@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <!-- Main Container Div-->
+    <div class="container">
+        <!-- Side Bar Div-->
+        <div class="side-bar">
+            <div class="logo-wrapper">
+                <img class="icon" src="./icons/app-logo.png" alt="App Logo" />
+            </div>
+            <nav class="menu">
+                <div class="weather-option">
+                    <img class="icon" src="./icons/weather-forecast.png" alt="Cities option icon" />
+                    <p>Weather</p>
+                </div>
+                <div class="cities-option">
+                    <img class="icon" src="./icons/cities-icon.png" />
+                    <p>Cities</p>
+                </div>
+                <div class="map-option">
+                    <img class="icon" src="./icons/map.png" />
+                    <p>Map</p>
+                </div>
+                <div class="settings-option">
+                    <img class="icon" src="./icons/settings-icon.png" />
+                    <p>Settings</p>
+                </div>
+            </nav>
+        </div>
+        <!-- Main Informational screen-->
+        <div class="app-screen">
+            <!--Search Bar-->
+            <div class="search-bar">
+                <form class="search-form">
+                    <input type="text" name="city" id="city-search" class="search-bar-itself" value="Madrid" size="50" frameborder="0">
+                </form>
+            </div>
+            <!--Content Screen-->
+            <div class="info-screen">
+                <!--This is whenre the main content is. It has a separate div that wraps the temperature data.-->
+                    <div class="main-info">
+                        <!--This div wraps the main temperature data and will be replaced with another div (tab), depending on which button is clicked.-->
+                            <div class="weather">
+                                <div class="temperature">
+                                    <div class="temperature-info">
+                                            <div class="temperature-location">
+                                                <h1>Madrid</h1>
+                                                <p>Chance of rain:0%</p>
+                                            </div>
+                                            <div class="temperature-degrees">
+                                                <h1>31&deg;</h1>
+                                            </div>
+                                    </div>
+                                    <div class="weather-image">
+                                        <img src="./weather images/sunny-img.png" alt="Sunny" />
+                                    </div>
+
+                                </div>
+                                <!--This is where multible html tabs will be nested to then switch their display property to none if they are not needed and back when user clicks the appropriate button-->
+                                <div id="hourlyAndConditionsId" class="hourly-forecast-and-conditions">
+                                    <!--This is the default and first tab that will be visible from the begining-->
+                                    <div class="hourly-forecast">
+                                        <p>Today's Forecast</p>
+                                        <ul class="hourly-forecast-ul">
+                                            <li>
+                                                <div class="hourly-forecast-li">
+                                                    <p>6:00 AM</p>
+                                                    <img src="./weather images/cloudy-img.png" />
+                                                    <p class="hourly-degrees">25&deg;</p>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="hourly-forecast-li">
+                                                    <p>9:00 AM</p>
+                                                    <img src="./weather images/sunny-cloudy-img.png" />
+                                                    <p class="hourly-degrees">28&deg;</p>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="hourly-forecast-li">
+                                                    <p>12:00 PM</p>
+                                                    <img src="./weather images/sunny-img.png" />
+                                                    <p class="hourly-degrees">33&deg;</p>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="hourly-forecast-li">
+                                                    <p>3:00 PM</p>
+                                                    <img src="./weather images/sunny-img.png" />
+                                                    <p class="hourly-degrees">34&deg;</p>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="hourly-forecast-li">
+                                                    <p>6:00 PM</p>
+                                                    <img src="./weather images/sunny-img.png" />
+                                                    <p class="hourly-degrees">32&deg;</p>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="hourly-forecast-li">
+                                                    <p>9:00 PM</p>
+                                                    <img src="./weather images/sunny-cloudy-img.png" />
+                                                    <p class="hourly-degrees">30&deg;</p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="conditions">
+                                        <div class="header-and-button">
+                                            <p>Air Conditions</p>
+                                            <button id="expand-conditions" class="conditions-button">See more</button>
+                                        </div>
+                                        <div class="conditions-grid">
+                                            <div class="grid-con">
+                                                <p>Real Feel</p>
+                                                <p>30&deg;</p>
+                                                <img src="./condition-icons/real-feel-icon.png" alt="Real feel icon"/>
+                                            </div>
+                                            <div class="grid-con">
+                                                <p>Wind</p>
+                                                <p>0.2 km/h</p>
+                                                <img class="further" src="./condition-icons/wind-icon.png" alt="Wind icon"/>
+                                            </div>
+                                            <div class="grid-con">
+                                                <p>Chance of rain</p>
+                                                <p>0%</p>
+                                                <img src="./condition-icons/chance-rain-icon.png" alt="Chance of rain icon"/>
+                                            </div>
+                                            <div class="grid-con">
+                                                <p>UV Index</p>
+                                                <p>3</p>
+                                                <img class="further" src="./condition-icons/uv-index-icon.png" alt="UV Index icon"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--This is the extended conditions tab that contains the grid for all the atmosphere conditions. Will be toggable between the default tab by using the display property-->
+                                <div id="extendedConditionsWrapper" class="extended-conditions-wrapper">
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                </div>
+                            </div>
+                    </div>
+                    <!--This is where the sub data is displayed. Just like the main div it has a child div that wraps the current data, and will be replaced with another tab when a different button is clicked.-->
+                    <div class="sub-info">
+                        <!--This div is a wrapper of sub data, technically a tab that will be replaced with another one when a different button is clicked.-->
+                            <div class="sub-weather">
+                                        <p>7-day forecast</p>
+                                        <!--This is a list that wraps the daily forecast.-->
+                                        <ul>
+                                            <li class="daily-forecast">
+                                                    <p>Today</p>
+                                                    <div>
+                                                        <img src="./weather images/sunny-img.png" alt="sunny" />
+                                                        <p>Sunny</p>
+                                                    </div>
+                                                    <p><span aria-labe="temperature">36</span>/22</p>
+                                            </li>
+                                            <li class="daily-forecast">
+                                                    <p>Tue</p>
+                                                    <div>
+                                                        <img src="./weather images/sunny-img.png" alt="sunny" />
+                                                        <p>Sunny</p>
+                                                    </div>
+                                                    <p><span>37</span>/21</p>
+                                            </li>
+                                            <li class="daily-forecast">
+                                                    <p>Wed</p>
+                                                    <div>
+                                                        <img src="./weather images/sunny-img.png" alt="sunny" />
+                                                        <p>Sunny</p>
+                                                    </div>
+                                                    <p><span>37</span>/22</p>
+                                            </li>
+                                            <li class="daily-forecast">
+                                                    <p>Thu</p>
+                                                    <div>
+                                                        <img src="./weather images/cloudy-img.png" alt="sunny" />
+                                                        <p>Cloudy</p>
+                                                    </div>
+                                                    <p><span>37</span>/22</p>
+                                            </li>
+                                            <li class="daily-forecast">
+                                                    <p>Fri</p>
+                                                    <div>
+                                                        <img src="./weather images/cloudy-img.png" alt="sunny" />
+                                                        <p>Cloudy</p>
+                                                    </div>
+                                                    <p><span>37</span>/22</p>
+                                            </li>
+                                            <li class="daily-forecast">
+                                                    <p>Sat</p>
+                                                    <div>
+                                                        <img src="./weather images/sunny-img.png" alt="sunny" />
+                                                        <p>Sunny</p>
+                                                    </div>
+                                                    <p><span>37</span>/22</p>
+                                            </li>
+                                            <li class="daily-forecast">
+                                                    <p>Sun</p>
+                                                    <div>
+                                                        <img src="./weather images/sunny-img.png" alt="sunny" />
+                                                        <p>Sunny</p>
+                                                    </div>
+                                                    <p><span>37</span>/22</p>
+                                            </li>
+                                        </ul>
+                            </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

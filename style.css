@@ -416,8 +416,53 @@ div {
     height:100%;
     display:none;
     grid-template-columns:1fr 1fr;
-    grid-template-rows: repeat(4, 20%);
+    grid-template-rows: repeat(4, 25%);
     flex-basis:100%;
-    background-color: rgba(255,255,255,.8);
+    /* background-color: rgba(255,255,255,.8); */
+    align-content: stretch;
+    
 }
 
+.extended-conditions-wrapper > div{
+    background-color: var(--color-div-background);
+    position:relative;
+    padding: 6px;
+    padding-left: 94px;
+    padding-top:12px;
+
+}
+
+.extended-conditions-wrapper > div img{
+    position:absolute;
+    width:30px;
+    height:30px;
+    top: 23px;
+    left: 49px;
+    margin:2px;
+}
+
+.extended-conditions-wrapper > div:nth-child(odd){
+    margin: 8px 10px 8px 0;
+}
+.extended-conditions-wrapper > div:nth-child(even){
+    margin: 8px 0 8px 10px;
+}
+.extended-conditions-wrapper > div:nth-child(-n+2){
+    margin-top:0;
+}
+
+.extended-conditions-wrapper > div:nth-last-child(-n+2){
+    margin-bottom:0;
+}
+
+.extended-conditions-wrapper > div > p:nth-child(1){
+    color:var(--color-text-dark);
+    line-height:2;
+    font-size:1.5rem;
+    letter-spacing: .5px
+}
+
+.extended-conditions-wrapper > div > p:nth-child(2){
+    color:var(--color-text-light);
+    font-size:2rem;
+}

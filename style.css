@@ -140,7 +140,8 @@ div {
 .sub-info{
     width: 33%;
     height: 100%;
-    background-color: var(--color-div-background);
+    /* background-color: var(--color-div-background); */
+    
 }
 
 /* This is the first TAB of the app. these tabs will be switching display to none and visible accordingly. the .weather class contains today's temperature, hourly forecast and conditions divs.*/
@@ -251,7 +252,6 @@ div {
     background-color: rgba(255,255,255,.2);
     left: 82px;
     z-index: 5;
-
 }
 .hourly-degrees{
     color:var(--color-text-light);
@@ -334,18 +334,28 @@ div {
     top: 5px;
     left: -29px;
 }
+
 /*sub-info's sub-weather div styling. Mainly has a 7 day forecast as a unordered list with display flex */
 .sub-weather{
-    padding:12px;
+    
     width:100%;
     height:100%;
+    /* background-color: var(--color-div-background); */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.daily-forecast-div{
+    flex-basis: 100%;
+    background-color: var(--color-div-background);
+    padding:34px;
+}
+.daily-forecast-div div{
     border-radius:0;
 }
-.sub-weather div{
-    border-radius:0;
-}
-.sub-weather > ul{
-    margin: 42px 8px 0 8px;
+.daily-forecast-div > ul{
+    margin: 20px 8px 0 8px;
     height: 90%;
     display: flex;
     flex-direction: column;
@@ -355,21 +365,22 @@ div {
     overflow: hidden;
 }
 /* selects the first and second paragraph elements inside of the list item element*/
-.sub-weather > ul > li > p:nth-child(-n+3){
+.daily-forecast-div > ul > li > p:nth-child(-n+3){
     color:var(--color-text-dark);
     font-size:1rem;
     width:20%
 }
 /* this overrides the list item paragraph syling rule but only for the span element nested inside of the second paragraph element*/
-.sub-weather > ul > li > p > span{
+.daily-forecast-div > ul > li > p > span{
     color:var(--color-text-light);
     font-size:1rem;
 }
-.sub-weather > p{
+.daily-forecast-div > p{
     margin:8px;
     color:var(--color-text-dark);
     text-transform: uppercase;
     font-size:1rem;
+    margin-bottom: 39px;
 }
 .daily-forecast,
 .daily-forecast > div{
@@ -382,7 +393,7 @@ div {
     position:relative;
 }
 /* adds the horizontal lines below each list item */
-.sub-weather > ul > .daily-forecast:nth-child(-n+6)::after{
+.daily-forecast-div > ul > .daily-forecast:nth-child(-n+6)::after{
     content:'';
     width: 100%;
     height:1px;
@@ -393,15 +404,85 @@ div {
 
 }
 .daily-forecast > div{
-    width:30%;
+
+    width:40%;
     color:var(--color-text-light);
     font-size:1.1rem;
+    justify-content: center;
+    gap:13px;
 }
 .daily-forecast > div img{
     
     width:50px;
     height:50px;
 }
+
+/*Styling for the appendable hourly forecast div that will be addded to sub weather when the button is clicked.*/
+.sub-hourly-forecast{
+    width: 100%;
+    flex-basis:30%;
+    background-color: var(--color-div-background);
+    padding: 12px 24px;
+    margin: 12px 0;
+    display:none; /* Default value */
+}
+
+.sub-hourly-forecast div {
+    border-radius:0;
+}
+.sub-hourly-forecast > p{
+    margin: 12px 8px 6px 8px;
+    color:var(--color-text-dark);
+    text-transform: uppercase;
+}
+
+.sub-hourly-forecast > ul{
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    gap:55px;
+    list-style: none;
+    margin-top: 24px;
+    height: 70%;
+}
+.sub-hourly-forecast > ul > li{
+    margin:4px;
+    position:relative;
+}
+
+.sub-hourly-forecast > ul > li > div{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    color:var(--color-text-dark);
+    /* overflow:visible; */
+}
+.sub-hourly-forecast > ul > li:nth-of-type(-n+2)::after{
+    content: '';
+    height: 156px;
+    width: 1px;
+    top:0;
+    position: absolute;
+    background-color: rgba(255,255,255,.2);
+    left: 82px;
+    z-index: 5;
+}
+
+.sub-hourly-forecast > ul > li > div > p:nth-child(2){
+    color:var(--color-text-light);
+    font-size:2rem;
+    margin:4px;
+}
+
+.sub-hourly-forecast > ul > li > div > img{
+    width:50px;
+    height:50px;
+    margin: 6px 0;
+}
+/*End of Sub-weather styling*/
+
 /* This is the FIRST tab container that will be toggled using its display property.*/
 .hourly-forecast-and-conditions{
     display:flex;
@@ -420,18 +501,14 @@ div {
     flex-basis:100%;
     /* background-color: rgba(255,255,255,.8); */
     align-content: stretch;
-    
 }
-
 .extended-conditions-wrapper > div{
     background-color: var(--color-div-background);
     position:relative;
     padding: 6px;
     padding-left: 94px;
     padding-top:12px;
-
 }
-
 .extended-conditions-wrapper > div img{
     position:absolute;
     width:30px;
@@ -440,7 +517,6 @@ div {
     left: 49px;
     margin:2px;
 }
-
 .extended-conditions-wrapper > div:nth-child(odd){
     margin: 8px 10px 8px 0;
 }
@@ -450,18 +526,15 @@ div {
 .extended-conditions-wrapper > div:nth-child(-n+2){
     margin-top:0;
 }
-
 .extended-conditions-wrapper > div:nth-last-child(-n+2){
     margin-bottom:0;
 }
-
 .extended-conditions-wrapper > div > p:nth-child(1){
     color:var(--color-text-dark);
     line-height:2;
     font-size:1.5rem;
     letter-spacing: .5px
 }
-
 .extended-conditions-wrapper > div > p:nth-child(2){
     color:var(--color-text-light);
     font-size:2rem;

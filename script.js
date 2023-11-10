@@ -1,3 +1,6 @@
+//Side bar elements
+const weatherButton = document.getElementById("weather-option");
+
 // Main info elements
 const conditionsExpandButton = document.getElementById("expand-conditions");
 const hourlyAndConditionsWrapper = document.getElementById("hourlyAndConditionsId");
@@ -6,7 +9,13 @@ const extendedConditionsWrapper =  document.getElementById("extendedConditionsWr
 const dailyForecast = document.getElementById("dailyForecast");
 const subHourlyForecast = document.getElementById("subHourlyForecast");
 const dailyForecastUL = document.querySelector(".daily-forecast-div > ul");
+const dailyForecastFirstParagraph = document.querySelector(".daily-forecast-div > p");
+const dailyForecastLi = document.querySelectorAll("[data-daily]");
+// console.log(dailyForecastFirstParagraph);
+// console.log(dailyForecastLi);
 
+
+// button handler that shows expanded conditions and adds hourly to sub-weather tab
 conditionsExpandButton.addEventListener('click',() =>{
 
     hourlyAndConditionsWrapper.style.display = 'none';
@@ -15,10 +24,34 @@ conditionsExpandButton.addEventListener('click',() =>{
 
 })
 
-function subWeatherDisplayChange(){
-    dailyForecast.style.flexBasis = "66%";
-    dailyForecast.style.padding = "25px";
-    dailyForecastUL.style.gap = "13px"
-    subHourlyForecast.style.display = "block";
+//button handler to return to the original main screen
+weatherButton.addEventListener('click', () => {
+    hourlyAndConditionsWrapper.style.display = 'flex';
+    extendedConditionsWrapper.style.display = 'none';
+    subWeatherDisplayRevert();
+})
 
+
+// Function to change the sub-weather display
+function subWeatherDisplayChange(){
+    dailyForecast.style.padding = "28px";
+    dailyForecast.style.flexBasis = "66%";
+    dailyForecastUL.style.gap = "15px";
+    dailyForecastFirstParagraph.style.marginBottom = "0"
+    subHourlyForecast.style.display = "block";
+    dailyForecastLi.forEach(day => {
+        day.classList.toggle("daily-forecast-shrink");
+    })
+}
+
+// Function that returns the original state of the sub-weather tab
+function subWeatherDisplayRevert(){
+    dailyForecast.style.padding = "34px";
+    dailyForecast.style.flexBasis = "100%";
+    dailyForecastUL.style.gap = "51px";
+    dailyForecastFirstParagraph.style.marginBottom = "39px"
+    subHourlyForecast.style.display = "none";
+    dailyForecastLi.forEach(day => {
+        day.classList.remove("daily-forecast-shrink");
+    })
 }

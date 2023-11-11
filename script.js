@@ -5,6 +5,7 @@ const weatherButton = document.getElementById("weather-option");
 const conditionsExpandButton = document.getElementById("expand-conditions");
 const hourlyAndConditionsWrapper = document.getElementById("hourlyAndConditionsId");
 const extendedConditionsWrapper =  document.getElementById("extendedConditionsWrapper");
+const cityMain = document.getElementById('cityMain');
 // Sub info elements
 const dailyForecast = document.getElementById("dailyForecast");
 const subHourlyForecast = document.getElementById("subHourlyForecast");
@@ -20,6 +21,7 @@ conditionsExpandButton.addEventListener('click',() =>{
 
     hourlyAndConditionsWrapper.style.display = 'none';
     extendedConditionsWrapper.style.display = 'grid';
+    updateWeather();
     subWeatherDisplayChange();
 
 })
@@ -55,3 +57,29 @@ function subWeatherDisplayRevert(){
         day.classList.remove("daily-forecast-shrink");
     })
 }
+
+const getWeatherData = async (lat, lon) => {
+    let  weatherData = undefined;
+    weatherData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
+    // console.log(weatherData.timezone);
+    return weatherData.timezone;
+}
+
+async function getCityName(getData) {
+
+
+    let cityName = await getData(40.7128,-74.006);
+    let city = cityName.split('/')[1];
+    city = city.split('_')[0] + ' ' + city.split('_')[1];
+    console.log(city);
+    return city;
+} 
+
+
+
+async function updateWeather(){
+
+    cityMain.innerText = await getCityName(getWeatherData);
+
+}
+

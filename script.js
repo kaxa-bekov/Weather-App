@@ -5,7 +5,9 @@ const weatherButton = document.getElementById("weather-option");
 const conditionsExpandButton = document.getElementById("expand-conditions");
 const hourlyAndConditionsWrapper = document.getElementById("hourlyAndConditionsId");
 const extendedConditionsWrapper =  document.getElementById("extendedConditionsWrapper");
+// Main info updatable fields (may add to a class later.)
 const cityMain = document.getElementById('cityMain');
+const tempMain = document.getElementById('tempMain');
 // Sub info elements
 const dailyForecast = document.getElementById("dailyForecast");
 const subHourlyForecast = document.getElementById("subHourlyForecast");
@@ -21,7 +23,6 @@ conditionsExpandButton.addEventListener('click',() =>{
 
     hourlyAndConditionsWrapper.style.display = 'none';
     extendedConditionsWrapper.style.display = 'grid';
-    updateWeather();
     subWeatherDisplayChange();
 
 })
@@ -31,6 +32,7 @@ weatherButton.addEventListener('click', () => {
     hourlyAndConditionsWrapper.style.display = 'flex';
     extendedConditionsWrapper.style.display = 'none';
     subWeatherDisplayRevert();
+    updateWeather();
 })
 
 
@@ -62,24 +64,30 @@ const getWeatherData = async (lat, lon) => {
     let  weatherData = undefined;
     weatherData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
     // console.log(weatherData.timezone);
-    return weatherData.timezone;
+    return weatherData;
 }
 
-async function getCityName(getData) {
+async function getNeededWeather(getData) {
 
 
-    let cityName = await getData(40.7128,-74.006);
-    let city = cityName.split('/')[1];
+    let weatherData = await getData(40.7128,-74.006);
+    let temp = weatherData.current.temp;
+
+    let city = weatherData.timezone.split('/')[1];
     city = city.split('_')[0] + ' ' + city.split('_')[1];
     console.log(city);
-    return city;
+    let neededData = [city, temp];
+    return neededData;
 } 
 
 
 
 async function updateWeather(){
 
-    cityMain.innerText = await getCityName(getWeatherData);
+    let infoArray = await getNeededWeather(getWeatherData);
+    cityMain.innerText = infoArray[0];
+    tempMain.innerHTML = `${infoArray[1]}` + `&deg;`;
+    console.log(await getNeededWeather(getWeatherData));
 
 }
 

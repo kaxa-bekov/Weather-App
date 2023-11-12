@@ -241,6 +241,7 @@ div {
     align-items: center;
     gap: 16px;
     color:var(--color-text-dark);
+    text-align: center;
     /* overflow:visible; */
 }
 .hourly-forecast-ul li:nth-of-type(-n+5)::after{
@@ -257,6 +258,7 @@ div {
     color:var(--color-text-light);
     font-size:2rem;
     margin:4px;
+    text-align: center;
 }
 .hourly-forecast-li img{
     width:50px;
@@ -505,6 +507,7 @@ div {
     justify-content:center;
     align-items:center;
     flex-basis:100%;
+    width: 100%;
 }
 /* This is the SECOND tab container that will be toggled using its display property.*/
 .extended-conditions-wrapper{

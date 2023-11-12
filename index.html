@@ -52,7 +52,7 @@
                                     <div class="temperature-info">
                                             <div class="temperature-location">
                                                 <h1 id="cityMain">Madrid</h1>
-                                                <p>Chance of rain:0%</p>
+                                                <p>Chance of rain:<span id="chance-of-rain-top-screen">0%</span></p>
                                             </div>
                                             <div class="temperature-degrees">
                                                 <h1 id="tempMain">31&deg;</h1>
@@ -72,43 +72,43 @@
                                             <li>
                                                 <div class="hourly-forecast-li">
                                                     <p>6:00 AM</p>
-                                                    <img src="./weather images/cloudy-img.png" />
-                                                    <p class="hourly-degrees">25&deg;</p>
+                                                    <img data-hourlyImage src="./weather images/cloudy-img.png" />
+                                                    <p data-hourlySixFormat class="hourly-degrees">25&deg;</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
                                                     <p>9:00 AM</p>
-                                                    <img src="./weather images/sunny-cloudy-img.png" />
-                                                    <p class="hourly-degrees">28&deg;</p>
+                                                    <img data-hourlyImage src="./weather images/sunny-cloudy-img.png" />
+                                                    <p data-hourlySixFormat class="hourly-degrees">28&deg;</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
                                                     <p>12:00 PM</p>
-                                                    <img src="./weather images/sunny-img.png" />
-                                                    <p class="hourly-degrees">33&deg;</p>
+                                                    <img data-hourlyImage src="./weather images/sunny-img.png" />
+                                                    <p data-hourlySixFormat class="hourly-degrees">33&deg;</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
                                                     <p>3:00 PM</p>
-                                                    <img src="./weather images/sunny-img.png" />
-                                                    <p class="hourly-degrees">34&deg;</p>
+                                                    <img data-hourlyImage src="./weather images/sunny-img.png" />
+                                                    <p data-hourlySixFormat class="hourly-degrees">34&deg;</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
                                                     <p>6:00 PM</p>
-                                                    <img src="./weather images/sunny-img.png" />
-                                                    <p class="hourly-degrees">32&deg;</p>
+                                                    <img data-hourlyImage src="./weather images/sunny-img.png" />
+                                                    <p data-hourlySixFormat class="hourly-degrees">32&deg;</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
                                                     <p>9:00 PM</p>
-                                                    <img src="./weather images/sunny-cloudy-img.png" />
-                                                    <p class="hourly-degrees">30&deg;</p>
+                                                    <img data-hourlyImage src="./weather images/sunny-cloudy-img.png" />
+                                                    <p data-hourlySixFormat class="hourly-degrees">30&deg;</p>
                                                 </div>
                                             </li>
                                         </ul>
@@ -121,22 +121,22 @@
                                         <div class="conditions-grid">
                                             <div class="grid-con">
                                                 <p>Real Feel</p>
-                                                <p>30&deg;</p>
+                                                <p id="real-feel-main">30&deg;</p>
                                                 <img src="./condition-icons/real-feel-icon.png" alt="Real feel icon"/>
                                             </div>
                                             <div class="grid-con">
                                                 <p>Wind</p>
-                                                <p>0.2 km/h</p>
+                                                <p id="wind-main">0.2 km/h</p>
                                                 <img class="further" src="./condition-icons/wind-icon.png" alt="Wind icon"/>
                                             </div>
                                             <div class="grid-con">
                                                 <p>Chance of rain</p>
-                                                <p>0%</p>
+                                                <p id="chance-of-rain-main">0%</p>
                                                 <img src="./condition-icons/chance-rain-icon.png" alt="Chance of rain icon"/>
                                             </div>
                                             <div class="grid-con">
                                                 <p>UV Index</p>
-                                                <p>3</p>
+                                                <p id="uv-index-main">3</p>
                                                 <img class="further" src="./condition-icons/uv-index-icon.png" alt="UV Index icon"/>
                                             </div>
                                         </div>
@@ -146,42 +146,42 @@
                                 <div id="extendedConditionsWrapper" class="extended-conditions-wrapper">
                                         <div>
                                             <p>UV Index</p>
-                                            <p>3</p>
+                                            <p id="uv-index">3</p>
                                             <img src="./condition-icons/uv-index-icon.png" alt="Real feel icon"/>
                                         </div>
                                         <div>
                                             <p>Wind</p>
-                                            <p>0.2 km/h</p>
+                                            <p id="wind">0.2 km/h</p>
                                             <img src="./condition-icons/wind-icon.png" alt="Real feel icon"/>
                                         </div>
                                         <div>
                                             <p>Humidity</p>
-                                            <p>56%</p>
+                                            <p id="humidity">56%</p>
                                             <img src="./condition-icons/humidity-icon.png" alt="Real feel icon"/>
                                         </div>
                                         <div>
                                             <p>Visibility</p>
-                                            <p>12 km</p>
+                                            <p id="visibility">12 km</p>
                                             <img src="./condition-icons/visibility-icon.png" alt="Real feel icon"/>
                                         </div>
                                         <div>
-                                            <p>Feel Like</p>
-                                            <p>30&deg;</p>
+                                            <p>Feels Like</p>
+                                            <p id="feels-like">30&deg;</p>
                                             <img src="./condition-icons/real-feel-icon.png" alt="Real feel icon"/>
                                         </div>
                                         <div>
                                             <p>Chance Of Rain</p>
-                                            <p>0%</p>
+                                            <p id="chance-of-rain">0%</p>
                                             <img src="./condition-icons/chance-rain-icon.png" alt="Real feel icon"/>
                                         </div>
                                         <div>
                                             <p>Pressure</p>
-                                            <p>1008 hPa</p>
+                                            <p id="pressure">1008 hPa</p>
                                             <img src="./condition-icons/pressure-icon.png" alt="Real feel icon"/>
                                         </div>
                                         <div>
                                             <p>Sunset</p>
-                                            <p>20:58</p>
+                                            <p id="sunset">20:58</p>
                                             <img src="./condition-icons/sunset-icon.png" alt="Real feel icon"/>
                                         </div>
                                 </div>
@@ -197,22 +197,22 @@
                                         <li>
                                             <div>
                                                 <p>6:00 AM</p>
-                                                <img src="./weather images/cloudy-img.png" />
-                                                <p>25&deg;</p>
+                                                <img data-hourlyImageShort src="./weather images/cloudy-img.png" />
+                                                <p data-hourlyThreeFormat >25&deg;</p>
                                             </div>
                                         </li>
                                         <li>
                                             <div>
                                                 <p>9:00 AM</p>
-                                                <img src="./weather images/sunny-cloudy-img.png" />
-                                                <p>28&deg;</p>
+                                                <img data-hourlyImageShort src="./weather images/sunny-cloudy-img.png" />
+                                                <p data-hourlyThreeFormat >28&deg;</p>
                                             </div>
                                         </li>
                                         <li>
                                             <div>
                                                 <p>12:00 PM</p>
-                                                <img src="./weather images/sunny-img.png" />
-                                                <p>33&deg;</p>
+                                                <img data-hourlyImageShort src="./weather images/sunny-img.png" />
+                                                <p data-hourlyThreeFormat >33&deg;</p>
                                             </div>
                                         </li>
                                     </ul>
@@ -224,56 +224,56 @@
                                             <li data-daily class="daily-forecast">
                                                     <p>Today</p>
                                                     <div>
-                                                        <img src="./weather images/sunny-img.png" alt="sunny" />
-                                                        <p>Sunny</p>
+                                                        <img data-dailyImage src="./weather images/sunny-img.png" alt="sunny" />
+                                                        <p data-daySummary>Sunny</p>
                                                     </div>
                                                     <p><span aria-labe="temperature">36</span>/22</p>
                                             </li>
                                             <li data-daily class="daily-forecast">
                                                     <p>Tue</p>
                                                     <div>
-                                                        <img src="./weather images/sunny-img.png" alt="sunny" />
-                                                        <p>Sunny</p>
+                                                        <img data-dailyImage src="./weather images/sunny-img.png" alt="sunny" />
+                                                        <p data-daySummary>Sunny</p>
                                                     </div>
                                                     <p><span>37</span>/21</p>
                                             </li>
                                             <li data-daily class="daily-forecast">
                                                     <p>Wed</p>
                                                     <div>
-                                                        <img src="./weather images/sunny-img.png" alt="sunny" />
-                                                        <p>Sunny</p>
+                                                        <img data-dailyImage src="./weather images/sunny-img.png" alt="sunny" />
+                                                        <p data-daySummary>Sunny</p>
                                                     </div>
                                                     <p><span>37</span>/22</p>
                                             </li>
                                             <li data-daily class="daily-forecast">
                                                     <p>Thu</p>
                                                     <div>
-                                                        <img src="./weather images/cloudy-img.png" alt="sunny" />
-                                                        <p>Cloudy</p>
+                                                        <img data-dailyImage src="./weather images/cloudy-img.png" alt="sunny" />
+                                                        <p data-daySummary>Cloudy</p>
                                                     </div>
                                                     <p><span>37</span>/22</p>
                                             </li>
                                             <li data-daily class="daily-forecast">
                                                     <p>Fri</p>
                                                     <div>
-                                                        <img src="./weather images/cloudy-img.png" alt="sunny" />
-                                                        <p>Cloudy</p>
+                                                        <img data-dailyImage src="./weather images/cloudy-img.png" alt="sunny" />
+                                                        <p data-daySummary>Cloudy</p>
                                                     </div>
                                                     <p><span>37</span>/22</p>
                                             </li>
                                             <li data-daily class="daily-forecast">
                                                     <p>Sat</p>
                                                     <div>
-                                                        <img src="./weather images/sunny-img.png" alt="sunny" />
-                                                        <p>Sunny</p>
+                                                        <img data-dailyImage src="./weather images/sunny-img.png" alt="sunny" />
+                                                        <p data-daySummary>Sunny</p>
                                                     </div>
                                                     <p><span>37</span>/22</p>
                                             </li>
                                             <li data-daily class="daily-forecast">
                                                     <p>Sun</p>
                                                     <div>
-                                                        <img src="./weather images/sunny-img.png" alt="sunny" />
-                                                        <p>Sunny</p>
+                                                        <img data-dailyImage src="./weather images/sunny-img.png" alt="sunny" />
+                                                        <p data-daySummary>Sunny</p>
                                                     </div>
                                                     <p><span>37</span>/22</p>
                                             </li>

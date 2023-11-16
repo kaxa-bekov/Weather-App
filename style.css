@@ -378,10 +378,13 @@ div {
     width:20%
 }
 /* this overrides the list item paragraph syling rule but only for the span element nested inside of the second paragraph element*/
-.daily-forecast-div > ul > li > p > span{
+.daily-forecast-div > ul > li > p > span:nth-child(1){
     color:var(--color-text-light);
     font-size:1rem;
+    font-weight: 600;
 }
+
+
 .daily-forecast-div > p{
     margin:8px;
     color:var(--color-text-dark);

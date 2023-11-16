@@ -10,7 +10,7 @@
 <body>
     <!-- Main Container Div-->
     <div class="container">
-        <!-- Side Bar Div-->
+        <!-- Side Bar Div---------------------------------------------------------------------------------->
         <div class="side-bar">
             <div class="logo-wrapper">
                 <img class="icon" src="./icons/app-logo.png" alt="App Logo" />
@@ -20,29 +20,31 @@
                     <img class="icon" src="./icons/weather-forecast.png" alt="Cities option icon" />
                     <p>Weather</p>
                 </div>
-                <div class="cities-option">
+                <div id="cities-option" class="cities-option">
                     <img class="icon" src="./icons/cities-icon.png" />
                     <p>Cities</p>
                 </div>
-                <div class="map-option">
+                <div id="map-option" class="map-option">
                     <img class="icon" src="./icons/map.png" />
                     <p>Map</p>
                 </div>
-                <div class="settings-option">
+                <div id="settings-option" class="settings-option">
                     <img class="icon" src="./icons/settings-icon.png" />
                     <p>Settings</p>
                 </div>
             </nav>
         </div>
-        <!-- Main Informational screen-->
+        <!-------------------------------------------------------------------------------------------------->
+        <!-- Main Informational screen---------------------------------------------------------------------->
         <div class="app-screen">
-            <!--Search Bar-->
+            <!--Search Bar----------------------------------------------------------->
             <div class="search-bar">
                 <form class="search-form">
-                    <input type="text" name="city" id="city-search" class="search-bar-itself" value="Madrid" size="50" frameborder="0" placeholder="City">
+                    <input type="text" name="city" id="city-search" class="search-bar-itself"  frameborder="0" placeholder="Enter City">
                 </form>
             </div>
-            <!--Content Screen-->
+            <!----------------------------------------------------------------------->
+            <!--Content Screen------------------------------------------------------->
             <div class="info-screen">
                 <!--This is whenre the main content is. It has a separate div that wraps the temperature data.-->
                     <div class="main-info">
@@ -187,6 +189,7 @@
                                 </div>
                             </div>
                     </div>
+                    <!-------------------------------------------------------------------------------------------------------------------------->
                     <!--This is where the sub data is displayed. Just like the main div it has a child div that wraps the current data, and will be replaced with another tab when a different button is clicked.-->
                     <div class="sub-info">
                         <!--This div is a wrapper of sub data, technically a tab that will be replaced with another one when a different button is clicked.-->
@@ -217,6 +220,7 @@
                                         </li>
                                     </ul>
                                 </div>
+                                <!--------------------------------------------------------------------------------->
                                 <div id="dailyForecast" class="daily-forecast-div">
                                         <p>7-day forecast</p>
                                         <!--This is a list that wraps the daily forecast.-->
@@ -227,63 +231,64 @@
                                                         <img data-dailyImage src="./weather images/sunny-img.png" alt="sunny" />
                                                         <p data-daySummary>Sunny</p>
                                                     </div>
-                                                    <p><span aria-labe="temperature">36</span>/22</p>
+                                                    <p><span data-max-temp>36 </span>/<span data-min-temp>22</span></p>
                                             </li>
                                             <li data-daily class="daily-forecast">
-                                                    <p>Tue</p>
+                                                    <p data-day>Tue</p>
                                                     <div>
                                                         <img data-dailyImage src="./weather images/sunny-img.png" alt="sunny" />
                                                         <p data-daySummary>Sunny</p>
                                                     </div>
-                                                    <p><span>37</span>/21</p>
+                                                    <p><span data-max-temp>37 </span>/<span data-min-temp>22</span></p>
                                             </li>
                                             <li data-daily class="daily-forecast">
-                                                    <p>Wed</p>
+                                                    <p data-day>Wed</p>
                                                     <div>
                                                         <img data-dailyImage src="./weather images/sunny-img.png" alt="sunny" />
                                                         <p data-daySummary>Sunny</p>
                                                     </div>
-                                                    <p><span>37</span>/22</p>
+                                                    <p><span data-max-temp>37 </span>/<span data-min-temp>22</span></p>
                                             </li>
                                             <li data-daily class="daily-forecast">
-                                                    <p>Thu</p>
+                                                    <p data-day>Thu</p>
                                                     <div>
                                                         <img data-dailyImage src="./weather images/cloudy-img.png" alt="sunny" />
                                                         <p data-daySummary>Cloudy</p>
                                                     </div>
-                                                    <p><span>37</span>/22</p>
+                                                    <p><span data-max-temp>37 </span>/<span data-min-temp>22</span></p>
                                             </li>
                                             <li data-daily class="daily-forecast">
-                                                    <p>Fri</p>
+                                                    <p data-day>Fri</p>
                                                     <div>
                                                         <img data-dailyImage src="./weather images/cloudy-img.png" alt="sunny" />
                                                         <p data-daySummary>Cloudy</p>
                                                     </div>
-                                                    <p><span>37</span>/22</p>
+                                                    <p><span data-max-temp>37 </span>/<span data-min-temp>22</span></p>
                                             </li>
                                             <li data-daily class="daily-forecast">
-                                                    <p>Sat</p>
+                                                    <p data-day>Sat</p>
                                                     <div>
                                                         <img data-dailyImage src="./weather images/sunny-img.png" alt="sunny" />
                                                         <p data-daySummary>Sunny</p>
                                                     </div>
-                                                    <p><span>37</span>/22</p>
+                                                    <p><span data-max-temp>37 </span>/<span data-min-temp>22</span></p>
                                             </li>
                                             <li data-daily class="daily-forecast">
-                                                    <p>Sun</p>
+                                                    <p data-day>Sun</p>
                                                     <div>
                                                         <img data-dailyImage src="./weather images/sunny-img.png" alt="sunny" />
                                                         <p data-daySummary>Sunny</p>
                                                     </div>
-                                                    <p><span>37</span>/22</p>
+                                                    <p><span data-max-temp>37 </span>/<span data-min-temp>22</span></p>
                                             </li>
                                         </ul>
                                 </div>
                             </div>
                 </div>
             </div>
+            <!----------------------------------------------------------------------->
         </div>
-        
+        <!-------------------------------------------------------------------------------------------------->
     </div>
     <script src="script.js"></script>
 </body>

@@ -1,17 +1,21 @@
 //Side bar elements
 const weatherButton = document.getElementById("weather-option");
+const citiesButton = document.getElementById("cities-option");
+const mapButton = document.getElementById("map-option");
+const settingsButton = document.getElementById("settings-option");
+
 
 // Main info elements
 const conditionsExpandButton = document.getElementById("expand-conditions");
 const hourlyAndConditionsWrapper = document.getElementById("hourlyAndConditionsId");
 const extendedConditionsWrapper =  document.getElementById("extendedConditionsWrapper");
-// Main info updatable fields (may add to a class later.)
+// Main and sub info updatable fields (may add to a class later.)
 const cityMain = document.getElementById('cityMain');
 const tempMain = document.getElementById('tempMain');
 const chanceOfRainMainScreen = document.getElementById('chance-of-rain-top-screen');
 //small grid condition elements
 const realFeelMain = document.getElementById('real-feel-main');
-const windMAin = document.getElementById('wind-main');
+const windMain = document.getElementById('wind-main');
 const chanceOfRainMain = document.getElementById('chance-of-rain-main');
 const uvIndexMain = document.getElementById('uv-index-main');
 // big grid condition elements
@@ -26,6 +30,8 @@ const sunset = document.getElementById('sunset');
 
         // Element arrays to update the info.
         // 6 hours hourly temperature array
+        // 3 hours hourly temperature arrays
+        //Object containing keys as the day summary and values as icon URLs to assign them epending on the summary of  a given day
 const hourlySixFormat = document.querySelectorAll('[data-hourlySixFormat]');
 const hourlyThreeFormat = document.querySelectorAll('[data-hourlyThreeFormat]');
 //Image object and image element array
@@ -36,7 +42,6 @@ const imageURLs = {
             Snow: './weather images/snow-img.png',
             Thunderstorm: './weather images/thunderstorm-img.png'
 }
-
 const daySummaries = {
     Clear:'Sunny',
     Clouds:'Cloudy',
@@ -44,17 +49,44 @@ const daySummaries = {
     Snow: 'Snow',
     Thunderstorm: 'Storm'
 }
+// Hourly and daily image elements arrays, as well as daily summary word array
 const hourlyImageElements = document.querySelectorAll('[data-hourlyImage]');
 const hourlyImageElementsShort = document.querySelectorAll('[data-hourlyImageShort]');
 const dailyImage = document.querySelectorAll('[data-dailyImage]');
 const daySummaryWord = document.querySelectorAll('[data-daySummary]')
 
-// Sub info elements
+//example
+// for (const key in object) {
+//     if (Object.hasOwnProperty.call(object, key)) {
+//         const element = object[key];
+//     }
+// }
+
+//min  and max daily tempereatures.
+const dailyMins = document.querySelectorAll('[data-min-temp]');
+const dailyMaxes = document.querySelectorAll('[data-max-temp]');
+// console.log(dailyMins[0].textContent);
 const dailyForecast = document.getElementById("dailyForecast");
 const subHourlyForecast = document.getElementById("subHourlyForecast");
 const dailyForecastUL = document.querySelector(".daily-forecast-div > ul");
 const dailyForecastFirstParagraph = document.querySelector(".daily-forecast-div > p");
 const dailyForecastLi = document.querySelectorAll("[data-daily]");
+//Week days array
+const daysOfWeek = document.querySelectorAll('[data-day]')
+let dayAfter = new Date();
+let today = new Date();
+
+const weekDaysRefs = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
+for(let i=0;i<daysOfWeek.length;i++){
+    let nextDay = i + 1;
+    dayAfter.setDate(today.getDate() + nextDay);
+    daysOfWeek[i].innerHTML = weekDaysRefs[dayAfter.getDay()];
+
+}
+
+
+
 // console.log(dailyForecastFirstParagraph);
 // console.log(dailyForecastLi);
 
@@ -165,7 +197,6 @@ async function getNeededWeather(getData) {
                             weatherData.hourly[21].weather[0].main
                             ]
 
-                            console.log(hourlySummary);
     
     //6. Now we will get and store the daily highest/lowest temperatures. This is represented as a matrix with each row containing the highest/lowest temperatures for that given day.
     let dailyTempHiLo = [   [weatherData.daily[0].temp.max,weatherData.daily[0].temp.min],
@@ -212,15 +243,15 @@ async function getNeededWeather(getData) {
                 hourlySummary[4],
                 hourlySummary[5]
                 ],
-        dailyMinMax: {
-                today:`${dailyTempHiLo[0]}`,
-                day1:`${dailyTempHiLo[1]}`,
-                day2:`${dailyTempHiLo[2]}`,
-                day3:`${dailyTempHiLo[3]}`,
-                day4:`${dailyTempHiLo[4]}`,
-                day5:`${dailyTempHiLo[5]}`,
-                day6:`${dailyTempHiLo[6]}`
-            },
+        dailyMinMax: [
+                dailyTempHiLo[0],
+                dailyTempHiLo[1],
+                dailyTempHiLo[2],
+                dailyTempHiLo[3],
+                dailyTempHiLo[4],
+                dailyTempHiLo[5],
+                dailyTempHiLo[6]
+                ],
         daySummaryKeyWord: [
                 daySummary[0],
                 daySummary[1],
@@ -240,19 +271,19 @@ async function getNeededWeather(getData) {
 function updateConditions(obj){
 
     realFeelMain.innerHTML = `${Math.trunc(obj.airConditions.feelsLike)}` + `&deg;`;
-    windMAin.innerHTML = obj.airConditions.windSpeed;
+    windMain.innerHTML = `${Math.trunc(obj.airConditions.windSpeed*3.6)}` + ' km/h';
     chanceOfRainMain.innerHTML = obj.airConditions.rain ?? '0%';
     uvIndexMain.innerHTML = obj.airConditions.uvi;
     uvIndex.innerHTML = obj.airConditions.uvi;
-    wind.innerHTML = obj.airConditions.windSpeed;
-    humidity.innerHTML = obj.airConditions.humidity;
-    visibility.innerHTML = obj.airConditions.visibility;
+    wind.innerHTML = `${Math.trunc(obj.airConditions.windSpeed*3.6)}` + ' km/h';
+    humidity.innerHTML = `${obj.airConditions.humidity}` + ' %';
+    visibility.innerHTML = `${obj.airConditions.visibility/1000}` + ' km';
     feelsLike.innerHTML = `${Math.trunc(obj.airConditions.feelsLike)}` + `&deg;`;
-    chanceOfRain.innerHTML = obj.airConditions.rain ?? '0%';
-    pressure.innerHTML = obj.airConditions.pressure;
+    chanceOfRain.innerHTML = obj.airConditions.rain ?? ' 0%';
+    pressure.innerHTML = `${obj.airConditions.pressure}` + ' hPa';
     let date = new Date(obj.airConditions.sunset * 1000).toLocaleTimeString('en-US', { hour: "2-digit", minute: "2-digit" });
     sunset.innerHTML = date;
-    chanceOfRainMainScreen.innerHTML = obj.airConditions.rain ?? '0%';
+    chanceOfRainMainScreen.innerHTML = obj.airConditions.rain ?? ' 0%';
 
 
     for(let i = 0; i < hourlyThreeFormat.length; i++){
@@ -277,7 +308,12 @@ function updateConditions(obj){
         daySummaryWord[i].innerHTML = daySummaries.hasOwnProperty([obj.daySummaryKeyWord[i]]) ? daySummaries[obj.daySummaryKeyWord[i]] : undefined ;
     }
 
+    console.log(obj.dailyMinMax[0][1]);
 
+    for(let i = 0; i < dailyMaxes.length; i++){
+        dailyMaxes[i].innerHTML = `${Math.trunc(obj.dailyMinMax[i][0])}` + ' ';
+        dailyMins[i].innerHTML = Math.trunc(obj.dailyMinMax[i][1]);
+    }
 }
 
 async function updateWeather(){

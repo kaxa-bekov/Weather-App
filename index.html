@@ -46,18 +46,18 @@
             <!----------------------------------------------------------------------->
             <!--Content Screen------------------------------------------------------->
             <div class="info-screen">
-                <!--This is whenre the main content is. It has a separate div that wraps the temperature data.-->
+                <!--This is where the main content is. It has a separate div that wraps the temperature data.-->
                     <div class="main-info">
                         <!--This div wraps the main temperature data and will be replaced with another div (tab), depending on which button is clicked.-->
-                            <div class="weather">
+                            <div data-mains id="weather-tab" class="weather">
                                 <div class="temperature">
                                     <div class="temperature-info">
                                             <div class="temperature-location">
-                                                <h1 id="cityMain">Madrid</h1>
-                                                <p>Chance of rain:<span id="chance-of-rain-top-screen">0%</span></p>
+                                                <h1 data-city>Loading...</h1>
+                                                <p>Precipitation: <span data-precipitation>...</span></p>
                                             </div>
                                             <div class="temperature-degrees">
-                                                <h1 id="tempMain">31&deg;</h1>
+                                                <h1 data-temperature-main >...&deg;</h1>
                                             </div>
                                     </div>
                                     <div class="weather-image">
@@ -73,42 +73,42 @@
                                         <ul class="hourly-forecast-ul">
                                             <li>
                                                 <div class="hourly-forecast-li">
-                                                    <p>6:00 AM</p>
+                                                    <p data-6Hours>6:00 AM</p>
                                                     <img data-hourlyImage src="./weather images/cloudy-img.png" />
                                                     <p data-hourlySixFormat class="hourly-degrees">25&deg;</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
-                                                    <p>9:00 AM</p>
+                                                    <p data-6Hours>9:00 AM</p>
                                                     <img data-hourlyImage src="./weather images/sunny-cloudy-img.png" />
                                                     <p data-hourlySixFormat class="hourly-degrees">28&deg;</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
-                                                    <p>12:00 PM</p>
+                                                    <p data-6Hours>12:00 PM</p>
                                                     <img data-hourlyImage src="./weather images/sunny-img.png" />
                                                     <p data-hourlySixFormat class="hourly-degrees">33&deg;</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
-                                                    <p>3:00 PM</p>
+                                                    <p data-6Hours>3:00 PM</p>
                                                     <img data-hourlyImage src="./weather images/sunny-img.png" />
                                                     <p data-hourlySixFormat class="hourly-degrees">34&deg;</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
-                                                    <p>6:00 PM</p>
+                                                    <p data-6Hours>6:00 PM</p>
                                                     <img data-hourlyImage src="./weather images/sunny-img.png" />
                                                     <p data-hourlySixFormat class="hourly-degrees">32&deg;</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
-                                                    <p>9:00 PM</p>
+                                                    <p data-6Hours>9:00 PM</p>
                                                     <img data-hourlyImage src="./weather images/sunny-cloudy-img.png" />
                                                     <p data-hourlySixFormat class="hourly-degrees">30&deg;</p>
                                                 </div>
@@ -123,22 +123,22 @@
                                         <div class="conditions-grid">
                                             <div class="grid-con">
                                                 <p>Real Feel</p>
-                                                <p id="real-feel-main">30&deg;</p>
+                                                <p data-real-feel>...</p>
                                                 <img src="./condition-icons/real-feel-icon.png" alt="Real feel icon"/>
                                             </div>
                                             <div class="grid-con">
                                                 <p>Wind</p>
-                                                <p id="wind-main">0.2 km/h</p>
+                                                <p data-wind>...</p>
                                                 <img class="further" src="./condition-icons/wind-icon.png" alt="Wind icon"/>
                                             </div>
                                             <div class="grid-con">
-                                                <p>Chance of rain</p>
-                                                <p id="chance-of-rain-main">0%</p>
+                                                <p>Precipitation</p>
+                                                <p><span data-precipitation>...</span></p>
                                                 <img src="./condition-icons/chance-rain-icon.png" alt="Chance of rain icon"/>
                                             </div>
                                             <div class="grid-con">
                                                 <p>UV Index</p>
-                                                <p id="uv-index-main">3</p>
+                                                <p data-uv>...</p>
                                                 <img class="further" src="./condition-icons/uv-index-icon.png" alt="UV Index icon"/>
                                             </div>
                                         </div>
@@ -148,72 +148,76 @@
                                 <div id="extendedConditionsWrapper" class="extended-conditions-wrapper">
                                         <div>
                                             <p>UV Index</p>
-                                            <p id="uv-index">3</p>
+                                            <p data-uv>...</p>
                                             <img src="./condition-icons/uv-index-icon.png" alt="Real feel icon"/>
                                         </div>
                                         <div>
                                             <p>Wind</p>
-                                            <p id="wind">0.2 km/h</p>
+                                            <p data-wind>...</p>
                                             <img src="./condition-icons/wind-icon.png" alt="Real feel icon"/>
                                         </div>
                                         <div>
                                             <p>Humidity</p>
-                                            <p id="humidity">56%</p>
+                                            <p data-humidity>...</p>
                                             <img src="./condition-icons/humidity-icon.png" alt="Real feel icon"/>
                                         </div>
                                         <div>
                                             <p>Visibility</p>
-                                            <p id="visibility">12 km</p>
+                                            <p data-visibility>...</p>
                                             <img src="./condition-icons/visibility-icon.png" alt="Real feel icon"/>
                                         </div>
                                         <div>
                                             <p>Feels Like</p>
-                                            <p id="feels-like">30&deg;</p>
+                                            <p data-real-feel>...</p>
                                             <img src="./condition-icons/real-feel-icon.png" alt="Real feel icon"/>
                                         </div>
                                         <div>
-                                            <p>Chance Of Rain</p>
-                                            <p id="chance-of-rain">0%</p>
+                                            <p>Precipitation</p>
+                                            <p><span data-precipitation>...</span></p>
                                             <img src="./condition-icons/chance-rain-icon.png" alt="Real feel icon"/>
                                         </div>
                                         <div>
                                             <p>Pressure</p>
-                                            <p id="pressure">1008 hPa</p>
+                                            <p data-pressure>...</p>
                                             <img src="./condition-icons/pressure-icon.png" alt="Real feel icon"/>
                                         </div>
                                         <div>
                                             <p>Sunset</p>
-                                            <p id="sunset">20:58</p>
+                                            <p data-sunset>..:..</p>
                                             <img src="./condition-icons/sunset-icon.png" alt="Real feel icon"/>
                                         </div>
                                 </div>
+                            </div>
+                            <!--This is the second tab of this partition. it contains the list of cities when user has clicked on the seach bar to look up cities or simply selected the cities in the side bar.-->
+                            <div data-mains id="cities-tab">
+
                             </div>
                     </div>
                     <!-------------------------------------------------------------------------------------------------------------------------->
                     <!--This is where the sub data is displayed. Just like the main div it has a child div that wraps the current data, and will be replaced with another tab when a different button is clicked.-->
                     <div class="sub-info">
                         <!--This div is a wrapper of sub data, technically a tab that will be replaced with another one when a different button is clicked.-->
-                            <div class="sub-weather">
+                            <div data-subs id="sub-weather-tab" class="sub-weather">
                                 <div id="subHourlyForecast" class="sub-hourly-forecast">
                                     <p>Today's Forecast</p>
                                     <ul>
                                         <li>
                                             <div>
-                                                <p>6:00 AM</p>
+                                                <p data-3hours>6:00 AM</p>
                                                 <img data-hourlyImageShort src="./weather images/cloudy-img.png" />
                                                 <p data-hourlyThreeFormat >25&deg;</p>
                                             </div>
                                         </li>
                                         <li>
                                             <div>
-                                                <p>9:00 AM</p>
+                                                <p data-3hours>9:00 AM</p>
                                                 <img data-hourlyImageShort src="./weather images/sunny-cloudy-img.png" />
                                                 <p data-hourlyThreeFormat >28&deg;</p>
                                             </div>
                                         </li>
                                         <li>
                                             <div>
-                                                <p>12:00 PM</p>
+                                                <p data-3hours>12:00 PM</p>
                                                 <img data-hourlyImageShort src="./weather images/sunny-img.png" />
                                                 <p data-hourlyThreeFormat >33&deg;</p>
                                             </div>
@@ -284,7 +288,53 @@
                                         </ul>
                                 </div>
                             </div>
-                </div>
+
+                        <!--This is the second tab of this partition. it contains the weather summary when user has clicked on the seach bar to look up cities or simply selected the cities in the side bar.-->
+                            <div data-subs id="sub-weather-summary-tab" class="weather-summary">
+                                <div class="alt-temp">
+                                            <div class="temperature-info alt-temp-info">
+                                                <div class="temperature-location">
+                                                    <h1 data-city>Loading...</h1>
+                                                    <p>Precipitation: <span data-precipitation>...</span></p>
+                                                </div>
+                                                <div class="temperature-degrees">
+                                                    <h1 data-temperature-main >...&deg;</h1>
+                                                </div>
+                                            </div>
+                                            <div class="alt-weather-image">
+                                                <img src="./weather images/sunny-img.png" alt="Sunny" />
+                                            </div>
+                                </div>
+                                <div class="alt-hourly sub-hourly-forecast">
+                                            <p>Today's Forecast</p>
+                                            <ul>
+                                                <li>
+                                                    <div>
+                                                        <p>6:00 AM</p>
+                                                        <img data-hourlyImageShort src="./weather images/cloudy-img.png" />
+                                                        <p data-hourlyThreeFormat >25&deg;</p>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div>
+                                                        <p>9:00 AM</p>
+                                                        <img data-hourlyImageShort src="./weather images/sunny-cloudy-img.png" />
+                                                        <p data-hourlyThreeFormat >28&deg;</p>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div>
+                                                        <p>12:00 PM</p>
+                                                        <img data-hourlyImageShort src="./weather images/sunny-img.png" />
+                                                        <p data-hourlyThreeFormat >33&deg;</p>
+                                                    </div>
+                                                </li>
+                                            </ul>
+
+                                </div>
+                                <div class="alt-daily"></div>
+                            </div>
+                    </div>
             </div>
             <!----------------------------------------------------------------------->
         </div>

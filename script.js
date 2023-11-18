@@ -41,8 +41,19 @@ const sunset = document.querySelector('[data-sunset]');
         // 6 hours hourly temperature array
         // 3 hours hourly temperature arrays
         //Object containing keys as the day summary and values as icon URLs to assign them depending on the summary of a given day
-const hourlySixFormat = document.querySelectorAll('[data-hourlySixFormat]');
-const hourlyThreeFormat = document.querySelectorAll('[data-hourlyThreeFormat]');
+        let arrayOf3HoursTempDataElements = [document.querySelectorAll('[data-hourlyThreeFormat-firstHour]'),document.querySelectorAll('[data-hourlyThreeFormat-secondHour]'),document.querySelectorAll('[data-hourlyThreeFormat-thirdHour]')];
+        let arrayOf3HoursImageDataElements = [document.querySelectorAll('[data-hourlyImageShort-firstImage]'),document.querySelectorAll('[data-hourlyImageShort-secondImage]'),document.querySelectorAll('[data-hourlyImageShort-thirdImage]')];
+
+        let arrayOf6HoursTempDataElements = [
+            document.querySelectorAll('[data-hourlySixFormat-first]'),document.querySelectorAll('[data-hourlySixFormat-second]'),document.querySelectorAll('[data-hourlySixFormat-third]'),
+            document.querySelectorAll('[data-hourlySixFormat-fourth]'),document.querySelectorAll('[data-hourlySixFormat-fifth]'),document.querySelectorAll('[data-hourlySixFormat-sixth]')
+    ];
+
+        let arrayOf6HoursImageDataElements = [
+            document.querySelectorAll('[data-hourlyImage-first]'),document.querySelectorAll('[data-hourlyImage-second]'),document.querySelectorAll('[data-hourlyImage-third]'),
+            document.querySelectorAll('[data-hourlyImage-fourth]'),document.querySelectorAll('[data-hourlyImage-fifth]'),document.querySelectorAll('[data-hourlyImage-sixth]')
+    ];
+
 //Image object and image element array
 const imageURLs = {
             Clear:'./weather images/sunny-img.png',
@@ -58,9 +69,7 @@ const daySummaries = {
     Snow: 'Snow',
     Thunderstorm: 'Storm'
 }
-// Hourly and daily image elements arrays, as well as daily summary word array
-const hourlyImageElements = document.querySelectorAll('[data-hourlyImage]');
-const hourlyImageElementsShort = document.querySelectorAll('[data-hourlyImageShort]');
+
 const dailyImage = document.querySelectorAll('[data-dailyImage]');
 const daySummaryWord = document.querySelectorAll('[data-daySummary]')
 
@@ -300,19 +309,44 @@ function updateConditions(obj){
     sunset.innerHTML = date;
     
     
-    
-    for(let i = 0; i < hourlyThreeFormat.length; i++){
-        hourlyThreeFormat[i].innerHTML = `${obj.hourly[i]}` + `&deg;`;
+    for(let i = 0;i < arrayOf3HoursTempDataElements.length;i++){
+            for(let j= 0;j < arrayOf3HoursTempDataElements[i].length; j++){
+                arrayOf3HoursTempDataElements[i][j].innerHTML = `${obj.hourly[i]}` + `&deg;`;
+            }
     }
+
+    for(let i = 0;i < arrayOf6HoursTempDataElements.length;i++){
+        for(let j= 0;j < arrayOf6HoursTempDataElements[i].length; j++){
+            arrayOf6HoursTempDataElements[i][j].innerHTML = `${obj.hourly[i]}` + `&deg;`;
+        }
+}
+
     
-    
-    for(let i = 0; i < hourlyImageElements.length;i++){
-        hourlyImageElements[i].src = imageURLs.hasOwnProperty([obj.hourlySummaryKeyWord[i]]) ? imageURLs[obj.hourlySummaryKeyWord[i]] : undefined ;
+    for(let i = 0;i < arrayOf6HoursImageDataElements.length;i++){
+        for(let j = 0;j < arrayOf6HoursImageDataElements[i].length;j++){
+            arrayOf6HoursImageDataElements[i][j].src = imageURLs.hasOwnProperty([obj.hourlySummaryKeyWord[i]]) ? imageURLs[obj.hourlySummaryKeyWord[i]] : undefined ;
+        }
+        console.log('test')
     }
+
+    //Depreciated way of setting the summary image to hourly 3hours forecast
+    // for(let i = 0; i < hourlyImageElements.length;i++){
+    //     hourlyImageElements[i].src = imageURLs.hasOwnProperty([obj.hourlySummaryKeyWord[i]]) ? imageURLs[obj.hourlySummaryKeyWord[i]] : undefined ;
+    // }
     
-    for(let i = 0; i < hourlyImageElementsShort.length;i++){
-        hourlyImageElementsShort[i].src = imageURLs.hasOwnProperty([obj.hourlySummaryKeyWord[i]]) ? imageURLs[obj.hourlySummaryKeyWord[i]] : undefined ;
+
+    for(let i = 0;i < arrayOf3HoursImageDataElements.length;i++){
+        for(let j = 0;j < arrayOf3HoursImageDataElements[i].length;j++){
+            arrayOf3HoursImageDataElements[i][j].src = imageURLs.hasOwnProperty([obj.hourlySummaryKeyWord[i]]) ? imageURLs[obj.hourlySummaryKeyWord[i]] : undefined ;
+        }
     }
+
+    //Depreciated way of setting the summary image to hourly 3hours forecast
+    // for(let i = 0; i < hourlyImageElementsShort.length;i++){
+    //     hourlyImageElementsShort[i].src = imageURLs.hasOwnProperty([obj.hourlySummaryKeyWord[i]]) ? imageURLs[obj.hourlySummaryKeyWord[i]] : undefined ;
+    // }
+
+
 
     for(let i = 0; i < dailyImage.length;i++){
         dailyImage[i].src = imageURLs.hasOwnProperty([obj.daySummaryKeyWord[i]]) ? imageURLs[obj.daySummaryKeyWord[i]] : undefined ;
@@ -323,7 +357,6 @@ function updateConditions(obj){
         daySummaryWord[i].innerHTML = daySummaries.hasOwnProperty([obj.daySummaryKeyWord[i]]) ? daySummaries[obj.daySummaryKeyWord[i]] : undefined ;
     }
     
-    console.log(obj.dailyMinMax[0][1]);
     
     for(let i = 0; i < dailyMaxes.length; i++){
         dailyMaxes[i].innerHTML = `${Math.trunc(obj.dailyMinMax[i][0])}` + ' ';
@@ -344,12 +377,6 @@ async function updateWeather(){
     tempMain.forEach(t =>{
         t.innerHTML = `${infoObject.temp}` + `&deg;`;
     })
-    
-    // initializing the 6 hours temperature array
-    for(let i = 0; i < hourlySixFormat.length;i++){
-        hourlySixFormat[i].innerHTML = `${infoObject.hourly[i]}` + `&deg;`;
-        
-    }
     
     
     let hour6 = new Date();

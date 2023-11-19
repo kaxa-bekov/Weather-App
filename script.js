@@ -26,6 +26,7 @@ const extendedConditionsWrapper =  document.getElementById("extendedConditionsWr
 // Main and sub info updatable fields (may add to a class later.)
 const cityMain = document.querySelectorAll('[data-city]');
 const tempMain = document.querySelectorAll('[data-temperature-main]');
+const imageMain = document.querySelectorAll('[data-image-main]');
 //Conditions variables/arrays of the same condition elements
 const precipitation = document.querySelectorAll('[data-precipitation]');
 const realFeel = document.querySelectorAll('[data-real-feel]');
@@ -38,22 +39,27 @@ const sunset = document.querySelector('[data-sunset]');
                                                
 
         // Element arrays to update the info.
-        // 6 hours hourly temperature array
-        // 3 hours hourly temperature arrays
-        //Object containing keys as the day summary and values as icon URLs to assign them depending on the summary of a given day
-        let arrayOf3HoursTempDataElements = [document.querySelectorAll('[data-hourlyThreeFormat-firstHour]'),document.querySelectorAll('[data-hourlyThreeFormat-secondHour]'),document.querySelectorAll('[data-hourlyThreeFormat-thirdHour]')];
-        let arrayOf3HoursImageDataElements = [document.querySelectorAll('[data-hourlyImageShort-firstImage]'),document.querySelectorAll('[data-hourlyImageShort-secondImage]'),document.querySelectorAll('[data-hourlyImageShort-thirdImage]')];
-
+        // Array contains other element arrays if they should have the same info. for example these arrays contain arrays of element, where each array of elements contains the element that supposed to displaythe same data.
+        // for example the first hour, then second hour and then third hour temperature, then the rest of the 3 arrays contain only one Element, but down in the nested for loop everything gets initialized properly
+    //temperature update
         let arrayOf6HoursTempDataElements = [
-            document.querySelectorAll('[data-hourlySixFormat-first]'),document.querySelectorAll('[data-hourlySixFormat-second]'),document.querySelectorAll('[data-hourlySixFormat-third]'),
-            document.querySelectorAll('[data-hourlySixFormat-fourth]'),document.querySelectorAll('[data-hourlySixFormat-fifth]'),document.querySelectorAll('[data-hourlySixFormat-sixth]')
+            document.querySelectorAll('[data-hourly-first]'),document.querySelectorAll('[data-hourly-second]'),document.querySelectorAll('[data-hourly-third]'),
+            document.querySelectorAll('[data-hourly-fourth]'),document.querySelectorAll('[data-hourly-fifth]'),document.querySelectorAll('[data-hourly-sixth]')
     ];
-
+    //image update
         let arrayOf6HoursImageDataElements = [
             document.querySelectorAll('[data-hourlyImage-first]'),document.querySelectorAll('[data-hourlyImage-second]'),document.querySelectorAll('[data-hourlyImage-third]'),
             document.querySelectorAll('[data-hourlyImage-fourth]'),document.querySelectorAll('[data-hourlyImage-fifth]'),document.querySelectorAll('[data-hourlyImage-sixth]')
     ];
 
+    
+
+        let arrayOfHourIncrement = [
+            document.querySelectorAll('[data-hourI-first]'),document.querySelectorAll('[data-hourI-second]'),document.querySelectorAll('[data-hourI-third]'),
+            document.querySelectorAll('[data-hourI-fourth]'),document.querySelectorAll('[data-hourI-fifth]'),document.querySelectorAll('[data-hourI-sixth]')
+    ];
+
+//Object containing keys as the day summary and values as icon URLs to assign them depending on the summary of a given day
 //Image object and image element array
 const imageURLs = {
             Clear:'./weather images/sunny-img.png',
@@ -70,8 +76,18 @@ const daySummaries = {
     Thunderstorm: 'Storm'
 }
 
-const dailyImage = document.querySelectorAll('[data-dailyImage]');
-const daySummaryWord = document.querySelectorAll('[data-daySummary]')
+//Daaly forecast elements arrays of arrays of similar elements to have them initialized in one place in the code.
+
+const dailyImage =[
+     document.querySelectorAll('[data-dailyImage-first]'),document.querySelectorAll('[data-dailyImage-second]'),document.querySelectorAll('[data-dailyImage-third]'),document.querySelectorAll('[data-dailyImage-fourth]'),
+     document.querySelectorAll('[data-dailyImage-fifth]'),document.querySelectorAll('[data-dailyImage-sixth]'),document.querySelectorAll('[data-dailyImage-seventh]')
+];
+
+const daySummaryWord = [
+    document.querySelectorAll('[data-daySummary-first]'),document.querySelectorAll('[data-daySummary-second]'),document.querySelectorAll('[data-daySummary-third]'),document.querySelectorAll('[data-daySummary-fourth]'),
+    document.querySelectorAll('[data-daySummary-fifth]'),document.querySelectorAll('[data-daySummary-sixth]'),document.querySelectorAll('[data-daySummary-seventh]')
+
+]
 
 //example
 // for (const key in object) {
@@ -80,38 +96,53 @@ const daySummaryWord = document.querySelectorAll('[data-daySummary]')
 //     }
 // }
 
+
+                                ////Alternative way of initializing the daily min maxes
+                                // let arrayOfMins = [
+                                //     document.querySelectorAll('[data-min-first]'),document.querySelectorAll('[data-min-second]'),document.querySelectorAll('[data-min-third]'),
+                                //     document.querySelectorAll('[data-min-fourth]'),document.querySelectorAll('[data-min-fifth]'),document.querySelectorAll('[data-min-sixth]'),
+                                //     document.querySelectorAll('[data-min-seventh]')
+                                // ]
+
+                                // let arrayOfMaxes = [
+                                //     document.querySelectorAll('[data-max-first]'),document.querySelectorAll('[data-max-second]'),document.querySelectorAll('[data-max-third]'),
+                                //     document.querySelectorAll('[data-max-fourth]'),document.querySelectorAll('[data-max-fifth]'),document.querySelectorAll('[data-max-sixth]'),
+                                //     document.querySelectorAll('[data-max-seventh]')
+                                // ]
+
+
 //min  and max daily tempereatures.
-const dailyMins = document.querySelectorAll('[data-min-temp]');
-const dailyMaxes = document.querySelectorAll('[data-max-temp]');
+
+let arrayOfArraysOfElementsContaining2ArraysMinAndMax = [
+
+    [document.querySelectorAll('[data-max-first]'),document.querySelectorAll('[data-min-first]')],
+    [document.querySelectorAll('[data-max-second]'),document.querySelectorAll('[data-min-second]')],
+    [document.querySelectorAll('[data-max-third]'),document.querySelectorAll('[data-min-third]')],
+    [document.querySelectorAll('[data-max-fourth]'),document.querySelectorAll('[data-min-fourth]')],
+    [document.querySelectorAll('[data-max-fifth]'),document.querySelectorAll('[data-min-fifth]')],
+    [document.querySelectorAll('[data-max-sixth]'),document.querySelectorAll('[data-min-sixth]')],
+    [document.querySelectorAll('[data-max-seventh]'),document.querySelectorAll('[data-min-seventh]')]
+
+]
+
+
+
 // console.log(dailyMins[0].textContent);
 const dailyForecast = document.getElementById("dailyForecast");
 const subHourlyForecast = document.getElementById("subHourlyForecast");
 const dailyForecastUL = document.querySelector(".daily-forecast-div > ul");
 const dailyForecastFirstParagraph = document.querySelector(".daily-forecast-div > p");
 const dailyForecastLi = document.querySelectorAll("[data-daily]");
-//Week days array
-const daysOfWeek = document.querySelectorAll('[data-day]')
 
-let dayAfter = new Date();
+
+//Week days array and some of the handling
+const daysOfWeek = document.querySelectorAll('[data-day]')
+const daysOfWeekShort = document.querySelectorAll('[data-day-short]')
+let dayIncrement = new Date();
 let today = new Date();
 
 const weekDaysRefs = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
-for(let i=0;i<daysOfWeek.length;i++){
-    let nextDay = i + 1;
-    dayAfter.setDate(today.getDate() + nextDay);
-    daysOfWeek[i].innerHTML = weekDaysRefs[dayAfter.getDay()];
-
-}
-
-
-
-// This block ensures that hourly forecast starts with the current hour and increments every 3 hours
-const hourly6 = document.querySelectorAll('[data-6Hours]')
-
-
-// console.log(dailyForecastFirstParagraph);
-// console.log(dailyForecastLi);
 
 
 // button handler that shows expanded conditions and adds hourly to sub-weather tab
@@ -157,7 +188,6 @@ const getWeatherData = async (lat, lon) => {
     return weatherData;
 }
 
-// getWeatherData(40.4093, 49.8671);
 
 // This fuction gets the callback function as a parameter and then calls that function inside. The callback function is the API Call function that will return the json object.
 // Then in this function we extract all the needed weather information and store it in our JS object that will be returned from here to be handled in the update() function.
@@ -216,24 +246,24 @@ async function getNeededWeather(getData) {
     
     //6. Now we will get and store the daily highest/lowest temperatures. This is represented as a matrix with each row containing the highest/lowest temperatures for that given day.
     let dailyTempHiLo = [   [weatherData.daily[0].temp.max,weatherData.daily[0].temp.min],
-    [weatherData.daily[1].temp.max,weatherData.daily[1].temp.min],
-    [weatherData.daily[2].temp.max,weatherData.daily[2].temp.min],
-    [weatherData.daily[3].temp.max,weatherData.daily[3].temp.min],
-    [weatherData.daily[4].temp.max,weatherData.daily[4].temp.min],
-    [weatherData.daily[5].temp.max,weatherData.daily[5].temp.min],
-    [weatherData.daily[6].temp.max,weatherData.daily[6].temp.min]
+        [weatherData.daily[1].temp.max,weatherData.daily[1].temp.min],
+        [weatherData.daily[2].temp.max,weatherData.daily[2].temp.min],
+        [weatherData.daily[3].temp.max,weatherData.daily[3].temp.min],
+        [weatherData.daily[4].temp.max,weatherData.daily[4].temp.min],
+        [weatherData.daily[5].temp.max,weatherData.daily[5].temp.min],
+        [weatherData.daily[6].temp.max,weatherData.daily[6].temp.min]
 ]
 
 // console.log(dailyTempHiLo[0]);
 
 //7. And the las thing is we have to get the summary of the day like 'sunny' or 'cloudy'
 let daySummary = [  weatherData.daily[0].weather[0].main,
-weatherData.daily[1].weather[0].main,
-weatherData.daily[2].weather[0].main,
-weatherData.daily[3].weather[0].main,
-weatherData.daily[4].weather[0].main,
-weatherData.daily[5].weather[0].main,
-weatherData.daily[6].weather[0].main
+    weatherData.daily[1].weather[0].main,
+    weatherData.daily[2].weather[0].main,
+    weatherData.daily[3].weather[0].main,
+    weatherData.daily[4].weather[0].main,
+    weatherData.daily[5].weather[0].main,
+    weatherData.daily[6].weather[0].main
 ]
 
 
@@ -308,60 +338,89 @@ function updateConditions(obj){
     let date = new Date(obj.airConditions.sunset * 1000).toLocaleTimeString('en-US', { hour: "2-digit", minute: "2-digit" });
     sunset.innerHTML = date;
     
-    
-    for(let i = 0;i < arrayOf3HoursTempDataElements.length;i++){
-            for(let j= 0;j < arrayOf3HoursTempDataElements[i].length; j++){
-                arrayOf3HoursTempDataElements[i][j].innerHTML = `${obj.hourly[i]}` + `&deg;`;
-            }
-    }
 
+    //Hourly temp data
     for(let i = 0;i < arrayOf6HoursTempDataElements.length;i++){
         for(let j= 0;j < arrayOf6HoursTempDataElements[i].length; j++){
             arrayOf6HoursTempDataElements[i][j].innerHTML = `${obj.hourly[i]}` + `&deg;`;
         }
 }
-
-    
+    //Hourly image
     for(let i = 0;i < arrayOf6HoursImageDataElements.length;i++){
         for(let j = 0;j < arrayOf6HoursImageDataElements[i].length;j++){
             arrayOf6HoursImageDataElements[i][j].src = imageURLs.hasOwnProperty([obj.hourlySummaryKeyWord[i]]) ? imageURLs[obj.hourlySummaryKeyWord[i]] : undefined ;
         }
-        console.log('test')
     }
 
-    //Depreciated way of setting the summary image to hourly 3hours forecast
-    // for(let i = 0; i < hourlyImageElements.length;i++){
-    //     hourlyImageElements[i].src = imageURLs.hasOwnProperty([obj.hourlySummaryKeyWord[i]]) ? imageURLs[obj.hourlySummaryKeyWord[i]] : undefined ;
-    // }
+    //Daily image
+    for(let i=0;i<dailyImage.length;i++){
+        for(let j = 0; j < dailyImage[i].length;j++){
+        dailyImage[i][j].src = imageURLs.hasOwnProperty([obj.daySummaryKeyWord[i]]) ? imageURLs[obj.daySummaryKeyWord[i]] : undefined ;
+    }
+    }
     
+    //Daily Summary
+    for(let i=0;i<daySummaryWord.length;i++){
+        for(let j = 0; j < daySummaryWord[i].length;j++){
+        daySummaryWord[i][j].innerHTML = daySummaries.hasOwnProperty([obj.daySummaryKeyWord[i]]) ? daySummaries[obj.daySummaryKeyWord[i]] : undefined ;
+    }
+    }
 
-    for(let i = 0;i < arrayOf3HoursImageDataElements.length;i++){
-        for(let j = 0;j < arrayOf3HoursImageDataElements[i].length;j++){
-            arrayOf3HoursImageDataElements[i][j].src = imageURLs.hasOwnProperty([obj.hourlySummaryKeyWord[i]]) ? imageURLs[obj.hourlySummaryKeyWord[i]] : undefined ;
+
+    //Week days long implementation
+    for(let i=0;i<daysOfWeek.length;i++){
+        let nextDay = i + 1;
+        dayIncrement.setDate(today.getDate() + nextDay);
+        daysOfWeek[i].innerHTML = weekDaysRefs[dayIncrement.getDay()];
+    }
+
+//Week days short implementation
+    for(let i =0;i<daysOfWeekShort.length;i++){
+        let nextDay = i + 1;
+        dayIncrement.setDate(today.getDate() + nextDay);
+        daysOfWeekShort[i].innerHTML = weekDaysRefs[dayIncrement.getDay()];
+    }
+
+    ////Alternative way of initializing the daily min maxes
+                    // //Daily max temps
+                    // for(let i=0;i < arrayOfMaxes.length;i++){
+                    //     for(j=0;j<arrayOfMaxes[i].length;j++){
+                    //         arrayOfMaxes[i][j].innerHTML = `${Math.trunc(obj.dailyMinMax[i][0])}` + ' ';
+
+                    //     }
+                    // }
+                    // //Daily min temps
+                    // for(let i=0;i<arrayOfMins.length;i++){
+                    //     for(j=0;j<arrayOfMins[i].length;j++){
+                    //         arrayOfMins[i][j].innerHTML = Math.trunc(obj.dailyMinMax[i][1]);
+                    //     }
+                    // }
+
+    // console.log(arrayOfArraysOfElementsContaining2ArraysMinAndMax.length);
+    // console.log(arrayOfArraysOfElementsContaining2ArraysMinAndMax[0].length);
+    // console.log(arrayOfArraysOfElementsContaining2ArraysMinAndMax[5][0].length);
+
+    
+    // going inside of the main array
+    for(let i = 0; i<arrayOfArraysOfElementsContaining2ArraysMinAndMax.length;i++){
+        //going inside of the second array, this one will alway contain a PAIR (2) of arrays foe each lines max and min, therefore we are only entering this loop once, then increasing the j variable to be out of range.
+        //That is done because we are accesing both of the nested arrays(max and min) usin [j+1] for the second one and initializing both
+        for(let j = 0;j < arrayOfArraysOfElementsContaining2ArraysMinAndMax[i].length;j+=5){
+            // Entering the actual elements array and setting their data (both at the same time) using the two dimensional array that we get from our forecast object.
+            for(let n = 0;n < arrayOfArraysOfElementsContaining2ArraysMinAndMax[i][j].length;n++){
+                //setting max 
+                    arrayOfArraysOfElementsContaining2ArraysMinAndMax[i][j][n].innerHTML = `${Math.trunc(obj.dailyMinMax[i][0])}` + ' ';
+                // //setting min
+                    arrayOfArraysOfElementsContaining2ArraysMinAndMax[i][j+1][n].innerHTML = Math.trunc(obj.dailyMinMax[i][1]);
+            }
         }
     }
 
-    //Depreciated way of setting the summary image to hourly 3hours forecast
-    // for(let i = 0; i < hourlyImageElementsShort.length;i++){
-    //     hourlyImageElementsShort[i].src = imageURLs.hasOwnProperty([obj.hourlySummaryKeyWord[i]]) ? imageURLs[obj.hourlySummaryKeyWord[i]] : undefined ;
+    
+    // for(let i = 0; i < dailyMaxes.length; i++){
+    //     dailyMaxes[i].innerHTML = `${Math.trunc(obj.dailyMinMax[i][0])}` + ' ';
+    //     dailyMins[i].innerHTML = Math.trunc(obj.dailyMinMax[i][1]);
     // }
-
-
-
-    for(let i = 0; i < dailyImage.length;i++){
-        dailyImage[i].src = imageURLs.hasOwnProperty([obj.daySummaryKeyWord[i]]) ? imageURLs[obj.daySummaryKeyWord[i]] : undefined ;
-    }
-    
-    
-    for(let i = 0; i < daySummaryWord.length;i++){
-        daySummaryWord[i].innerHTML = daySummaries.hasOwnProperty([obj.daySummaryKeyWord[i]]) ? daySummaries[obj.daySummaryKeyWord[i]] : undefined ;
-    }
-    
-    
-    for(let i = 0; i < dailyMaxes.length; i++){
-        dailyMaxes[i].innerHTML = `${Math.trunc(obj.dailyMinMax[i][0])}` + ' ';
-        dailyMins[i].innerHTML = Math.trunc(obj.dailyMinMax[i][1]);
-    }
 }
 
 async function updateWeather(){
@@ -377,35 +436,26 @@ async function updateWeather(){
     tempMain.forEach(t =>{
         t.innerHTML = `${infoObject.temp}` + `&deg;`;
     })
-    
-    
-    let hour6 = new Date();
-    let hour3 = new Date();
-    let hourIncrement = 0;
-    for(i=0;i<hourly6.length;i++){
 
-        hour6.setHours(today.getHours() + hourIncrement, 0);
-        hourly6[i].innerHTML = hour6.toLocaleTimeString(undefined, {hour:'2-digit',minute: '2-digit'});
-        
-        hourIncrement += 3;
+    imageMain.forEach(image => {
+        image.alt = daySummaries.hasOwnProperty([infoObject.daySummaryKeyWord[0]]) ? daySummaries[infoObject.daySummaryKeyWord[0]] : undefined ;
+        image.src = imageURLs.hasOwnProperty(infoObject.daySummaryKeyWord[0]) ? imageURLs[infoObject.daySummaryKeyWord[0]] : undefined;
+    })
+
+    //incrementring hour value +3
+        let hourCurrent = new Date();
+        let hourIncrement = 0;
+
+    for(let i=0;i<arrayOfHourIncrement.length;i++){
+        for(j=0;j<arrayOfHourIncrement[i].length;j++){
+        hourCurrent.setHours(today.getHours() + hourIncrement, 0);
+        arrayOfHourIncrement[i][j].innerHTML = hourCurrent.toLocaleTimeString(undefined, {hour:'2-digit',minute: '2-digit'});
     }
-    
-    hourIncrement = 0;
-    // console.log(today.getTimezoneOffset()/60);
-    // today.setHours(6, 0);
-    // console.log(today.toString());
-    
-    const hourly3 = document.querySelectorAll('[data-3hours]')
-    
-    for(i=0;i<hourly3.length;i++){
-        hour3.setHours(today.getHours() + hourIncrement, 0);
-        hourly3[i].innerHTML = hour3.toLocaleTimeString(undefined, {hour: '2-digit', minute:'2-digit'});
-        hourIncrement += 3;
+    hourIncrement += 3;
     }
     
     
     updateConditions(infoObject);
-    
     
 }
 

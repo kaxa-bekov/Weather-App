@@ -195,7 +195,7 @@ async function prepareResponse(location){
     let wData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
     let neededData = await getNeededWeather(wData);
     console.log(neededData);
-    updateWeather(neededData);
+    // updateWeather(neededData);
     updateConditions(neededData);
     return 
 
@@ -421,11 +421,7 @@ function updateConditions(obj){
         }
     }
 
-}
 
-function updateWeather(infoObject){
-    
-    
     //initializing the city with geocoding api and the temperature with weather api
     
     cityMain.forEach(city => {
@@ -434,12 +430,12 @@ function updateWeather(infoObject){
     
     
     tempMain.forEach(t =>{
-        t.innerHTML = `${infoObject.temp}` + `&deg;`;
+        t.innerHTML = `${obj.temp}` + `&deg;`;
     })
 
     imageMain.forEach(image => {
-        image.alt = daySummaries.hasOwnProperty([infoObject.daySummaryKeyWord[0]]) ? daySummaries[infoObject.daySummaryKeyWord[0]] : undefined ;
-        image.src = imageURLs.hasOwnProperty(infoObject.daySummaryKeyWord[0]) ? imageURLs[infoObject.daySummaryKeyWord[0]] : undefined;
+        image.alt = daySummaries.hasOwnProperty([obj.daySummaryKeyWord[0]]) ? daySummaries[obj.daySummaryKeyWord[0]] : undefined ;
+        image.src = imageURLs.hasOwnProperty(obj.daySummaryKeyWord[0]) ? imageURLs[obj.daySummaryKeyWord[0]] : undefined;
     })
 
     //incrementring hour value +3
@@ -456,12 +452,15 @@ function updateWeather(infoObject){
     
     
     
+
+
 }
 
+// function updateWeather(infoObject){
+    
+    
 
-
-
-
+// }
 
 //Cities button handles ro switch tabs (classList.add/remove('active/hidden)).
 

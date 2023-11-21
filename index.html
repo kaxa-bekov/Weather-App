@@ -39,8 +39,8 @@
         <div class="app-screen">
             <!--Search Bar----------------------------------------------------------->
             <div class="search-bar">
-                <form class="search-form">
-                    <input type="text" name="city" id="city-search" class="search-bar-itself"  frameborder="0" placeholder="Enter City">
+                <form id="searh-box" class="search-form">
+                    <input data-location  type="text" name="city" id="city-search" class="search-bar-itself"  frameborder="0" placeholder="Enter City">
                 </form>
             </div>
             <!----------------------------------------------------------------------->
@@ -61,7 +61,7 @@
                                             </div>
                                     </div>
                                     <div class="weather-image">
-                                        <img data-image-main src="" alt="" />
+                                        <img data-image-main src="./icons/loading-icon.png" alt="" />
                                     </div>
 
                                 </div>
@@ -74,42 +74,42 @@
                                             <li>
                                                 <div class="hourly-forecast-li">
                                                     <p data-hourI-first>6:00 AM</p>
-                                                    <img data-hourlyImage-first src="./weather images/cloudy-img.png" />
+                                                    <img data-hourlyImage-first src="./icons/loading-icon.png" />
                                                     <p data-hourly-first class="hourly-degrees">25&deg;</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
                                                     <p data-hourI-second>9:00 AM</p>
-                                                    <img data-hourlyImage-second src="./weather images/sunny-cloudy-img.png" />
+                                                    <img data-hourlyImage-second src="./icons/loading-icon.png" />
                                                     <p data-hourly-second class="hourly-degrees">28&deg;</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
                                                     <p data-hourI-third>12:00 PM</p>
-                                                    <img data-hourlyImage-third src="./weather images/sunny-img.png" />
+                                                    <img data-hourlyImage-third src="./icons/loading-icon.png" />
                                                     <p data-hourly-third class="hourly-degrees">33&deg;</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
                                                     <p data-hourI-fourth>3:00 PM</p>
-                                                    <img data-hourlyImage-fourth src="./weather images/sunny-img.png" />
+                                                    <img data-hourlyImage-fourth src="./icons/loading-icon.png" />
                                                     <p data-hourly-fourth class="hourly-degrees">34&deg;</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
                                                     <p data-hourI-fifth>6:00 PM</p>
-                                                    <img data-hourlyImage-fifth src="./weather images/sunny-img.png" />
+                                                    <img data-hourlyImage-fifth src="./icons/loading-icon.png" />
                                                     <p data-hourly-fifth class="hourly-degrees">32&deg;</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
                                                     <p data-hourI-sixth>9:00 PM</p>
-                                                    <img data-hourlyImage-sixth src="./weather images/sunny-cloudy-img.png" />
+                                                    <img data-hourlyImage-sixth src="./icons/loading-icon.png" />
                                                     <p data-hourly-sixth class="hourly-degrees">30&deg;</p>
                                                 </div>
                                             </li>
@@ -190,7 +190,16 @@
                             </div>
                             <!--This is the second tab of this partition. it contains the list of cities when user has clicked on the seach bar to look up cities or simply selected the cities in the side bar.-->
                             <div data-mains id="cities-tab">
-
+                                    <ul class="cities-list">
+                                        <li class="city-list-item">
+                                            <img src="./icons/loading-icon.png" alt="weather image">
+                                            <div class="city-name-and-local-time">
+                                                <h1 class="list-item-city">Madrid</h1>
+                                                <p class="local-time">12:32</p>
+                                            </div>
+                                            <p class="list-item-temperature">32&deg;</p>
+                                        </li>
+                                    </ul> 
                             </div>
                     </div>
                     <!-------------------------------------------------------------------------------------------------------------------------->
@@ -204,21 +213,21 @@
                                         <li>
                                             <div>
                                                 <p data-hourI-first>6:00 AM</p>
-                                                <img data-hourlyImage-first src="" />
+                                                <img data-hourlyImage-first src="./icons/loading-icon.png" />
                                                 <p data-hourly-first >25&deg;</p>
                                             </div>
                                         </li>
                                         <li>
                                             <div>
                                                 <p data-hourI-second>9:00 AM</p>
-                                                <img data-hourlyImage-second src="" />
+                                                <img data-hourlyImage-second src="./icons/loading-icon.png" />
                                                 <p data-hourly-second >28&deg;</p>
                                             </div>
                                         </li>
                                         <li>
                                             <div>
                                                 <p data-hourI-third>12:00 PM</p>
-                                                <img data-hourlyImage-third src="" />
+                                                <img data-hourlyImage-third src="./icons/loading-icon.png" />
                                                 <p data-hourly-third >33&deg;</p>
                                             </div>
                                         </li>
@@ -232,7 +241,7 @@
                                             <li data-daily class="daily-forecast">
                                                     <p>Today</p>
                                                     <div>
-                                                        <img data-dailyImage-first src="" alt="sunny" />
+                                                        <img data-dailyImage-first src="./icons/loading-icon.png" alt="sunny" />
                                                         <p data-daySummary-first>...</p>
                                                     </div>
                                                     <p><span data-max-first>. </span>/<span data-min-first>.</span></p>
@@ -240,7 +249,7 @@
                                             <li data-daily class="daily-forecast">
                                                     <p data-day>...</p>
                                                     <div>
-                                                        <img data-dailyImage-second src="" alt="sunny" />
+                                                        <img data-dailyImage-second src="./icons/loading-icon.png" alt="sunny" />
                                                         <p data-daySummary-second>...</p>
                                                     </div>
                                                     <p><span data-max-second>. </span>/<span data-min-second>.</span></p>
@@ -248,7 +257,7 @@
                                             <li data-daily class="daily-forecast">
                                                     <p data-day>...</p>
                                                     <div>
-                                                        <img data-dailyImage-third src="" alt="sunny" />
+                                                        <img data-dailyImage-third src="./icons/loading-icon.png" alt="sunny" />
                                                         <p data-daySummary-third>...</p>
                                                     </div>
                                                     <p><span data-max-third>. </span>/<span data-min-third>.</span></p>
@@ -256,7 +265,7 @@
                                             <li data-daily class="daily-forecast">
                                                     <p data-day>...</p>
                                                     <div>
-                                                        <img data-dailyImage-fourth src="" alt="sunny" />
+                                                        <img data-dailyImage-fourth src="./icons/loading-icon.png" alt="sunny" />
                                                         <p data-daySummary-fourth>...</p>
                                                     </div>
                                                     <p><span data-max-fourth>. </span>/<span data-min-fourth>.</span></p>
@@ -264,7 +273,7 @@
                                             <li data-daily class="daily-forecast">
                                                     <p data-day>...</p>
                                                     <div>
-                                                        <img data-dailyImage-fifth src="" alt="sunny" />
+                                                        <img data-dailyImage-fifth src="./icons/loading-icon.png" alt="sunny" />
                                                         <p data-daySummary-fifth>...</p>
                                                     </div>
                                                     <p><span data-max-fifth>. </span>/<span data-min-fifth>.</span></p>
@@ -272,7 +281,7 @@
                                             <li data-daily class="daily-forecast">
                                                     <p data-day>...</p>
                                                     <div>
-                                                        <img data-dailyImage-sixth src="" alt="sunny" />
+                                                        <img data-dailyImage-sixth src="./icons/loading-icon.png" alt="sunny" />
                                                         <p data-daySummary-sixth>...</p>
                                                     </div>
                                                     <p><span data-max-sixth>. </span>/<span data-min-sixth>.</span></p>
@@ -280,7 +289,7 @@
                                             <li data-daily class="daily-forecast">
                                                     <p data-day>...</p>
                                                     <div>
-                                                        <img data-dailyImage-seventh src="" alt="sunny" />
+                                                        <img data-dailyImage-seventh src="./icons/loading-icon.png" alt="sunny" />
                                                         <p data-daySummary-seventh>...</p>
                                                     </div>
                                                     <p><span data-max-seventh>. </span>/<span data-min-seventh>.</span></p>
@@ -302,7 +311,7 @@
                                                 </div>
                                             </div>
                                             <div class="alt-weather-image">
-                                                <img data-image-main src="" alt="" />
+                                                <img data-image-main src="./icons/loading-icon.png" alt="" />
                                             </div>
                                 </div>
                                 <div class="alt-hourly sub-hourly-forecast">
@@ -311,21 +320,21 @@
                                                 <li>
                                                     <div>
                                                         <p data-hourI-first>6:00 AM</p>
-                                                        <img data-hourlyImage-first src="" />
+                                                        <img data-hourlyImage-first src="./icons/loading-icon.png" />
                                                         <p data-hourly-first>25&deg;</p>
                                                     </div>
                                                 </li>
                                                 <li>
                                                     <div>
                                                         <p data-hourI-second>9:00 AM</p>
-                                                        <img data-hourlyImage-second src="" />
+                                                        <img data-hourlyImage-second src="./icons/loading-icon.png" />
                                                         <p data-hourly-second>28&deg;</p>
                                                     </div>
                                                 </li>
                                                 <li>
                                                     <div>
                                                         <p data-hourI-third>12:00 PM</p>
-                                                        <img data-hourlyImage-third src="" />
+                                                        <img data-hourlyImage-third src="./icons/loading-icon.png" />
                                                         <p data-hourly-third>33&deg;</p>
                                                     </div>
                                                 </li>
@@ -336,7 +345,7 @@
                                         <li class="daily-forecast">
                                                 <p>Today</p>
                                                 <div>
-                                                    <img data-dailyImage-first src="" alt="daily summary" />
+                                                    <img data-dailyImage-first src="./icons/loading-icon.png" alt="daily summary" />
                                                     <p data-daySummary-first>...</p>
                                                 </div>
                                                 <p><span data-max-first>. </span>/<span data-min-first>.</span></p>
@@ -344,7 +353,7 @@
                                         <li class="daily-forecast">
                                                 <p data-day-short>...</p>
                                                 <div>
-                                                    <img data-dailyImage-second src="" alt="daily summary" />
+                                                    <img data-dailyImage-second src="./icons/loading-icon.png" alt="daily summary" />
                                                     <p data-daySummary-second>...</p>
                                                 </div>
                                                 <p><span data-max-second>. </span>/<span data-min-second>.</span></p>
@@ -352,7 +361,7 @@
                                         <li class="daily-forecast">
                                                 <p data-day-short>...</p>
                                                 <div>
-                                                    <img data-dailyImage-third src="" alt="daily summary" />
+                                                    <img data-dailyImage-third src="./icons/loading-icon.png" alt="daily summary" />
                                                     <p data-daySummary-third>...</p>
                                                 </div>
                                                 <p><span data-max-third>. </span>/<span data-min-third>.</span></p>

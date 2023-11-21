@@ -627,6 +627,64 @@ div {
     width:100%
 }
 
+.cities-list{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background-color: transparent;
+    border-radius: 0;
+    list-style: none;
+}
+
+.city-list-item{
+    width: 100%;
+    height: 10%;
+    padding: 12px;
+    margin: 12px 0;
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--color-div-background);
+    border-radius:26px;
+}
+
+.city-list-item:hover,
+.city-list-item:focus-visible{
+    border: 1px solid blue;
+    background-color: transparent;
+}
+
+.city-list-item > img{
+    width: 125px;
+    height: 125px;
+    padding: 6px;
+}
+
+.list-item-temperature{
+    color: var(--color-text-light);
+    font-size: 3rem;
+    padding: 8px;
+    padding-top:10px;
+}
+
+.local-time{
+    color:var(--color-text-dark);
+    line-height: 2;
+    font-size: 1.5rem;
+}
+
+.city-name-and-local-time{
+    border-radius:0;
+    padding: 8px;
+    padding-top: 23px;
+    margin-right: 368px;
+}
+
+.list-item-city{
+    color:var(--color-text-light);
+    font-size:2rem;
+    
+}
+
 .hidden{
     display:none;
 }

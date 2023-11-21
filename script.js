@@ -4,6 +4,8 @@ const citiesButton = document.getElementById("cities-option");
 const mapButton = document.getElementById("map-option");
 const settingsButton = document.getElementById("settings-option");
 
+const searchBox = document.getElementById('searh-box');
+const searchData = document.querySelector('[data-location]');
 //All tabs are contained in two arrays, one array holds the main tabs to set their active/hidden class and anothe array contains the sub tabs for the same functionality
 // Also all the tabs have their unique ids to use them as a reference to each tab depending on which one is selected and set it to active.
 const weatherTab = document.getElementById('weather-tab')
@@ -52,8 +54,6 @@ const sunset = document.querySelector('[data-sunset]');
             document.querySelectorAll('[data-hourlyImage-fourth]'),document.querySelectorAll('[data-hourlyImage-fifth]'),document.querySelectorAll('[data-hourlyImage-sixth]')
     ];
 
-    
-
         let arrayOfHourIncrement = [
             document.querySelectorAll('[data-hourI-first]'),document.querySelectorAll('[data-hourI-second]'),document.querySelectorAll('[data-hourI-third]'),
             document.querySelectorAll('[data-hourI-fourth]'),document.querySelectorAll('[data-hourI-fifth]'),document.querySelectorAll('[data-hourI-sixth]')
@@ -75,8 +75,7 @@ const daySummaries = {
     Snow: 'Snow',
     Thunderstorm: 'Storm'
 }
-
-//Daaly forecast elements arrays of arrays of similar elements to have them initialized in one place in the code.
+//Daily forecast elements arrays of arrays of similar elements to have them initialized in one place in the code.
 
 const dailyImage =[
      document.querySelectorAll('[data-dailyImage-first]'),document.querySelectorAll('[data-dailyImage-second]'),document.querySelectorAll('[data-dailyImage-third]'),document.querySelectorAll('[data-dailyImage-fourth]'),
@@ -144,6 +143,13 @@ let today = new Date();
 const weekDaysRefs = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 
+// Variable to hold location and weather data
+// let locationLat = '';
+// let locationLong = '';
+
+//Default city name
+let currentLocation= '';
+
 
 // button handler that shows expanded conditions and adds hourly to sub-weather tab
 conditionsExpandButton.addEventListener('click',() =>{
@@ -180,38 +186,58 @@ function subWeatherDisplayRevert(){
     })
 }
 
-// This function makes the Api call and returns the json object to be handled later in the code. It receives the lat and long coordinates that will be passed from the search bar.
-const getWeatherData = async (lat, lon) => {
-    let  weatherData = undefined;
-    weatherData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
-    console.log(weatherData);
-    return weatherData;
+async function prepareResponse(location){
+   
+    let geoData = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=2e45d6c495086102f84e4abce600e8a6`).then(response => response.json());
+    currentLocation = geoData[0].name;
+    let lat = geoData[0].lat;
+    let lon = geoData[0].lon;
+    let wData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
+    let neededData = await getNeededWeather(wData);
+    console.log(neededData);
+    updateWeather(neededData);
+    updateConditions(neededData);
+    return 
+
 }
+
+//This function fetches the location lat and long and initializes two variables to hold that data.
+
+// async function getLocation(location){
+
+//     const locationData = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=2e45d6c495086102f84e4abce600e8a6`).then(response => response.json());
+
+//     locationLat = locationData[0].lat;
+//     locationLong = locationData[0].lon;
+    
+
+//     const geoObject = {
+//         city: locationData[0].name,
+//         lat: locationData[0].lat,
+//         lon: locationData[0].lon
+//     }
+
+//     return geoObject;
+
+// }
+// This function makes the Api call and returns the json object to be handled later in the code. It receives the lat and long coordinates that will be passed from the search bar.
+
+// const getWeatherData = async (lat, lon) => {
+//     let weatherData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
+//     return weatherData;
+// }
 
 
 // This fuction gets the callback function as a parameter and then calls that function inside. The callback function is the API Call function that will return the json object.
 // Then in this function we extract all the needed weather information and store it in our JS object that will be returned from here to be handled in the update() function.
-async function getNeededWeather(getData) {
+async function getNeededWeather(weatherData) {
     
-    
-    // This is returned json object, we need to get needed data from it and save it in our custom object.
-    let weatherData = await getData(41.4993,-81.6944);
-    
-    //Now we need to extract the following: city name, current temperature, chance of rain, hourly temperatures for that current day, air conditions for the current day.
-    // We also need to get the daily temperature (highest/lowest pairs) - this will be assigned to each day of the week so should probably have a separate object for it.
-    
-    //1. City Name variable:
-    let city = weatherData.timezone.split('/')[1];
-    //will check if the city name is 2 words and if it is will remove the underscore from it, otherwise city will be returned
-    if(city.includes('_')){
-        city = city.split('_')[0] + ' ' + city.split('_')[1];
-    }
-    // console.log(city);
+    //1. The city name is being initialized globally and set from the variable on line 151.
     
     //2. Now we will set a variable for the current temperature
     let temp = Math.trunc(weatherData.current.temp);
     
-    //3. Now we will creat an array and save all of the needed air conditions in it. the chance of rain will be used twice.
+    //3. Now we will creat an array and save all of the needed air conditions in it.
     let airConditions = {       
         uvi: weatherData.current.uvi,
         windSpeed: weatherData.current.wind_speed,
@@ -223,7 +249,6 @@ async function getNeededWeather(getData) {
         sunset: weatherData.current.sunset
     };
 
-    // console.log(airConditions[0]);
     //4. Now we need the hourly temperature values for that day.
     let hourlyTempRaw = [weatherData.hourly[0].temp, weatherData.hourly[3].temp, weatherData.hourly[6].temp, weatherData.hourly[9].temp, weatherData.hourly[12].temp, weatherData.hourly[15].temp];
     
@@ -266,12 +291,9 @@ let daySummary = [  weatherData.daily[0].weather[0].main,
     weatherData.daily[6].weather[0].main
 ]
 
-
-
 // this variable holds the object that has the needed info.
 let neededInfoObject = {
-    city:`${city}`,
-    temp:`${temp}`,
+    temp,
     airConditions,
     hourly: [
         hourlyTemp[0],
@@ -315,6 +337,8 @@ return neededInfoObject;
 
 
 function updateConditions(obj){
+
+
     
     realFeel.forEach(realFeel => {
         realFeel.innerHTML = `${Math.trunc(obj.airConditions.feelsLike)}` + `&deg;`;
@@ -374,37 +398,18 @@ function updateConditions(obj){
         daysOfWeek[i].innerHTML = weekDaysRefs[dayIncrement.getDay()];
     }
 
-//Week days short implementation
+   //Week days short implementation
     for(let i =0;i<daysOfWeekShort.length;i++){
         let nextDay = i + 1;
         dayIncrement.setDate(today.getDate() + nextDay);
         daysOfWeekShort[i].innerHTML = weekDaysRefs[dayIncrement.getDay()];
     }
 
-    ////Alternative way of initializing the daily min maxes
-                    // //Daily max temps
-                    // for(let i=0;i < arrayOfMaxes.length;i++){
-                    //     for(j=0;j<arrayOfMaxes[i].length;j++){
-                    //         arrayOfMaxes[i][j].innerHTML = `${Math.trunc(obj.dailyMinMax[i][0])}` + ' ';
-
-                    //     }
-                    // }
-                    // //Daily min temps
-                    // for(let i=0;i<arrayOfMins.length;i++){
-                    //     for(j=0;j<arrayOfMins[i].length;j++){
-                    //         arrayOfMins[i][j].innerHTML = Math.trunc(obj.dailyMinMax[i][1]);
-                    //     }
-                    // }
-
-    // console.log(arrayOfArraysOfElementsContaining2ArraysMinAndMax.length);
-    // console.log(arrayOfArraysOfElementsContaining2ArraysMinAndMax[0].length);
-    // console.log(arrayOfArraysOfElementsContaining2ArraysMinAndMax[5][0].length);
-
     
     // going inside of the main array
     for(let i = 0; i<arrayOfArraysOfElementsContaining2ArraysMinAndMax.length;i++){
-        //going inside of the second array, this one will alway contain a PAIR (2) of arrays foe each lines max and min, therefore we are only entering this loop once, then increasing the j variable to be out of range.
-        //That is done because we are accesing both of the nested arrays(max and min) usin [j+1] for the second one and initializing both
+        //going inside of the second array, this one will always contain a PAIR (2) of arrays foe each lines max and min, therefore we are only entering this loop once, then increasing the j variable to be out of range.
+        //That is done because we are accesing both of the nested arrays(max and min) using [j+1] for the second one and initializing both
         for(let j = 0;j < arrayOfArraysOfElementsContaining2ArraysMinAndMax[i].length;j+=5){
             // Entering the actual elements array and setting their data (both at the same time) using the two dimensional array that we get from our forecast object.
             for(let n = 0;n < arrayOfArraysOfElementsContaining2ArraysMinAndMax[i][j].length;n++){
@@ -416,20 +421,15 @@ function updateConditions(obj){
         }
     }
 
-    
-    // for(let i = 0; i < dailyMaxes.length; i++){
-    //     dailyMaxes[i].innerHTML = `${Math.trunc(obj.dailyMinMax[i][0])}` + ' ';
-    //     dailyMins[i].innerHTML = Math.trunc(obj.dailyMinMax[i][1]);
-    // }
 }
 
-async function updateWeather(){
+function updateWeather(infoObject){
     
-    let infoObject = await getNeededWeather(getWeatherData);
-    //initializing the city (will chage later with geocoding api) and the temperature (will be formatting to a integer number instead of decimal)
+    
+    //initializing the city with geocoding api and the temperature with weather api
     
     cityMain.forEach(city => {
-        city.innerText = infoObject.city;
+        city.innerText = currentLocation;
     })
     
     
@@ -455,11 +455,13 @@ async function updateWeather(){
     }
     
     
-    updateConditions(infoObject);
     
 }
 
-updateWeather();
+
+
+
+
 
 //Cities button handles ro switch tabs (classList.add/remove('active/hidden)).
 
@@ -482,6 +484,46 @@ citiesButton.addEventListener('click', () => {
     
     
     
+})
+
+//Searh box listener and handler 
+
+// searchBox.addEventListener('select',  () => {
+//     mainTabs.forEach(tab => {
+//         tab.classList.add('hidden');
+//         tab.classList.remove('active');
+//     })
+
+//     subTabs.forEach(tab =>{
+//         tab.classList.add('hidden');
+//         tab.classList.remove('active');
+//     })
+    
+//     subWeatherSummaryTab.classList.add('active');
+//     subWeatherSummaryTab.classList.remove('hidden');
+//     citiesTab.classList.add('active');
+//     citiesTab.classList.remove('hidden');
+// })
+
+searchBox.addEventListener('submit', async (event) =>{
+
+    
+    try{
+        
+    event.preventDefault();
+    const userInput = searchData.value.trim();
+    if(!userInput){
+        throw new Error('Empty Location');
+    }
+    await prepareResponse(userInput);
+    
+    }catch(error){
+        alert('Please enter a city name or a zip code: ' + `${error}`);
+    }
+    finally{
+      
+        searchData.value = '';
+    }
 })
 
 //Weather button handler to return to the original main screen and revert the changes of 'see more; button.
@@ -507,5 +549,5 @@ weatherButton.addEventListener('click', () => {
     hourlyAndConditionsWrapper.style.display = 'flex';
     extendedConditionsWrapper.style.display = 'none';
     subWeatherDisplayRevert();
-    updateWeather();
+    prepareResponse(currentLocation);
 })

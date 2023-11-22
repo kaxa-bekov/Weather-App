@@ -88,27 +88,6 @@ const daySummaryWord = [
 
 ]
 
-//example
-// for (const key in object) {
-//     if (Object.hasOwnProperty.call(object, key)) {
-//         const element = object[key];
-//     }
-// }
-
-
-                                ////Alternative way of initializing the daily min maxes
-                                // let arrayOfMins = [
-                                //     document.querySelectorAll('[data-min-first]'),document.querySelectorAll('[data-min-second]'),document.querySelectorAll('[data-min-third]'),
-                                //     document.querySelectorAll('[data-min-fourth]'),document.querySelectorAll('[data-min-fifth]'),document.querySelectorAll('[data-min-sixth]'),
-                                //     document.querySelectorAll('[data-min-seventh]')
-                                // ]
-
-                                // let arrayOfMaxes = [
-                                //     document.querySelectorAll('[data-max-first]'),document.querySelectorAll('[data-max-second]'),document.querySelectorAll('[data-max-third]'),
-                                //     document.querySelectorAll('[data-max-fourth]'),document.querySelectorAll('[data-max-fifth]'),document.querySelectorAll('[data-max-sixth]'),
-                                //     document.querySelectorAll('[data-max-seventh]')
-                                // ]
-
 
 //min  and max daily tempereatures.
 
@@ -160,8 +139,6 @@ conditionsExpandButton.addEventListener('click',() =>{
 
 })
 
-
-
 // Function to change the sub-weather display
 function subWeatherDisplayChange(){
     dailyForecast.style.padding = "28px";
@@ -194,10 +171,8 @@ async function prepareResponse(location){
     let lon = geoData[0].lon;
     let wData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
     let neededData = await getNeededWeather(wData);
-    console.log(neededData);
-    // updateWeather(neededData);
+    console.log(wData);
     updateConditions(neededData);
-    return 
 
 }
 
@@ -444,7 +419,7 @@ function updateConditions(obj){
 
     for(let i=0;i<arrayOfHourIncrement.length;i++){
         for(j=0;j<arrayOfHourIncrement[i].length;j++){
-        hourCurrent.setHours(today.getHours() + hourIncrement, 0);
+        hourCurrent.setHours(hourCurrent.getHours() + hourIncrement, 0);
         arrayOfHourIncrement[i][j].innerHTML = hourCurrent.toLocaleTimeString(undefined, {hour:'2-digit',minute: '2-digit'});
     }
     hourIncrement += 3;
@@ -455,12 +430,6 @@ function updateConditions(obj){
 
 
 }
-
-// function updateWeather(infoObject){
-    
-    
-
-// }
 
 //Cities button handles ro switch tabs (classList.add/remove('active/hidden)).
 
@@ -548,5 +517,12 @@ weatherButton.addEventListener('click', () => {
     hourlyAndConditionsWrapper.style.display = 'flex';
     extendedConditionsWrapper.style.display = 'none';
     subWeatherDisplayRevert();
-    prepareResponse(currentLocation);
+    try{
+        if(!currentLocation){
+            throw new Error('No data to show!')
+        }
+       prepareResponse(currentLocation); 
+    }catch(error){
+        // alert('please enter a location to view weather: ' + `${error}`);
+    }
 })

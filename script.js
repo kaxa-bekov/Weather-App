@@ -19,8 +19,6 @@ const mainTabs = document.querySelectorAll('[data-mains]');
 const subTabs = document.querySelectorAll('[data-subs]');
 
 
-
-
 // Main info elements
 const conditionsExpandButton = document.getElementById("expand-conditions");
 const hourlyAndConditionsWrapper = document.getElementById("hourlyAndConditionsId");
@@ -39,10 +37,9 @@ const visibility = document.querySelector('[data-visibility]');
 const pressure = document.querySelector('[data-pressure]');
 const sunset = document.querySelector('[data-sunset]');
                                                
-
-        // Element arrays to update the info.
-        // Array contains other element arrays if they should have the same info. for example these arrays contain arrays of element, where each array of elements contains the element that supposed to displaythe same data.
-        // for example the first hour, then second hour and then third hour temperature, then the rest of the 3 arrays contain only one Element, but down in the nested for loop everything gets initialized properly
+    // Element arrays to update the info.
+    // Array contains other element arrays if they should have the same info. for example these arrays contain arrays of element, where each array of elements contains the element that supposed to displaythe same data.
+    // for example the first hour, then second hour and then third hour temperature, then the rest of the 3 arrays contain only one Element, but down in the nested for loop everything gets initialized properly
     //temperature update
         let arrayOf6HoursTempDataElements = [
             document.querySelectorAll('[data-hourly-first]'),document.querySelectorAll('[data-hourly-second]'),document.querySelectorAll('[data-hourly-third]'),
@@ -88,7 +85,6 @@ const daySummaryWord = [
 
 ]
 
-
 //min  and max daily tempereatures.
 
 let arrayOfArraysOfElementsContaining2ArraysMinAndMax = [
@@ -102,8 +98,6 @@ let arrayOfArraysOfElementsContaining2ArraysMinAndMax = [
     [document.querySelectorAll('[data-max-seventh]'),document.querySelectorAll('[data-min-seventh]')]
 
 ]
-
-
 
 // console.log(dailyMins[0].textContent);
 const dailyForecast = document.getElementById("dailyForecast");
@@ -121,10 +115,6 @@ let today = new Date();
 
 const weekDaysRefs = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
-
-// Variable to hold location and weather data
-// let locationLat = '';
-// let locationLong = '';
 
 //Default city name
 let currentLocation= '';
@@ -223,17 +213,14 @@ async function getNeededWeather(weatherData) {
         pressure: weatherData.current.pressure,
         sunset: weatherData.current.sunset
     };
-
     //4. Now we need the hourly temperature values for that day.
     let hourlyTempRaw = [weatherData.hourly[0].temp, weatherData.hourly[3].temp, weatherData.hourly[6].temp, weatherData.hourly[9].temp, weatherData.hourly[12].temp, weatherData.hourly[15].temp];
-    
     
     let hourlyTemp = hourlyTempRaw.map(hour => {
         return Math.trunc(hour);
     })
     
     //5. We also need to get the hourly summary and use it to set according images on the hourly list
-    
     let hourlySummary = [
         weatherData.hourly[0].weather[0].main,
         weatherData.hourly[3].weather[0].main,
@@ -242,8 +229,6 @@ async function getNeededWeather(weatherData) {
         weatherData.hourly[12].weather[0].main,
         weatherData.hourly[15].weather[0].main
     ]
-    
-    
     //6. Now we will get and store the daily highest/lowest temperatures. This is represented as a matrix with each row containing the highest/lowest temperatures for that given day.
     let dailyTempHiLo = [   [weatherData.daily[0].temp.max,weatherData.daily[0].temp.min],
         [weatherData.daily[1].temp.max,weatherData.daily[1].temp.min],
@@ -254,8 +239,6 @@ async function getNeededWeather(weatherData) {
         [weatherData.daily[6].temp.max,weatherData.daily[6].temp.min]
 ]
 
-// console.log(dailyTempHiLo[0]);
-
 //7. And the las thing is we have to get the summary of the day like 'sunny' or 'cloudy'
 let daySummary = [  weatherData.daily[0].weather[0].main,
     weatherData.daily[1].weather[0].main,
@@ -265,7 +248,6 @@ let daySummary = [  weatherData.daily[0].weather[0].main,
     weatherData.daily[5].weather[0].main,
     weatherData.daily[6].weather[0].main
 ]
-
 // this variable holds the object that has the needed info.
 let neededInfoObject = {
     temp,
@@ -304,8 +286,6 @@ let neededInfoObject = {
         daySummary[5],
         daySummary[6]
     ]
-    
-    
 }
 return neededInfoObject;
 } 
@@ -419,16 +399,13 @@ function updateConditions(obj){
 
     for(let i=0;i<arrayOfHourIncrement.length;i++){
         for(j=0;j<arrayOfHourIncrement[i].length;j++){
-        hourCurrent.setHours(hourCurrent.getHours() + hourIncrement, 0);
+        hourCurrent.setHours(today.getHours() + hourIncrement, 0);
         arrayOfHourIncrement[i][j].innerHTML = hourCurrent.toLocaleTimeString(undefined, {hour:'2-digit',minute: '2-digit'});
     }
     hourIncrement += 3;
     }
     
     
-    
-
-
 }
 
 //Cities button handles ro switch tabs (classList.add/remove('active/hidden)).

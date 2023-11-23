@@ -189,16 +189,10 @@
                                 </div>
                             </div>
                             <!--This is the second tab of this partition. it contains the list of cities when user has clicked on the seach bar to look up cities or simply selected the cities in the side bar.-->
-                            <div data-mains id="cities-tab">
-                                    <ul class="cities-list">
-                                        <li class="city-list-item">
-                                            <img src="./icons/loading-icon.png" alt="weather image">
-                                            <div class="city-name-and-local-time">
-                                                <h1 class="list-item-city">Madrid</h1>
-                                                <p class="local-time">12:32</p>
-                                            </div>
-                                            <p class="list-item-temperature">32&deg;</p>
-                                        </li>
+                            <div data-mains class="cities-tab" id="cities-tab">
+                                    <p data-city-placeholder>Look up a city to add it to your list</p>
+                                    <ul id="cities-list" class="cities-list">
+                                        <!--This list will be populated using JS whne user wantrs to add a city to a list-->
                                     </ul> 
                             </div>
                     </div>
@@ -303,7 +297,7 @@
                                 <div class="alt-temp">
                                             <div class="temperature-info alt-temp-info">
                                                 <div class="temperature-location">
-                                                    <h1 data-city>Loading...</h1>
+                                                    <h1 data-city class="sub-city-name">Loading...</h1>
                                                     <p>Precipitation: <span data-precipitation>...</span></p>
                                                 </div>
                                                 <div class="temperature-degrees">

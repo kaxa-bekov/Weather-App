@@ -13,6 +13,8 @@ const subWeatherTab = document.getElementById('sub-weather-tab');
 
 const subWeatherSummaryTab = document.getElementById('sub-weather-summary-tab');
 const citiesTab = document.getElementById('cities-tab');
+const placeholderCity = document.querySelector('[data-city-placeholder]');
+const citiesList = document.getElementById('cities-list');
 
 
 const mainTabs = document.querySelectorAll('[data-mains]');
@@ -119,6 +121,11 @@ const weekDaysRefs = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 //Default city name
 let currentLocation= '';
 
+// List of all the added cities
+let arrayOfCities = [...citiesList.children];
+let arrayOfCityNames = [];
+
+
 
 // button handler that shows expanded conditions and adds hourly to sub-weather tab
 conditionsExpandButton.addEventListener('click',() =>{
@@ -153,48 +160,88 @@ function subWeatherDisplayRevert(){
     })
 }
 
+async function addCityListItem(location){
+
+let rawData = await prepareResponse(location);
+
+// arrayOfCityNames.forEach(cityName => {
+//     if(cityName.innerHTML === rawData.locationName){
+//         alert("This city has already been added! Please select it from the list.")
+//         return
+//     }
+// })
+
+for(let cityName of arrayOfCityNames){
+    
+    if(cityName.innerHTML === rawData.locationName){
+        alert("This city has already been added! Please select it from the list.")
+        return
+    }
+}
+
+let cityListItem = document.createElement('li');
+    cityListItem.classList.add('city-list-item');
+let weatherImage = document.createElement('img');
+    weatherImage.classList.add('city-list-img');
+    weatherImage.src = imageURLs.hasOwnProperty(rawData.daySummaryKeyWord[0]) ? imageURLs[rawData.daySummaryKeyWord[0]] : './icons/loading-icon.png';
+let cityNameAndLocalTimeDiv = document.createElement('div');
+    cityNameAndLocalTimeDiv.classList.add('city-name-and-local-time');
+let cityName = document.createElement('h1');
+    cityName.classList.add('list-item-city');
+    cityName.setAttribute('data-city-name',null);
+    cityName.innerHTML = rawData.locationName;
+let localTime = document.createElement('p');
+    localTime.classList.add('local-time');
+    localTime.innerHTML = '02:43 AM'
+let listItemTemp = document.createElement('p');
+    listItemTemp.classList.add('list-item-temperature');
+    listItemTemp.innerHTML = `${rawData.temp}&deg;`;
+    cityNameAndLocalTimeDiv.appendChild(cityName);
+    cityNameAndLocalTimeDiv.appendChild(localTime);
+    cityListItem.appendChild(weatherImage);
+    cityListItem.appendChild(cityNameAndLocalTimeDiv);
+    cityListItem.appendChild(listItemTemp);
+
+    if(placeholderCity.parentElement === citiesTab){
+        citiesTab.removeChild(placeholderCity);
+    }
+
+    cityListItem.addEventListener('click', () => {
+        
+        arrayOfCities.forEach(city => {
+            city.classList.remove('selected');
+        });
+        updateConditions(location);
+        cityListItem.classList.add('selected');
+
+    })
+
+ 
+    
+    
+
+    citiesList.appendChild(cityListItem);
+    arrayOfCities = [...citiesList.children];
+    arrayOfCityNames = [...document.querySelectorAll('[data-city-name]')];
+
+}
+
 async function prepareResponse(location){
    
     let geoData = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=2e45d6c495086102f84e4abce600e8a6`).then(response => response.json());
-    currentLocation = geoData[0].name;
+    let locationName = geoData[0].name;
     let lat = geoData[0].lat;
     let lon = geoData[0].lon;
     let wData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
     let neededData = await getNeededWeather(wData);
-    console.log(wData);
-    updateConditions(neededData);
-
+    
+    let wholeObject = {locationName, ...neededData}; 
+    // console.log(wholeObject);
+    return wholeObject;
+    
 }
 
-//This function fetches the location lat and long and initializes two variables to hold that data.
 
-// async function getLocation(location){
-
-//     const locationData = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=2e45d6c495086102f84e4abce600e8a6`).then(response => response.json());
-
-//     locationLat = locationData[0].lat;
-//     locationLong = locationData[0].lon;
-    
-
-//     const geoObject = {
-//         city: locationData[0].name,
-//         lat: locationData[0].lat,
-//         lon: locationData[0].lon
-//     }
-
-//     return geoObject;
-
-// }
-// This function makes the Api call and returns the json object to be handled later in the code. It receives the lat and long coordinates that will be passed from the search bar.
-
-// const getWeatherData = async (lat, lon) => {
-//     let weatherData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
-//     return weatherData;
-// }
-
-
-// This fuction gets the callback function as a parameter and then calls that function inside. The callback function is the API Call function that will return the json object.
-// Then in this function we extract all the needed weather information and store it in our JS object that will be returned from here to be handled in the update() function.
 async function getNeededWeather(weatherData) {
     
     //1. The city name is being initialized globally and set from the variable on line 151.
@@ -291,10 +338,13 @@ return neededInfoObject;
 } 
 
 
-function updateConditions(obj){
+async function updateConditions(location){
+
+    let obj = await prepareResponse(location);
 
 
-    
+    currentLocation = obj.locationName;
+
     realFeel.forEach(realFeel => {
         realFeel.innerHTML = `${Math.trunc(obj.airConditions.feelsLike)}` + `&deg;`;
     })        
@@ -460,7 +510,25 @@ searchBox.addEventListener('submit', async (event) =>{
     if(!userInput){
         throw new Error('Empty Location');
     }
-    await prepareResponse(userInput);
+
+    if(citiesTab.classList.contains('active')){
+
+        await addCityListItem(userInput);
+
+    }else if(weatherTab.classList.contains('active')){
+        updateConditions(userInput);
+
+        arrayOfCities.forEach(city => {
+            city.classList.remove('selected');
+        });
+
+        
+    }else{
+        updateConditions(userInput);
+    }
+        
+    
+   
     
     }catch(error){
         alert('Please enter a city name or a zip code: ' + `${error}`);
@@ -473,7 +541,7 @@ searchBox.addEventListener('submit', async (event) =>{
 
 //Weather button handler to return to the original main screen and revert the changes of 'see more; button.
 
-weatherButton.addEventListener('click', () => {
+weatherButton.addEventListener('click', async () => {
 
     subTabs.forEach(tab => {
         tab.classList.add('hidden');
@@ -498,7 +566,7 @@ weatherButton.addEventListener('click', () => {
         if(!currentLocation){
             throw new Error('No data to show!')
         }
-       prepareResponse(currentLocation); 
+        await updateConditions(currentLocation); 
     }catch(error){
         // alert('please enter a location to view weather: ' + `${error}`);
     }

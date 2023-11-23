@@ -592,6 +592,24 @@ div {
     flex-basis: 33%;
 }
 
+
+.sub-city-name{
+    display: flex;
+    height: 90px;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+}
+
+[data-city-placeholder]{
+    text-align: center;
+    color: var(--color-text-dark);
+    font-size: 1.5rem;
+    margin:25px 0;
+
+}
+
+
 .alt-weather-image{
     height: 100%;
     padding: 8px;
@@ -630,33 +648,61 @@ div {
 .cities-list{
     width:100%;
     height:100%;
-    overflow:hidden;
     background-color: transparent;
     border-radius: 0;
     list-style: none;
 }
 
+.cities-tab{
+    overflow-x:hidden;
+    overflow-y:scroll;
+    scrollbar-width: none;
+    height:100%;
+    flex-direction: column;
+}
+
+/* .cities-tab::-webkit-scrollbar-button,
+.cities-tab::-webkit-scrollbar-corner,
+.cities-tab::-webkit-scrollbar-thumb,
+.cities-tab::-webkit-scrollbar-track,
+.cities-tab::-webkit-scrollbar-track-piece{
+
+} */
+
+.cities-tab::-webkit-scrollbar
+{
+    width: 0;
+}
+
 .city-list-item{
-    width: 100%;
-    height: 10%;
+    height: auto;
     padding: 12px;
-    margin: 12px 0;
+    margin: 12px 1px;
     display: flex;
     justify-content: space-between;
     background-color: var(--color-div-background);
     border-radius:26px;
+    transition: outline 1s;
 }
 
-.city-list-item:hover,
-.city-list-item:focus-visible{
-    border: 1px solid blue;
+.city-list-item:focus,
+.city-list-item:hover
+{
+    outline: 1px solid blue;
+    background-color: transparent;
+
+}
+
+.selected{
+    outline: 1px solid blue;
     background-color: transparent;
 }
 
-.city-list-item > img{
+.city-list-img{
     width: 125px;
     height: 125px;
     padding: 6px;
+    flex-basis:15%;
 }
 
 .list-item-temperature{
@@ -664,6 +710,9 @@ div {
     font-size: 3rem;
     padding: 8px;
     padding-top:10px;
+    flex-basis: 10%;
+    text-align: end;
+
 }
 
 .local-time{
@@ -676,7 +725,9 @@ div {
     border-radius:0;
     padding: 8px;
     padding-top: 23px;
-    margin-right: 368px;
+    margin-left:12px;
+    flex-basis:100%;
+
 }
 
 .list-item-city{

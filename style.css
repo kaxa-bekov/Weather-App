@@ -24,7 +24,7 @@ body{
 
 div {
     border-radius:26px;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 .container{
     display: flex;
@@ -734,6 +734,11 @@ div {
     color:var(--color-text-light);
     font-size:2rem;
     
+}
+
+.map-tab{
+    height:500px;
+    width:500px;
 }
 
 .hidden{

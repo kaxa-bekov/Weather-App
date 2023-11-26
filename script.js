@@ -15,11 +15,12 @@ const subWeatherSummaryTab = document.getElementById('sub-weather-summary-tab');
 const citiesTab = document.getElementById('cities-tab');
 const placeholderCity = document.querySelector('[data-city-placeholder]');
 const citiesList = document.getElementById('cities-list');
-
-
+const mapTab = document.getElementById('map-tab');
 const mainTabs = document.querySelectorAll('[data-mains]');
 const subTabs = document.querySelectorAll('[data-subs]');
 
+
+let mapInstance;
 
 // Main info elements
 const conditionsExpandButton = document.getElementById("expand-conditions");
@@ -237,8 +238,8 @@ async function prepareResponse(location){
     
     let wholeObject = {locationName, ...neededData}; 
     // console.log(wholeObject);
+    await initMap();
     return wholeObject;
-    
 }
 
 
@@ -458,6 +459,23 @@ async function updateConditions(location){
     
 }
 
+//Map initialization
+async function initMap(){
+    const { Map } = await google.maps.importLibrary('maps');
+
+    mapInstance = new Map(mapTab, {
+        center: {lat:40.730610,lng:-73.935242},
+        zoom: 12,
+    });
+
+    console.log(mapInstance)
+
+    // mapInstance.addEventListener('tilesLoaded', () => {
+    //     console.log('Tiles Loaded')
+    // })
+}
+
+
 //Cities button handles ro switch tabs (classList.add/remove('active/hidden)).
 
 citiesButton.addEventListener('click', () => {
@@ -567,7 +585,27 @@ weatherButton.addEventListener('click', async () => {
             throw new Error('No data to show!')
         }
         await updateConditions(currentLocation); 
+        
     }catch(error){
         // alert('please enter a location to view weather: ' + `${error}`);
     }
+})
+
+
+// map button listener
+mapButton.addEventListener('click', async () => {
+    subTabs.forEach(tab => {
+        tab.classList.add('hidden');
+        tab.classList.remove('active');
+    })
+    mainTabs.forEach(tab =>{
+        tab.classList.add('hidden');
+        tab.classList.remove('active');
+    })
+
+    mapTab.classList.add('active');
+    mapTab.classList.remove('hidden');
+
+    await initMap();
+
 })

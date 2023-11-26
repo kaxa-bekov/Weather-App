@@ -49,7 +49,7 @@
                 <!--This is where the main content is. It has a separate div that wraps the temperature data.-->
                     <div class="main-info">
                         <!--This div wraps the main temperature data and will be replaced with another div (tab), depending on which button is clicked.-->
-                            <div data-mains id="weather-tab" class="weather">
+                            <div data-mains id="weather-tab" class="weather active">
                                 <div class="temperature">
                                     <div class="temperature-info">
                                             <div class="temperature-location">
@@ -189,18 +189,22 @@
                                 </div>
                             </div>
                             <!--This is the second tab of this partition. it contains the list of cities when user has clicked on the seach bar to look up cities or simply selected the cities in the side bar.-->
-                            <div data-mains class="cities-tab" id="cities-tab">
+                            <div data-mains  id="cities-tab" class="cities-tab hidden">
                                     <p data-city-placeholder>Look up a city to add it to your list</p>
                                     <ul id="cities-list" class="cities-list">
                                         <!--This list will be populated using JS whne user wantrs to add a city to a list-->
                                     </ul> 
+                            </div>
+                            <!--This tab will hold a google map instance to show weather information a one or more selected locations (as markers -> as infoWindows)-->
+                            <div data-mains  id="map-tab" class="map-tab hidden">
+
                             </div>
                     </div>
                     <!-------------------------------------------------------------------------------------------------------------------------->
                     <!--This is where the sub data is displayed. Just like the main div it has a child div that wraps the current data, and will be replaced with another tab when a different button is clicked.-->
                     <div class="sub-info">
                         <!--This div is a wrapper of sub data, technically a tab that will be replaced with another one when a different button is clicked.-->
-                            <div data-subs id="sub-weather-tab" class="sub-weather">
+                            <div data-subs id="sub-weather-tab" class="sub-weather active">
                                 <div id="subHourlyForecast" class="sub-hourly-forecast">
                                     <p>Today's Forecast</p>
                                     <ul>
@@ -293,7 +297,7 @@
                             </div>
 
                         <!--This is the second tab of this partition. it contains the weather summary when user has clicked on the seach bar to look up cities or simply selected the cities in the side bar.-->
-                            <div data-subs id="sub-weather-summary-tab" class="weather-summary">
+                            <div data-subs id="sub-weather-summary-tab" class="weather-summary hidden">
                                 <div class="alt-temp">
                                             <div class="temperature-info alt-temp-info">
                                                 <div class="temperature-location">
@@ -369,6 +373,15 @@
         </div>
         <!-------------------------------------------------------------------------------------------------->
     </div>
-    <script src="script.js"></script>
+    
+    <script>
+        (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+          key: "AIzaSyAi97T2eKAyD-H_jYuAoFCON0OEy_XiQOE",
+          v: "weekly",
+          // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
+          // Add other bootstrap parameters as needed, using camel case.
+        });
+      </script>
+      <script src="script.js"></script>
 </body>
 </html>

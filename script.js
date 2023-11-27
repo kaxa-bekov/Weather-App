@@ -461,6 +461,13 @@ async function updateConditions(location){
 
 //Map initialization
 async function initMap(){
+
+    // const {Geocode}
+
+    const {LatLng} = await google.maps.importLibrary('core')
+
+   markerPosition = new LatLng(40.730610,-73.935242);
+
     const { Map } = await google.maps.importLibrary('maps');
 
     mapInstance = new Map(mapTab, {
@@ -468,12 +475,37 @@ async function initMap(){
         zoom: 12,
     });
 
-    console.log(mapInstance)
+    const {Marker} = await google.maps.importLibrary('marker');
+
+    console.log(Marker)
+    let marker = new Marker({
+        position: markerPosition,
+        map: mapInstance
+        
+    })
+
+    
+    console.log(markerPosition)
 
     // mapInstance.addEventListener('tilesLoaded', () => {
     //     console.log('Tiles Loaded')
     // })
 }
+
+
+// async function addMarker(){
+
+//     const {Marker} = await google.maps.importLibrary('marker');
+
+//     let marker = new Marker({
+//         position: {lat:40,lng:-73},
+//         mapInstance
+        
+//     })
+
+    
+//     console.log(marker.getPosition())
+// }
 
 
 //Cities button handles ro switch tabs (classList.add/remove('active/hidden)).

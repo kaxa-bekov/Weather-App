@@ -14,8 +14,13 @@ const subWeatherTab = document.getElementById('sub-weather-tab');
 const subWeatherSummaryTab = document.getElementById('sub-weather-summary-tab');
 const citiesTab = document.getElementById('cities-tab');
 const placeholderCity = document.querySelector('[data-city-placeholder]');
+const subPlaceholderCity = document.querySelector('[data-sub-city-placeholder]');
+
 const citiesList = document.getElementById('cities-list');
+const subCitiesList = document.getElementById('sub-cities-list');
+
 const mapTab = document.getElementById('map-tab');
+const subCitiesTab = document.getElementById('sub-cities-tab');
 const mainTabs = document.querySelectorAll('[data-mains]');
 const subTabs = document.querySelectorAll('[data-subs]');
 
@@ -124,6 +129,7 @@ let currentLocation= '';
 
 // List of all the added cities
 let arrayOfCities = [...citiesList.children];
+let arrayOfSubCities = [...subCitiesList.children];
 let arrayOfCityNames = [];
 
 
@@ -205,25 +211,60 @@ let listItemTemp = document.createElement('p');
 
     if(placeholderCity.parentElement === citiesTab){
         citiesTab.removeChild(placeholderCity);
+        subCitiesTab.removeChild(subPlaceholderCity)
     }
+
+    let subCityListItem = cityListItem.cloneNode(true);
+
+    subCityListItem.addEventListener('click', () => {
+        
+        arrayOfCities.forEach(city => {
+            city.classList.remove('selected');
+        });
+        arrayOfSubCities.forEach(city => {
+            city.classList.remove('selected');
+        });
+       
+        updateConditions(location);
+        subCityListItem.classList.add('selected');
+
+    })
 
     cityListItem.addEventListener('click', () => {
         
         arrayOfCities.forEach(city => {
             city.classList.remove('selected');
         });
+        arrayOfSubCities.forEach(city => {
+            city.classList.remove('selected');
+        });
+       
         updateConditions(location);
         cityListItem.classList.add('selected');
 
     })
 
- 
+    // console.log(cityListItem.innerHTML);
     
+    // console.log(cityListItem.innerHTML);
     
 
     citiesList.appendChild(cityListItem);
+    subCitiesList.appendChild(subCityListItem);
     arrayOfCities = [...citiesList.children];
+    arrayOfSubCities = [...subCitiesList.children];
     arrayOfCityNames = [...document.querySelectorAll('[data-city-name]')];
+
+    arrayOfSubCities.forEach(city => {
+        city.classList.add('sub-city-list-item');
+        let citiesInfoEls = city.children;
+        citiesInfoEls[0].classList.add('sub-city-list-img');
+        citiesInfoEls[1].classList.add('sub-city-name-and-local-time');
+        let localAndCityName = citiesInfoEls[1].children;
+        localAndCityName[0].classList.add('sub-list-item-city');
+        localAndCityName[1].classList.add('sub-local-time');
+        citiesInfoEls[2].classList.add('sub-list-item-temperature')
+    })
 
 }
 
@@ -250,7 +291,7 @@ async function prepareResponse(location){
     let lat = codedGeo.results[0].geometry.location.lat();
     let lon = codedGeo.results[0].geometry.location.lng();
 
-    console.log(codedGeo);
+
 
     let wData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
     let neededData = await getNeededWeather(wData);
@@ -578,24 +619,19 @@ searchBox.addEventListener('submit', async (event) =>{
         throw new Error('Empty Location');
     }
 
-    if(citiesTab.classList.contains('active')){
+    if(citiesTab.classList.contains('active') || mapTab.classList.contains('active')){
 
-        await addCityListItem(userInput);
         await updateConditions(userInput);
-
+        await addCityListItem(userInput); 
     }else if(weatherTab.classList.contains('active')){
         await updateConditions(userInput);
 
         arrayOfCities.forEach(city => {
             city.classList.remove('selected');
         });
-
-        
-    }else if(mapTab.classList.contains('active')){
-
-        await updateConditions(userInput);
-        await addCityListItem(userInput);
-
+        arrayOfSubCities.forEach(city => {
+            city.classList.remove('selected');
+        })
     }
         
     
@@ -656,6 +692,8 @@ mapButton.addEventListener('click', async () => {
 
     mapTab.classList.add('active');
     mapTab.classList.remove('hidden');
+    subCitiesTab.classList.add('active');
+    subCitiesTab.classList.remove('hidden');
 
     await initMap();
 

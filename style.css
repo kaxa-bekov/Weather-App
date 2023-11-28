@@ -592,21 +592,33 @@ div {
     flex-basis: 33%;
 }
 
+.sub-cities{
+    flex-direction: column;
+    overflow-x:hidden;
+    overflow-y:scroll;
+    scrollbar-width: none;
+    height:100%;
+}
+
+.sub-cities::-webkit-scrollbar{
+    width: 0;
+}
 
 .sub-city-name{
     display: flex;
-    height: 90px;
+    height: 123px;
     flex-direction: column;
     justify-content: center;
     overflow: hidden;
 }
 
-[data-city-placeholder]{
+[data-city-placeholder],
+[data-sub-city-placeholder]
+{
     text-align: center;
     color: var(--color-text-dark);
     font-size: 1.5rem;
     margin:25px 0;
-
 }
 
 
@@ -685,6 +697,8 @@ div {
     transition: outline 1s;
 }
 
+
+
 .city-list-item:focus,
 .city-list-item:hover
 {
@@ -712,7 +726,6 @@ div {
     padding-top:10px;
     flex-basis: 10%;
     text-align: end;
-
 }
 
 .local-time{
@@ -727,13 +740,43 @@ div {
     padding-top: 23px;
     margin-left:12px;
     flex-basis:100%;
-
 }
 
 .list-item-city{
     color:var(--color-text-light);
-    font-size:2rem;
-    
+    font-size:2rem;  
+}
+
+.sub-city-list-item{
+
+    padding: 4px;
+    margin:8px 1px;
+
+}
+
+.sub-city-list-img{
+    width:75px;
+    height:75px;
+    padding: 2px;
+}
+
+.sub-list-item-temperature{
+    font-size:1.9rem;
+    padding: 4px;
+    padding-top: 6px;
+}
+.sub-local-time{
+    font-size:1rem;
+}
+
+.sub-list-item-city{
+    font-size:1.5rem;
+}
+.sub-city-name-and-local-time{
+    padding: 4px;
+    padding-top: 12px;
+    margin-left: 6px;
+
 }
 
 .map-tab{

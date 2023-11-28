@@ -229,16 +229,47 @@ let listItemTemp = document.createElement('p');
 
 async function prepareResponse(location){
    
-    let geoData = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=2e45d6c495086102f84e4abce600e8a6`).then(response => response.json());
-    let locationName = geoData[0].name;
-    let lat = geoData[0].lat;
-    let lon = geoData[0].lon;
+    
+    // let geoData = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=2e45d6c495086102f84e4abce600e8a6`).then(response => response.json());
+    // let locationName = geoData[0].name;
+    // let lat = geoData[0].lat;
+    // let lon = geoData[0].lon;
+    
+
+    
+    const {Geocoder} = await google.maps.importLibrary('geocoding');
+    let geoCODEr = new Geocoder();
+
+    const codedGeo = await geoCODEr.geocode({address : location});
+
+    let locationName = codedGeo.results[0].formatted_address;
+    if(locationName.includes(',')){
+        let localName = locationName.split(',');
+        locationName = localName[0] + ', ' + localName[1];
+    }
+    let lat = codedGeo.results[0].geometry.location.lat();
+    let lon = codedGeo.results[0].geometry.location.lng();
+
+    console.log(codedGeo);
+
     let wData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
     let neededData = await getNeededWeather(wData);
-    
     let wholeObject = {locationName, ...neededData}; 
-    // console.log(wholeObject);
+
     await initMap();
+    
+    const {LatLng} = await google.maps.importLibrary('core')
+
+    markerPosition = new LatLng(lat, lon);
+
+    const {Marker} = await google.maps.importLibrary('marker');
+
+    let marker = new Marker({
+        position: markerPosition,
+        map: mapInstance
+        
+    })
+    mapInstance.panTo(markerPosition);
     return wholeObject;
 }
 
@@ -397,20 +428,22 @@ async function updateConditions(location){
     }
 
 
+    let dayIncrement = new Date();
+    let today = new Date();
     //Week days long implementation
     for(let i=0;i<daysOfWeek.length;i++){
         let nextDay = i + 1;
         dayIncrement.setDate(today.getDate() + nextDay);
         daysOfWeek[i].innerHTML = weekDaysRefs[dayIncrement.getDay()];
     }
-
+    dayIncrement = new Date();
    //Week days short implementation
     for(let i =0;i<daysOfWeekShort.length;i++){
         let nextDay = i + 1;
         dayIncrement.setDate(today.getDate() + nextDay);
         daysOfWeekShort[i].innerHTML = weekDaysRefs[dayIncrement.getDay()];
     }
-
+    dayIncrement = new Date();
     
     // going inside of the main array
     for(let i = 0; i<arrayOfArraysOfElementsContaining2ArraysMinAndMax.length;i++){
@@ -464,9 +497,7 @@ async function initMap(){
 
     // const {Geocode}
 
-    const {LatLng} = await google.maps.importLibrary('core')
-
-   markerPosition = new LatLng(40.730610,-73.935242);
+    if(mapInstance) return
 
     const { Map } = await google.maps.importLibrary('maps');
 
@@ -475,21 +506,7 @@ async function initMap(){
         zoom: 12,
     });
 
-    const {Marker} = await google.maps.importLibrary('marker');
-
-    console.log(Marker)
-    let marker = new Marker({
-        position: markerPosition,
-        map: mapInstance
-        
-    })
-
     
-    console.log(markerPosition)
-
-    // mapInstance.addEventListener('tilesLoaded', () => {
-    //     console.log('Tiles Loaded')
-    // })
 }
 
 
@@ -564,21 +581,23 @@ searchBox.addEventListener('submit', async (event) =>{
     if(citiesTab.classList.contains('active')){
 
         await addCityListItem(userInput);
+        await updateConditions(userInput);
 
     }else if(weatherTab.classList.contains('active')){
-        updateConditions(userInput);
+        await updateConditions(userInput);
 
         arrayOfCities.forEach(city => {
             city.classList.remove('selected');
         });
 
         
-    }else{
-        updateConditions(userInput);
+    }else if(mapTab.classList.contains('active')){
+
+        await updateConditions(userInput);
+        await addCityListItem(userInput);
+
     }
         
-    
-   
     
     }catch(error){
         alert('Please enter a city name or a zip code: ' + `${error}`);

@@ -275,8 +275,20 @@ async function prepareResponse(location){
     // let locationName = geoData[0].name;
     // let lat = geoData[0].lat;
     // let lon = geoData[0].lon;
+
+    let localDate = new Date(Date.now());
     
 
+    let utcYear = localDate.getUTCFullYear();
+    let utcMonth = localDate.getUTCMonth();
+    let utcDAte = localDate.getUTCDate();
+    let utcHour = localDate.getUTCHours();
+    let utcMinute = localDate.getUTCMinutes();
+    let utcSecond = localDate.getUTCSeconds();
+
+    let UTCdate = new Date(utcYear, utcMonth, utcDAte, utcHour, utcMinute, utcSecond);
+
+    utcTimestamp = Date.UTC(utcYear, utcMonth, utcDAte, utcHour, utcMinute, utcSecond) / 1000;
     
     const {Geocoder} = await google.maps.importLibrary('geocoding');
     let geoCODEr = new Geocoder();
@@ -291,7 +303,16 @@ async function prepareResponse(location){
     let lat = codedGeo.results[0].geometry.location.lat();
     let lon = codedGeo.results[0].geometry.location.lng();
 
+    //Calling time zone API to get the local time for the given location
+    let timeZOneInfo = await fetch(`https://maps.googleapis.com/maps/api/timezone/json?location=${lat}%2C${lon}&timestamp=${utcTimestamp}&key=AIzaSyAi97T2eKAyD-H_jYuAoFCON0OEy_XiQOE`).then(response => response.json());
+    console.log(timeZOneInfo);
 
+    let hourOffset = timeZOneInfo.rawOffset/3600;
+
+    let local = UTCdate.getHours() + hourOffset;
+    localToTheLocationDate = new Date();
+    localToTheLocationDate.setHours(local);
+    console.log(localToTheLocationDate);
 
     let wData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
     let neededData = await getNeededWeather(wData);
@@ -623,6 +644,7 @@ searchBox.addEventListener('submit', async (event) =>{
 
         await updateConditions(userInput);
         await addCityListItem(userInput); 
+
     }else if(weatherTab.classList.contains('active')){
         await updateConditions(userInput);
 

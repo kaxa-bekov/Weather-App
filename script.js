@@ -228,6 +228,7 @@ let listItemTemp = document.createElement('p');
         updateConditions(location);
         subCityListItem.classList.add('selected');
 
+
     })
 
     cityListItem.addEventListener('click', () => {
@@ -267,78 +268,108 @@ let listItemTemp = document.createElement('p');
     })
 
 }
-
-async function prepareResponse(location){
-   
-    
-    // let geoData = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=2e45d6c495086102f84e4abce600e8a6`).then(response => response.json());
-    // let locationName = geoData[0].name;
-    // let lat = geoData[0].lat;
-    // let lon = geoData[0].lon;
-
+//Function to return local time at the given location
+async function getLocalTimeForLocation(lat, lon){
+    //Creating a date object based on milliseconds elapsed from january 1 (timestamp in machine's local time)
     let localDate = new Date(Date.now());
-    
-
+    //Getting UTC time zone date pieces stored in 6 variables (used to create a date object for current UTC date/time in UTC time zone)
     let utcYear = localDate.getUTCFullYear();
     let utcMonth = localDate.getUTCMonth();
     let utcDAte = localDate.getUTCDate();
     let utcHour = localDate.getUTCHours();
     let utcMinute = localDate.getUTCMinutes();
     let utcSecond = localDate.getUTCSeconds();
-
+    //Creating the UTC date/time object for current time in UTC time zone
     let UTCdate = new Date(utcYear, utcMonth, utcDAte, utcHour, utcMinute, utcSecond);
+    //Getting a timestamp in milliseconds from the UTC date object - this gives us the seconds(after dividing on 1000) elapsed since january 1 till current time in UTC time zone
+    utcTimestamp = Date.UTC(utcYear, utcMonth, utcDAte, utcHour, utcMinute, utcSecond) / 1000; // Now we have a UTC date object and UTC seconds (all in UTC time zone which is important to get local time based on given location)
 
-    utcTimestamp = Date.UTC(utcYear, utcMonth, utcDAte, utcHour, utcMinute, utcSecond) / 1000;
-    
-    const {Geocoder} = await google.maps.importLibrary('geocoding');
-    let geoCODEr = new Geocoder();
-
-    const codedGeo = await geoCODEr.geocode({address : location});
-
-    let locationName = codedGeo.results[0].formatted_address;
-    if(locationName.includes(',')){
-        let localName = locationName.split(',');
-        locationName = localName[0] + ', ' + localName[1];
-    }
-    let lat = codedGeo.results[0].geometry.location.lat();
-    let lon = codedGeo.results[0].geometry.location.lng();
-
-    //Calling time zone API to get the local time for the given location
+    //Calling time zone API to get the time offset for the given location (passing the UTC timestapm for accuracy (kinda optional))
     let timeZOneInfo = await fetch(`https://maps.googleapis.com/maps/api/timezone/json?location=${lat}%2C${lon}&timestamp=${utcTimestamp}&key=AIzaSyAi97T2eKAyD-H_jYuAoFCON0OEy_XiQOE`).then(response => response.json());
     console.log(timeZOneInfo);
-
+    //Getting the Hour value of offset by diving the seconds value on 3600(60*60)
     let hourOffset = timeZOneInfo.rawOffset/3600;
-
+    //Calculating the local time for the given location by adding the offset hours to the UTC hours
     let local = UTCdate.getHours() + hourOffset;
+    //Creating a new date object to hold the local date to the given location and setting its hour value to the UTC hours + offset hours
     localToTheLocationDate = new Date();
     localToTheLocationDate.setHours(local);
     console.log(localToTheLocationDate);
+    //returning the Date object holding the local time for the given location
+    return localToTheLocationDate;
+}
 
-    let wData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
-    let neededData = await getNeededWeather(wData);
-    let wholeObject = {locationName, ...neededData}; 
+//This function will be getting the user input and returning lat and long for it
+async function getLatLongForInput(location){
+    //Creating a reference to the Geocoder class from google maps API
+    const {Geocoder} = await google.maps.importLibrary('geocoding');
+    //Creating an object of that class
+    let geocoder = new Geocoder();
+    //Geo coding the location input received from a user
+    const codedGeo = await geocoder.geocode({address : location});
+    //Setting the location name to the formatted location string
+    let locationName = codedGeo.results[0].formatted_address;
+    if(locationName.includes(',')){
+        //Making sure to remove the last word if there are 2 commas in the formatted response
+        let localName = locationName.split(',');
+        locationName = localName[0] + ', ' + localName[1];
+    }
+    //And finally setting the latitude and longtitude values to variables
+    let lat = codedGeo.results[0].geometry.location.lat();
+    let lon = codedGeo.results[0].geometry.location.lng();
+    //Putting the data in an object and returning that object
+    let geoCodedInfoObject = {
+        locationName,
+        lat,
+        lon
+    }
+    return geoCodedInfoObject;
+}
 
-    await initMap();
-    
+//This function will be adding a marker to the map every time user adds a city to the list
+async function addMarkerToTheMap(lat, lon){
+    //Creating a reference to LatLng class from google maps API
     const {LatLng} = await google.maps.importLibrary('core')
-
+    //Creating an object of that class called markerPosition because the will be our marker position for each new marker
     markerPosition = new LatLng(lat, lon);
-
+    //Creating a reference to Marker class from google maps API
     const {Marker} = await google.maps.importLibrary('marker');
-
+    //Creating a new Marker object and initializing it with the given LatLng object created a few lines above
     let marker = new Marker({
         position: markerPosition,
         map: mapInstance
-        
     })
+    //Every time this function is called map will be panned to the new marker position(previous markers remain on the map)
     mapInstance.panTo(markerPosition);
+}
+
+async function prepareResponse(location){
+    
+    //Calling the function that will return an object containing the formatted location string and lat adn long for the giveen location
+    let geoCodedObject = await getLatLongForInput(location);
+    let locationName = geoCodedObject.locationName;
+
+    //Calling the function that will return the local time to the location that was entered
+    let localTime = await getLocalTimeForLocation(geoCodedObject.lat, geoCodedObject.lon);
+    console.log(localTime.toLocaleTimeString());
+
+    
+
+    let wData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${geoCodedObject.lat}&lon=${geoCodedObject.lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
+    let neededData = await getNeededWeather(wData);
+    let wholeObject = {locationName, ...neededData}; 
+
+
+    await addMarkerToTheMap(geoCodedObject.lat, geoCodedObject.lon);
+
+
     return wholeObject;
 }
 
 
 async function getNeededWeather(weatherData) {
     
-    //1. The city name is being initialized globally and set from the variable on line 151.
+    //1. The location name is being initialized globally and set from the variable on line 151.
     
     //2. Now we will set a variable for the current temperature
     let temp = Math.trunc(weatherData.current.temp);
@@ -554,40 +585,9 @@ async function updateConditions(location){
     
 }
 
-//Map initialization
-async function initMap(){
-
-    // const {Geocode}
-
-    if(mapInstance) return
-
-    const { Map } = await google.maps.importLibrary('maps');
-
-    mapInstance = new Map(mapTab, {
-        center: {lat:40.730610,lng:-73.935242},
-        zoom: 12,
-    });
-
-    
-}
 
 
-// async function addMarker(){
-
-//     const {Marker} = await google.maps.importLibrary('marker');
-
-//     let marker = new Marker({
-//         position: {lat:40,lng:-73},
-//         mapInstance
-        
-//     })
-
-    
-//     console.log(marker.getPosition())
-// }
-
-
-//Cities button handles ro switch tabs (classList.add/remove('active/hidden)).
+//Cities button handles to switch tabs (classList.add/remove('active/hidden)).
 
 citiesButton.addEventListener('click', () => {
     
@@ -696,7 +696,7 @@ weatherButton.addEventListener('click', async () => {
         await updateConditions(currentLocation); 
         
     }catch(error){
-        // alert('please enter a location to view weather: ' + `${error}`);
+        alert('please enter a location to view weather: ' + `${error}`);
     }
 })
 
@@ -717,6 +717,18 @@ mapButton.addEventListener('click', async () => {
     subCitiesTab.classList.add('active');
     subCitiesTab.classList.remove('hidden');
 
-    await initMap();
+    // await initMap();
 
 })
+
+//Google map initialization(one instance only, called when app starts)
+async function initMap(){
+    if(mapInstance) return
+    const { Map } = await google.maps.importLibrary('maps');
+    mapInstance = new Map(mapTab, {
+        center: {lat:40.730610,lng:-73.935242},
+        zoom: 12,
+    });
+}
+
+window.initMap();

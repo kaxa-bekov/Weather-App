@@ -107,7 +107,6 @@ let arrayOfArraysOfElementsContaining2ArraysMinAndMax = [
 
 ]
 
-// console.log(dailyMins[0].textContent);
 const dailyForecast = document.getElementById("dailyForecast");
 const subHourlyForecast = document.getElementById("subHourlyForecast");
 const dailyForecastUL = document.querySelector(".daily-forecast-div > ul");
@@ -127,20 +126,12 @@ const weekDaysRefs = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 //Default city name
 let currentLocation= '';
 
-// List of all the added cities
-let arrayOfCities = [...citiesList.children];
-let arrayOfSubCities = [...subCitiesList.children];
-let arrayOfCityNames = [];
-
-
 
 // button handler that shows expanded conditions and adds hourly to sub-weather tab
 conditionsExpandButton.addEventListener('click',() =>{
-
     hourlyAndConditionsWrapper.style.display = 'none';
     extendedConditionsWrapper.style.display = 'grid';
     subWeatherDisplayChange();
-
 })
 
 // Function to change the sub-weather display
@@ -167,41 +158,102 @@ function subWeatherDisplayRevert(){
     })
 }
 
-async function addCityListItem(location){
+// List of all the added cities
+let arrayOfCities = [...citiesList.children];
+let arrayOfSubCities = [...subCitiesList.children];
+let arrayOfLocationNames = [];
 
-let rawData = await prepareResponse(location);
+//Function to receive a DOM Node and append it to the MAIN cities tab with applied styling accordingly
+function addToCityList(listItem,location){
 
-// arrayOfCityNames.forEach(cityName => {
-//     if(cityName.innerHTML === rawData.locationName){
-//         alert("This city has already been added! Please select it from the list.")
-//         return
-//     }
-// })
-
-for(let cityName of arrayOfCityNames){
+    listItem.classList.add('city-list-item');
+    listItem.children[0].classList.add('city-list-img');
+    listItem.children[1].classList.add('city-name-and-local-time');
+    listItem.children[1].children[0].classList.add('list-item-city');
+    listItem.children[1].children[1].classList.add('local-time');
+    listItem.children[2].classList.add('list-item-temperature');
+    citiesList.appendChild(listItem);
+    arrayOfCities = [...citiesList.children];
+    listItem.addEventListener('click', () => {
+        arrayOfCities.forEach(city => {
+            city.classList.remove('selected');
+        });
+        arrayOfSubCities.forEach(city => {
+            city.classList.remove('selected');
+        });
+        listItem.classList.add('selected');
+        updateConditions(location);
+        console.log(listItem.children[1].children[0].innerHTML);
+        console.log(currentLocation);
+        let nodeValue = listItem.children[1].children[0].innerHTML;
+        arrayOfSubCities.forEach(city => {
+        if(city.children[1].children[0].innerHTML === nodeValue){
+        city.classList.add('selected');
+        }});
+    })
     
-    if(cityName.innerHTML === rawData.locationName){
-        alert("This city has already been added! Please select it from the list.")
-        return
-    }
 }
 
+//Function to receive a DOM Node and appent it to the SUB cities tab with applied styles according to that tab
+function addToSubCityList(subListItem,location){
+    subListItem.classList.add('sub-city-list-item');
+    subListItem.children[0].classList.add('sub-city-list-img');
+    subListItem.children[1].classList.add('sub-city-name-and-local-time');
+    subListItem.children[1].children[0].classList.add('sub-list-item-city');
+    subListItem.children[1].children[1].classList.add('sub-local-time');
+    subListItem.children[2].classList.add('sub-list-item-temperature');
+    subCitiesList.appendChild(subListItem);
+    arrayOfSubCities = [...subCitiesList.children];
+    subListItem.addEventListener('click', () => {
+        arrayOfCities.forEach(city => {
+            city.classList.remove('selected');
+        });
+        arrayOfSubCities.forEach(city => {
+            city.classList.remove('selected');
+        });
+        subListItem.classList.add('selected');
+        updateConditions(location);
+        console.log();
+        console.log(currentLocation);
+        let nodeValue = subListItem.children[1].children[0].innerHTML;
+        arrayOfCities.forEach(city => {
+            if(city.children[1].children[0].innerHTML === nodeValue){
+            city.classList.add('selected');
+            }
+        });
+    })
+}
+
+
+async function addCityListItem(location){
+
+    // let exists = await ifLocationExists(location);
+    if(await ifLocationExists(location)){
+       return 
+    } 
+
+
+    let rawData = await prepareResponse(location);
+
+
+
+
 let cityListItem = document.createElement('li');
-    cityListItem.classList.add('city-list-item');
+    // cityListItem.classList.add('city-list-item');
 let weatherImage = document.createElement('img');
-    weatherImage.classList.add('city-list-img');
+    // weatherImage.classList.add('city-list-img');
     weatherImage.src = imageURLs.hasOwnProperty(rawData.daySummaryKeyWord[0]) ? imageURLs[rawData.daySummaryKeyWord[0]] : './icons/loading-icon.png';
 let cityNameAndLocalTimeDiv = document.createElement('div');
-    cityNameAndLocalTimeDiv.classList.add('city-name-and-local-time');
+    // cityNameAndLocalTimeDiv.classList.add('city-name-and-local-time');
 let cityName = document.createElement('h1');
-    cityName.classList.add('list-item-city');
-    cityName.setAttribute('data-city-name',null);
+    // cityName.classList.add('list-item-city');
+    // cityName.setAttribute('data-city-name',null);
     cityName.innerHTML = rawData.locationName;
 let localTime = document.createElement('p');
-    localTime.classList.add('local-time');
-    localTime.innerHTML = '02:43 AM'
+    // localTime.classList.add('local-time');
+    localTime.innerHTML = rawData.localTime.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit'});
 let listItemTemp = document.createElement('p');
-    listItemTemp.classList.add('list-item-temperature');
+    // listItemTemp.classList.add('list-item-temperature');
     listItemTemp.innerHTML = `${rawData.temp}&deg;`;
     cityNameAndLocalTimeDiv.appendChild(cityName);
     cityNameAndLocalTimeDiv.appendChild(localTime);
@@ -209,65 +261,85 @@ let listItemTemp = document.createElement('p');
     cityListItem.appendChild(cityNameAndLocalTimeDiv);
     cityListItem.appendChild(listItemTemp);
 
+    let subCityListItem = cityListItem.cloneNode(true);
+    addToCityList(cityListItem,rawData.locationName);
+    addToSubCityList(subCityListItem,rawData.locationName);
+ 
+
     if(placeholderCity.parentElement === citiesTab){
         citiesTab.removeChild(placeholderCity);
         subCitiesTab.removeChild(subPlaceholderCity)
     }
 
-    let subCityListItem = cityListItem.cloneNode(true);
-
-    subCityListItem.addEventListener('click', () => {
-        
-        arrayOfCities.forEach(city => {
-            city.classList.remove('selected');
-        });
-        arrayOfSubCities.forEach(city => {
-            city.classList.remove('selected');
-        });
-       
-        updateConditions(location);
-        subCityListItem.classList.add('selected');
-
-
-    })
-
-    cityListItem.addEventListener('click', () => {
-        
-        arrayOfCities.forEach(city => {
-            city.classList.remove('selected');
-        });
-        arrayOfSubCities.forEach(city => {
-            city.classList.remove('selected');
-        });
-       
-        updateConditions(location);
-        cityListItem.classList.add('selected');
-
-    })
-
-    // console.log(cityListItem.innerHTML);
-    
-    // console.log(cityListItem.innerHTML);
     
 
-    citiesList.appendChild(cityListItem);
-    subCitiesList.appendChild(subCityListItem);
-    arrayOfCities = [...citiesList.children];
-    arrayOfSubCities = [...subCitiesList.children];
-    arrayOfCityNames = [...document.querySelectorAll('[data-city-name]')];
+    // subCityListItem.addEventListener('click', () => {
+        
+    //     arrayOfCities.forEach(city => {
+    //         city.classList.remove('selected');
+    //     });
+    //     arrayOfSubCities.forEach(city => {
+    //         city.classList.remove('selected');
+    //     });
+       
+    //     updateConditions(location);
+    //     subCityListItem.classList.add('selected');
 
-    arrayOfSubCities.forEach(city => {
-        city.classList.add('sub-city-list-item');
-        let citiesInfoEls = city.children;
-        citiesInfoEls[0].classList.add('sub-city-list-img');
-        citiesInfoEls[1].classList.add('sub-city-name-and-local-time');
-        let localAndCityName = citiesInfoEls[1].children;
-        localAndCityName[0].classList.add('sub-list-item-city');
-        localAndCityName[1].classList.add('sub-local-time');
-        citiesInfoEls[2].classList.add('sub-list-item-temperature')
-    })
+
+    // })
+
+    // cityListItem.addEventListener('click', () => {
+        
+    //     arrayOfCities.forEach(city => {
+    //         city.classList.remove('selected');
+    //     });
+    //     arrayOfSubCities.forEach(city => {
+    //         city.classList.remove('selected');
+    //     });
+       
+    //     updateConditions(location);
+    //     cityListItem.classList.add('selected');
+    // })
+
+
+
+    // citiesList.appendChild(cityListItem);
+    // subCitiesList.appendChild(subCityListItem);
+    
+    // arrayOfCities = [...citiesList.children];
+    // arrayOfSubCities = [...subCitiesList.children];
+    if(rawData.locationName){
+    arrayOfLocationNames = [...arrayOfLocationNames, rawData.locationName];
+    }
+
+
+
+    // arrayOfSubCities.forEach(city => {
+    //     city.classList.add('sub-city-list-item');
+    //     let citiesInfoEls = city.children;
+    //     citiesInfoEls[0].classList.add('sub-city-list-img');
+    //     citiesInfoEls[1].classList.add('sub-city-name-and-local-time');
+    //     let localAndCityName = citiesInfoEls[1].children;
+    //     localAndCityName[0].classList.add('sub-list-item-city');
+    //     localAndCityName[1].classList.add('sub-local-time');
+    //     citiesInfoEls[2].classList.add('sub-list-item-temperature')
+    // })
 
 }
+
+//This function will be checking if we already have the same location added to our lists of locations and prevent any other function calls before we even get any weather for that location ( which is obviously unnecessary
+async function ifLocationExists(location){
+    let locationToCheck = await getLatLongForInput(location);
+    let ifExists = false;
+    for(localName of arrayOfLocationNames){
+        if(localName === locationToCheck.locationName){
+            alert("This city has already been added! Please select it from the list.");
+            ifExists = true;
+        }
+    }
+    return ifExists;
+ }
+
 //Function to return local time at the given location
 async function getLocalTimeForLocation(lat, lon){
     //Creating a date object based on milliseconds elapsed from january 1 (timestamp in machine's local time)
@@ -286,7 +358,6 @@ async function getLocalTimeForLocation(lat, lon){
 
     //Calling time zone API to get the time offset for the given location (passing the UTC timestapm for accuracy (kinda optional))
     let timeZOneInfo = await fetch(`https://maps.googleapis.com/maps/api/timezone/json?location=${lat}%2C${lon}&timestamp=${utcTimestamp}&key=AIzaSyAi97T2eKAyD-H_jYuAoFCON0OEy_XiQOE`).then(response => response.json());
-    console.log(timeZOneInfo);
     //Getting the Hour value of offset by diving the seconds value on 3600(60*60)
     let hourOffset = timeZOneInfo.rawOffset/3600;
     //Calculating the local time for the given location by adding the offset hours to the UTC hours
@@ -294,7 +365,6 @@ async function getLocalTimeForLocation(lat, lon){
     //Creating a new date object to hold the local date to the given location and setting its hour value to the UTC hours + offset hours
     localToTheLocationDate = new Date();
     localToTheLocationDate.setHours(local);
-    console.log(localToTheLocationDate);
     //returning the Date object holding the local time for the given location
     return localToTheLocationDate;
 }
@@ -351,23 +421,23 @@ async function prepareResponse(location){
 
     //Calling the function that will return the local time to the location that was entered
     let localTime = await getLocalTimeForLocation(geoCodedObject.lat, geoCodedObject.lon);
-    console.log(localTime.toLocaleTimeString());
 
-    
-
-    let wData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${geoCodedObject.lat}&lon=${geoCodedObject.lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
-    let neededData = await getNeededWeather(wData);
-    let wholeObject = {locationName, ...neededData}; 
-
-
+    //Calling the function that will add a narker to the map based on given location
     await addMarkerToTheMap(geoCodedObject.lat, geoCodedObject.lon);
 
+    //Making the Weather Api call based on lat and long returned fro Geocoder
+    let wData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${geoCodedObject.lat}&lon=${geoCodedObject.lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
+    //Calling the function that will format the weather data and return only what we need
+    let neededData = getNeededWeather(wData);
+    //Adding the necesary data to the object that will be returned to update all the conditions and UI
+    let wholeObject = {locationName, ...neededData,localTime}; 
 
+    //Returning the necessary data object
     return wholeObject;
 }
 
 
-async function getNeededWeather(weatherData) {
+function getNeededWeather(weatherData) {
     
     //1. The location name is being initialized globally and set from the variable on line 151.
     
@@ -411,62 +481,61 @@ async function getNeededWeather(weatherData) {
         [weatherData.daily[6].temp.max,weatherData.daily[6].temp.min]
 ]
 
-//7. And the las thing is we have to get the summary of the day like 'sunny' or 'cloudy'
-let daySummary = [  weatherData.daily[0].weather[0].main,
-    weatherData.daily[1].weather[0].main,
-    weatherData.daily[2].weather[0].main,
-    weatherData.daily[3].weather[0].main,
-    weatherData.daily[4].weather[0].main,
-    weatherData.daily[5].weather[0].main,
-    weatherData.daily[6].weather[0].main
-]
-// this variable holds the object that has the needed info.
-let neededInfoObject = {
-    temp,
-    airConditions,
-    hourly: [
-        hourlyTemp[0],
-        hourlyTemp[1],
-        hourlyTemp[2],
-        hourlyTemp[3],
-        hourlyTemp[4],
-        hourlyTemp[5]
-    ],
-    hourlySummaryKeyWord: [
-        hourlySummary[0],
-        hourlySummary[1],
-        hourlySummary[2],
-        hourlySummary[3],
-        hourlySummary[4],
-        hourlySummary[5]
-    ],
-    dailyMinMax: [
-        dailyTempHiLo[0],
-        dailyTempHiLo[1],
-        dailyTempHiLo[2],
-        dailyTempHiLo[3],
-        dailyTempHiLo[4],
-        dailyTempHiLo[5],
-        dailyTempHiLo[6]
-    ],
-    daySummaryKeyWord: [
-        daySummary[0],
-        daySummary[1],
-        daySummary[2],
-        daySummary[3],
-        daySummary[4],
-        daySummary[5],
-        daySummary[6]
+    //7. And the las thing is we have to get the summary of the day like 'sunny' or 'cloudy'
+    let daySummary = [  weatherData.daily[0].weather[0].main,
+        weatherData.daily[1].weather[0].main,
+        weatherData.daily[2].weather[0].main,
+        weatherData.daily[3].weather[0].main,
+        weatherData.daily[4].weather[0].main,
+        weatherData.daily[5].weather[0].main,
+        weatherData.daily[6].weather[0].main
     ]
-}
-return neededInfoObject;
+// this variable holds the object that has the needed info.
+    let neededInfoObject = {
+        temp,
+        airConditions,
+        hourly: [
+            hourlyTemp[0],
+            hourlyTemp[1],
+            hourlyTemp[2],
+            hourlyTemp[3],
+            hourlyTemp[4],
+            hourlyTemp[5]
+        ],
+        hourlySummaryKeyWord: [
+            hourlySummary[0],
+            hourlySummary[1],
+            hourlySummary[2],
+            hourlySummary[3],
+            hourlySummary[4],
+            hourlySummary[5]
+        ],
+        dailyMinMax: [
+            dailyTempHiLo[0],
+            dailyTempHiLo[1],
+            dailyTempHiLo[2],
+            dailyTempHiLo[3],
+            dailyTempHiLo[4],
+            dailyTempHiLo[5],
+            dailyTempHiLo[6]
+        ],
+        daySummaryKeyWord: [
+            daySummary[0],
+            daySummary[1],
+            daySummary[2],
+            daySummary[3],
+            daySummary[4],
+            daySummary[5],
+            daySummary[6]
+        ]
+    }
+    return neededInfoObject;
 } 
 
 
 async function updateConditions(location){
 
     let obj = await prepareResponse(location);
-
 
     currentLocation = obj.locationName;
 
@@ -526,7 +595,7 @@ async function updateConditions(location){
     //Week days long implementation
     for(let i=0;i<daysOfWeek.length;i++){
         let nextDay = i + 1;
-        dayIncrement.setDate(today.getDate() + nextDay);
+        dayIncrement.setDate(today.getDate() + nextDay); // consider using getDay instead of Date because you want to iterate throught days of week and not days of month----------------------------------------------------------------------------------------------------
         daysOfWeek[i].innerHTML = weekDaysRefs[dayIncrement.getDay()];
     }
     dayIncrement = new Date();
@@ -570,19 +639,20 @@ async function updateConditions(location){
         image.src = imageURLs.hasOwnProperty(obj.daySummaryKeyWord[0]) ? imageURLs[obj.daySummaryKeyWord[0]] : undefined;
     })
 
-    //incrementring hour value +3
-        let hourCurrent = new Date();
+    //incrementring LOCAL hour value +3
+        let hourCurrent = obj.localTime;
         let hourIncrement = 0;
 
     for(let i=0;i<arrayOfHourIncrement.length;i++){
-        for(j=0;j<arrayOfHourIncrement[i].length;j++){
-        hourCurrent.setHours(today.getHours() + hourIncrement, 0);
-        arrayOfHourIncrement[i][j].innerHTML = hourCurrent.toLocaleTimeString(undefined, {hour:'2-digit',minute: '2-digit'});
+
+        hourCurrent.setHours(hourCurrent.getHours() + hourIncrement, 0);
+
+            for(j=0;j<arrayOfHourIncrement[i].length;j++){
+            arrayOfHourIncrement[i][j].innerHTML = hourCurrent.toLocaleTimeString(undefined, {hour:'2-digit',minute: '2-digit'});
+            }
+
+        hourIncrement = 3;
     }
-    hourIncrement += 3;
-    }
-    
-    
 }
 
 
@@ -642,9 +712,16 @@ searchBox.addEventListener('submit', async (event) =>{
 
     if(citiesTab.classList.contains('active') || mapTab.classList.contains('active')){
 
+         
+        //Taking the selection off of all of thye list items
+        arrayOfCities.forEach(city => {
+            city.classList.remove('selected');
+        });
+        arrayOfSubCities.forEach(city => {
+            city.classList.remove('selected');
+        })
         await updateConditions(userInput);
-        await addCityListItem(userInput); 
-
+        await addCityListItem(userInput);
     }else if(weatherTab.classList.contains('active')){
         await updateConditions(userInput);
 

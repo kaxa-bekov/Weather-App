@@ -704,13 +704,8 @@ div {
 {
     outline: 1px solid blue;
     background-color: transparent;
-
 }
 
-.selected{
-    outline: 1px solid blue;
-    background-color: transparent;
-}
 
 .city-list-img{
     width: 125px;
@@ -748,40 +743,68 @@ div {
 }
 
 .sub-city-list-item{
-
     padding: 4px;
     margin:8px 1px;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--color-div-background);
+    border-radius:26px;
+    transition: outline 1s;
+}
 
+.sub-city-list-item:focus,
+.sub-city-list-item:hover
+{
+    outline: 1px solid blue;
+    background-color: transparent;
 }
 
 .sub-city-list-img{
     width:75px;
     height:75px;
     padding: 2px;
+    flex-basis:15%;
 }
 
 .sub-list-item-temperature{
     font-size:1.9rem;
     padding: 4px;
     padding-top: 6px;
+    color: var(--color-text-light);
+    flex-basis: 10%;
+    text-align: end;
 }
 .sub-local-time{
     font-size:1rem;
+    color:var(--color-text-dark);
+    line-height: 2;
 }
 
 .sub-list-item-city{
     font-size:1.5rem;
+    color:var(--color-text-light);
 }
 .sub-city-name-and-local-time{
     padding: 4px;
     padding-top: 12px;
     margin-left: 6px;
+    border-radius:0;
+    flex-basis:100%;
+}
 
+.selected{
+    outline: 1px solid blue;
+    background-color: transparent;
 }
 
 .map-tab{
     height:100%;
     width:100%;
+}
+
+.map-tab div {
+    border-radius:0;
 }
 
 .hidden{

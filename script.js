@@ -161,7 +161,6 @@ function subWeatherDisplayRevert(){
 // List of all the added cities
 let arrayOfCities = [...citiesList.children];
 let arrayOfSubCities = [...subCitiesList.children];
-let arrayOfLocationNames = [];
 
 //Function to receive a DOM Node and append it to the MAIN cities tab with applied styling accordingly
 function addToCityList(listItem,location){
@@ -213,8 +212,6 @@ function addToSubCityList(subListItem,location){
         });
         subListItem.classList.add('selected');
         updateConditions(location);
-        console.log();
-        console.log(currentLocation);
         let nodeValue = subListItem.children[1].children[0].innerHTML;
         arrayOfCities.forEach(city => {
             if(city.children[1].children[0].innerHTML === nodeValue){
@@ -227,33 +224,19 @@ function addToSubCityList(subListItem,location){
 
 async function addCityListItem(location){
 
-    // let exists = await ifLocationExists(location);
-    if(await ifLocationExists(location)){
-       return 
-    } 
-
+    if(await ifLocationExists(location)) return
 
     let rawData = await prepareResponse(location);
 
-
-
-
-let cityListItem = document.createElement('li');
-    // cityListItem.classList.add('city-list-item');
-let weatherImage = document.createElement('img');
-    // weatherImage.classList.add('city-list-img');
+    let cityListItem = document.createElement('li');
+    let weatherImage = document.createElement('img');
     weatherImage.src = imageURLs.hasOwnProperty(rawData.daySummaryKeyWord[0]) ? imageURLs[rawData.daySummaryKeyWord[0]] : './icons/loading-icon.png';
-let cityNameAndLocalTimeDiv = document.createElement('div');
-    // cityNameAndLocalTimeDiv.classList.add('city-name-and-local-time');
-let cityName = document.createElement('h1');
-    // cityName.classList.add('list-item-city');
-    // cityName.setAttribute('data-city-name',null);
+    let cityNameAndLocalTimeDiv = document.createElement('div');
+    let cityName = document.createElement('h1');
     cityName.innerHTML = rawData.locationName;
-let localTime = document.createElement('p');
-    // localTime.classList.add('local-time');
+    let localTime = document.createElement('p');
     localTime.innerHTML = rawData.localTime.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit'});
-let listItemTemp = document.createElement('p');
-    // listItemTemp.classList.add('list-item-temperature');
+    let listItemTemp = document.createElement('p');
     listItemTemp.innerHTML = `${rawData.temp}&deg;`;
     cityNameAndLocalTimeDiv.appendChild(cityName);
     cityNameAndLocalTimeDiv.appendChild(localTime);
@@ -264,75 +247,19 @@ let listItemTemp = document.createElement('p');
     let subCityListItem = cityListItem.cloneNode(true);
     addToCityList(cityListItem,rawData.locationName);
     addToSubCityList(subCityListItem,rawData.locationName);
- 
 
     if(placeholderCity.parentElement === citiesTab){
         citiesTab.removeChild(placeholderCity);
         subCitiesTab.removeChild(subPlaceholderCity)
     }
-
-    
-
-    // subCityListItem.addEventListener('click', () => {
-        
-    //     arrayOfCities.forEach(city => {
-    //         city.classList.remove('selected');
-    //     });
-    //     arrayOfSubCities.forEach(city => {
-    //         city.classList.remove('selected');
-    //     });
-       
-    //     updateConditions(location);
-    //     subCityListItem.classList.add('selected');
-
-
-    // })
-
-    // cityListItem.addEventListener('click', () => {
-        
-    //     arrayOfCities.forEach(city => {
-    //         city.classList.remove('selected');
-    //     });
-    //     arrayOfSubCities.forEach(city => {
-    //         city.classList.remove('selected');
-    //     });
-       
-    //     updateConditions(location);
-    //     cityListItem.classList.add('selected');
-    // })
-
-
-
-    // citiesList.appendChild(cityListItem);
-    // subCitiesList.appendChild(subCityListItem);
-    
-    // arrayOfCities = [...citiesList.children];
-    // arrayOfSubCities = [...subCitiesList.children];
-    if(rawData.locationName){
-    arrayOfLocationNames = [...arrayOfLocationNames, rawData.locationName];
-    }
-
-
-
-    // arrayOfSubCities.forEach(city => {
-    //     city.classList.add('sub-city-list-item');
-    //     let citiesInfoEls = city.children;
-    //     citiesInfoEls[0].classList.add('sub-city-list-img');
-    //     citiesInfoEls[1].classList.add('sub-city-name-and-local-time');
-    //     let localAndCityName = citiesInfoEls[1].children;
-    //     localAndCityName[0].classList.add('sub-list-item-city');
-    //     localAndCityName[1].classList.add('sub-local-time');
-    //     citiesInfoEls[2].classList.add('sub-list-item-temperature')
-    // })
-
 }
 
 //This function will be checking if we already have the same location added to our lists of locations and prevent any other function calls before we even get any weather for that location ( which is obviously unnecessary
 async function ifLocationExists(location){
     let locationToCheck = await getLatLongForInput(location);
     let ifExists = false;
-    for(localName of arrayOfLocationNames){
-        if(localName === locationToCheck.locationName){
+    for(localName of arrayOfCities){
+        if(localName.children[1].children[0].innerHTML === locationToCheck.locationName){
             alert("This city has already been added! Please select it from the list.");
             ifExists = true;
         }
@@ -397,7 +324,8 @@ async function getLatLongForInput(location){
 }
 
 //This function will be adding a marker to the map every time user adds a city to the list
-async function addMarkerToTheMap(lat, lon){
+async function addMarkerToTheMap(lat, lon,locationName,temp,daySummary){
+    
     //Creating a reference to LatLng class from google maps API
     const {LatLng} = await google.maps.importLibrary('core')
     //Creating an object of that class called markerPosition because the will be our marker position for each new marker
@@ -411,6 +339,41 @@ async function addMarkerToTheMap(lat, lon){
     })
     //Every time this function is called map will be panned to the new marker position(previous markers remain on the map)
     mapInstance.panTo(markerPosition);
+
+
+    const infoWindowContent = (location,temp,daySummary) => {
+        const infoDiv = document.createElement('div');
+        infoDiv.classList.add('info-window')
+        const infoLocation = document.createElement('h1');
+        infoLocation.innerHTML = location;
+        const infoImage = document.createElement('img');
+        infoImage.src = imageURLs.hasOwnProperty(daySummary) ? imageURLs[daySummary] : './icons/loading-icon.png';
+        const infoTemp = document.createElement('p');
+        infoTemp.innerHTML = temp + '&deg;';
+
+        infoDiv.append(infoLocation,infoImage,infoTemp);
+        return infoDiv;
+    }
+
+    
+    const {InfoWindow} = await google.maps.importLibrary('maps');
+    const infoWindow = new InfoWindow({content: infoWindowContent(locationName,temp,daySummary),maxWidth:300});
+
+   
+    infoWindow.open({
+        anchor: marker,
+        mapInstance,
+        shouldFocus: false
+    });
+    
+
+    marker.addListener('click', () => {
+        infoWindow.open({
+            anchor: marker,
+            mapInstance,
+            shouldFocus: false
+        });
+    })
 }
 
 async function prepareResponse(location){
@@ -422,8 +385,7 @@ async function prepareResponse(location){
     //Calling the function that will return the local time to the location that was entered
     let localTime = await getLocalTimeForLocation(geoCodedObject.lat, geoCodedObject.lon);
 
-    //Calling the function that will add a narker to the map based on given location
-    await addMarkerToTheMap(geoCodedObject.lat, geoCodedObject.lon);
+    
 
     //Making the Weather Api call based on lat and long returned fro Geocoder
     let wData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${geoCodedObject.lat}&lon=${geoCodedObject.lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
@@ -431,6 +393,12 @@ async function prepareResponse(location){
     let neededData = getNeededWeather(wData);
     //Adding the necesary data to the object that will be returned to update all the conditions and UI
     let wholeObject = {locationName, ...neededData,localTime}; 
+
+    //this code will execute only if user is currently in the Map Tab
+    if(mapTab.classList.contains('active')){
+    //Calling the function that will add a narker to the map based on given location
+    await addMarkerToTheMap(geoCodedObject.lat, geoCodedObject.lon,locationName,neededData.temp,neededData.daySummaryKeyWord[0]);
+    }
 
     //Returning the necessary data object
     return wholeObject;

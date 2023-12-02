@@ -106,6 +106,7 @@ div {
 .menu div:focus,
 .memu div:active{
     opacity:1;
+    cursor: pointer;
 }
 
 /* This includes everything except from the side bar.*/
@@ -704,6 +705,7 @@ div {
 {
     outline: 1px solid blue;
     background-color: transparent;
+    cursor: pointer;
 }
 
 
@@ -758,6 +760,7 @@ div {
 {
     outline: 1px solid blue;
     background-color: transparent;
+    cursor: pointer;
 }
 
 .sub-city-list-img{
@@ -805,6 +808,32 @@ div {
 
 .map-tab div {
     border-radius:0;
+}
+
+.info-window{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap:18px;
+    background-color: var(--color-div-background);
+    padding: 12px;
+    margin:6px;
+}
+
+.info-window img{
+    width:75px;
+    height:75px;
+    margin: 2px;
+}
+.info-window h1{
+    color: var(--color-text-dark);
+
+}
+.info-window p{
+    color: var(--color-text-light);
+    width: auto;
+    font-size:2rem;
 }
 
 .hidden{

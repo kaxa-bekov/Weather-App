@@ -21,6 +21,9 @@ const subCitiesList = document.getElementById('sub-cities-list');
 
 const mapTab = document.getElementById('map-tab');
 const subCitiesTab = document.getElementById('sub-cities-tab');
+
+const settingsTab = document.getElementById('settings-tab');
+
 const mainTabs = document.querySelectorAll('[data-mains]');
 const subTabs = document.querySelectorAll('[data-subs]');
 
@@ -764,6 +767,22 @@ mapButton.addEventListener('click', async () => {
 
     // await initMap();
 
+})
+
+
+settingsButton.addEventListener('click', () => {
+    subTabs.forEach(tab => {
+        tab.classList.add('hidden');
+        tab.classList.remove('active');
+    })
+    mainTabs.forEach(tab =>{
+        tab.classList.add('hidden');
+        tab.classList.remove('active');
+    })
+
+    settingsTab.classList.add('active');
+    settingsTab.classList.remove('hidden')
+    
 })
 
 //Google map initialization(one instance only, called when app starts)

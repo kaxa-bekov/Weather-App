@@ -207,39 +207,39 @@
                                         <div class="unit">
                                             <p>Temperature</p>
                                             <div class="unit-selector">
-                                                <div>Celcius</div>
-                                                <div>Farenheit</div>
+                                                <div onclick="setTempUnits('c')" data-temp-unit>Celcius</div>
+                                                <div onclick="setTempUnits('f')" data-temp-unit>Farenheit</div>
                                             </div>
                                         </div>
                                         <div class="unit">
                                             <p>Wind Speed</p>
                                             <div class="unit-selector">
-                                                <div>km/h</div>
-                                                <div>mi/h</div>
-                                                <div>Knots</div>
+                                                <div onclick="setWindUnits('km/h')" date-wind-unit>km/h</div>
+                                                <div onclick="setWindUnits('mi/h')" date-wind-unit>mi/h</div>
+                                                <div onclick="setWindUnits('knots')" date-wind-unit>Knots</div>
                                             </div>
                                         </div>
                                         <div class="unit">
                                             <p>Pressure</p>
                                             <div class="unit-selector">
-                                                <div>hPa</div>
-                                                <div>Inches</div>
-                                                <div>kPa</div>
-                                                <div>mm</div>
+                                                <div onclick="setPressureUnits('hPa')" data-pressure-unit>hPa</div>
+                                                <div onclick="setPressureUnits('inches')" data-pressure-unit>Inches</div>
+                                                <div onclick="setPressureUnits('kPa')" data-pressure-unit>kPa</div>
+                                                <div onclick="setPressureUnits('mm')" data-pressure-unit>mm</div>
                                             </div>
                                         </div>
                                         <div class="unit">
                                             <p>Precipitation</p>
                                             <div class="unit-selector">
-                                                <div>Millimeters</div>
-                                                <div>Inches</div>
+                                                <div onclick="setPrecipitationUnits('mm')" data-precipitation-unit>Millimeters</div>
+                                                <div onclick="setPrecipitationUnits('inches')" data-precipitation-unit>Inches</div>
                                             </div>
                                         </div>
                                         <div class="unit">
                                             <p>Distance</p>
                                             <div class="unit-selector">
-                                                <div>Kilometers</div>
-                                                <div>Miles</div>
+                                                <div onclick="setDistanceUnits('km')" data-distance-units>Kilometers</div>
+                                                <div onclick="setDistanceUnits('mi')" data-distance-units>Miles</div>
                                             </div>
                                         </div>
                                     </div>
@@ -251,7 +251,10 @@
                                             <p>Notifications</p>
                                             <p>Be aware of the weather</p>
                                         </div>
-                                        <div class="toggle-button"></div>
+                                        <div class="toggle-button">
+                                            <input type="checkbox" id="notification-toggle" class="toggle-input"/>
+                                            <div onclick="notificationsToggle()" class="toggle-slider"></div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="general-setting-wrapper wrapper">
@@ -259,7 +262,10 @@
                                     <div class="general-setting">
                                         <div class="toggable">
                                             <p>12-Hour Time</p>
-                                            <div class="toggle-button"></div>
+                                            <div class="toggle-button">
+                                                <input type="checkbox" id="12-hour-toggle" class="toggle-input"/>
+                                                <div onclick="twelveHourToggle()" class="toggle-slider"></div>
+                                            </div>
                                         </div>
                                         <div class="hr"></div>
                                         <div class="toggable">
@@ -267,7 +273,10 @@
                                                 <p>Location</p>
                                                 <p>Get weather of your location</p>
                                             </div>
-                                            <div class="toggle-button"></div>
+                                            <div class="toggle-button">
+                                                <input type="checkbox" id="location-toggle" class="toggle-input"/>
+                                                <div onclick="locationToggle()" class="toggle-slider"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

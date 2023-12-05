@@ -23,6 +23,16 @@ const mapTab = document.getElementById('map-tab');
 const subCitiesTab = document.getElementById('sub-cities-tab');
 
 const settingsTab = document.getElementById('settings-tab');
+const notificationToggleCheckBox = document.getElementById('notification-toggle');
+const twelveHourToggleCheckBox = document.getElementById('12-hour-toggle');
+const locationToggleCheckBox = document.getElementById('location-toggle');
+
+const tempUnits = document.querySelectorAll('[data-temp-unit]');
+const windUnits = document.querySelectorAll('[date-wind-unit]');
+const pressureUnits = document.querySelectorAll('[data-pressure-unit]');
+const precipitationUnits = document.querySelectorAll('[data-precipitation-unit]');
+const distanceUnits = document.querySelectorAll('[data-distance-units]');
+
 
 const mainTabs = document.querySelectorAll('[data-mains]');
 const subTabs = document.querySelectorAll('[data-subs]');
@@ -785,6 +795,125 @@ settingsButton.addEventListener('click', () => {
     
 })
 
+function setTempUnits(unit){
+    for(let i=0;i<tempUnits.length;i++){
+        tempUnits[i].classList.remove('selected-unit');
+        tempUnits[i].style.opacity = .8;
+    }
+    switch(unit){
+        case 'c':
+            tempUnits[0].classList.add('selected-unit');
+            tempUnits[0].style.opacity = 1;
+            break;
+        case 'f':
+            tempUnits[1].classList.add('selected-unit');
+            tempUnits[1].style.opacity = 1;
+            break;
+        default:
+            console.log('invalid argument for temperature unit');
+    }
+}
+
+function setWindUnits(unit){
+    for(let i=0;i<windUnits.length;i++){
+        windUnits[i].classList.remove('selected-unit');
+        windUnits[i].style.opacity = .8;
+    }
+    switch(unit){
+        case 'km/h':
+            windUnits[0].classList.add('selected-unit');
+            windUnits[0].style.opacity = 1;
+            break;
+        case 'mi/h':
+            windUnits[1].classList.add('selected-unit');
+            windUnits[1].style.opacity = 1;
+            break;
+        case 'knots':
+            windUnits[2].classList.add('selected-unit');
+            windUnits[2].style.opacity = 1;
+            break;
+        default:
+            console.log('invalid argument for wind speed unit');
+    }
+}
+
+function setPressureUnits(unit){
+    for(let i=0;i<pressureUnits.length;i++){
+        pressureUnits[i].classList.remove('selected-unit');
+        pressureUnits[i].style.opacity = .8;
+    }
+    switch(unit){
+        case 'hPa':
+            pressureUnits[0].classList.add('selected-unit');
+            pressureUnits[0].style.opacity = 1;
+            break;
+        case 'inches':
+            pressureUnits[1].classList.add('selected-unit');
+            pressureUnits[1].style.opacity = 1;
+            break;
+        case 'kPa':
+            pressureUnits[2].classList.add('selected-unit');
+            pressureUnits[2].style.opacity = 1;
+            break;
+        case 'mm':
+            pressureUnits[3].classList.add('selected-unit');
+            pressureUnits[3].style.opacity = 1;
+            break;    
+        default:
+            console.log('invalid argument for pressure unit');
+    }
+}
+
+function setPrecipitationUnits(unit){
+    for(let i=0;i<precipitationUnits.length;i++){
+        precipitationUnits[i].classList.remove('selected-unit');
+        precipitationUnits[i].style.opacity = .8;
+    }
+    switch(unit){
+        case 'mm':
+            precipitationUnits[0].classList.add('selected-unit');
+            precipitationUnits[0].style.opacity = 1;
+            break;
+        case 'inches':
+            precipitationUnits[1].classList.add('selected-unit');
+            precipitationUnits[1].style.opacity = 1;
+            break;
+        default:
+            console.log('invalid argument for precipitation unit');
+    }
+}
+
+function setDistanceUnits(unit){
+    for(let i=0;i<distanceUnits.length;i++){
+        distanceUnits[i].classList.remove('selected-unit');
+        distanceUnits[i].style.opacity = .8;
+    }
+    switch(unit){
+        case 'km':
+            distanceUnits[0].classList.add('selected-unit');
+            distanceUnits[0].style.opacity = 1;
+            break;
+        case 'mi':
+            distanceUnits[1].classList.add('selected-unit');
+            distanceUnits[1].style.opacity = 1;
+            break;
+        default:
+            console.log('invalid argument for distance unit');
+    }
+}
+
+
+function notificationsToggle(){
+    notificationToggleCheckBox.checked = !notificationToggleCheckBox.checked;
+}
+
+function twelveHourToggle(){
+    twelveHourToggleCheckBox.checked = !twelveHourToggleCheckBox.checked;
+}
+
+function locationToggle(){
+    locationToggleCheckBox.checked = !locationToggleCheckBox.checked;
+}
 //Google map initialization(one instance only, called when app starts)
 async function initMap(){
     if(mapInstance) return

@@ -885,12 +885,13 @@ div {
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: background-color .5s ease-in;
+    transition: background-color .3s ease-in;
 }
 
 .unit-selector > div:hover{
     background-color: var(--color-div-background);
     cursor: pointer;
+    opacity:.8;
 }
 
 .unit > p{
@@ -957,10 +958,48 @@ div {
 .toggle-button{
     width: 100px;
     height: 50px;
+    position: relative;
+    cursor: pointer;
 }
 
+.toggle-input{
+    display:none;
+}
 
+.toggle-slider{
+    position: relative;
+    background-color: var(--color-background);
+    width: 50px;
+    height:26px;
+    border-radius:13px;
+    top: 6px;
+    left: 37px;
+}
 
+.toggle-slider::before {
+    content:'';
+    width: 20px;
+    height:20px;
+    position: absolute;
+    display: inline-block;
+    top: 3px;
+    left: 3px;
+    background-color: var(--color-div-background);
+    border-radius:50%;
+    transition: transform .3s, background-color .3s;
+}
+
+.toggle-input:checked + .toggle-slider::before{
+    transform: translateX(24px);
+    background-color: var(--color-button-background);
+}
+
+.selected-unit{
+    background-color: var(--color-div-background);
+    opacity:1;
+    color:var(--color-text-dark);
+    transition: background-color .3s;
+}
 
 
 .hidden{

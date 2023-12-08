@@ -28,6 +28,8 @@ const notificationToggleCheckBox = document.getElementById('notification-toggle'
 const twelveHourToggleCheckBox = document.getElementById('12-hour-toggle');
 const locationToggleCheckBox = document.getElementById('location-toggle');
 
+twelveHourToggleCheckBox.checked = true;
+
 //Measurment unit selection sliders
 const tempSlider = document.getElementById('temp-slider');
 const windSlider = document.getElementById('wind-slider');
@@ -325,7 +327,7 @@ async function getLocalTimeForLocation(lat, lon){
     localToTheLocationDate = new Date();
     localToTheLocationDate.setHours(local);
     //returning the Date object holding the local time for the given location
-    return localToTheLocationDate;
+    return [localToTheLocationDate,hourOffset];
 }
 
 //This function will be getting the user input and returning lat and long for it
@@ -417,16 +419,17 @@ async function prepareResponse(location){
     let locationName = geoCodedObject.locationName;
 
     //Calling the function that will return the local time to the location that was entered
-    let localTime = await getLocalTimeForLocation(geoCodedObject.lat, geoCodedObject.lon);
+    let localTimeArray = await getLocalTimeForLocation(geoCodedObject.lat, geoCodedObject.lon);
+    let localTime = localTimeArray[0];
+    let localTimeOffset = localTimeArray[1];
 
-    
 
     //Making the Weather Api call based on lat and long returned fro Geocoder
     let wData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${geoCodedObject.lat}&lon=${geoCodedObject.lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
     //Calling the function that will format the weather data and return only what we need
     let neededData = getNeededWeather(wData);
     //Adding the necesary data to the object that will be returned to update all the conditions and UI
-    let wholeObject = {locationName, ...neededData,localTime}; 
+    let wholeObject = {locationName, ...neededData,localTime,localTimeOffset}; 
 
     //this code will execute only if user is currently in the Map Tab
     if(mapTab.classList.contains('active')){
@@ -545,6 +548,7 @@ async function updateConditions(location){
 
     currentLocation = obj.locationName;
 
+    console.log(obj.localTime);
 
     updateConditionsOnCityListItems(obj.temp);
 
@@ -597,7 +601,6 @@ async function updateConditions(location){
         uv.innerHTML = obj.airConditions.uvi;
     })
     humidity.innerHTML = `${obj.airConditions.humidity}` + ' %';
-
     switch (distanceUnit) {
         case 'km':
             visibility.innerHTML = `${obj.airConditions.visibility/1000}` + ' km';
@@ -607,7 +610,6 @@ async function updateConditions(location){
         default:
             break;
     }
-    
     switch(pressureUnit){
         case 'hPa':
             pressure.innerHTML = `${obj.airConditions.pressure}` + ' hPa';
@@ -626,9 +628,43 @@ async function updateConditions(location){
     }
     
 
+    //Getting Date object based on sunset timestamp for the location which returns the date and time in the machines local time zone. then getting UTC time off of that tsunset timestamp and then adding the local time ofset.
+    let date = new Date(obj.airConditions.sunset * 1000);
+    let utcYear = date.getUTCFullYear();
+    let utcMonth = date.getUTCMonth();
+    let utcDAte = date.getUTCDate();
+    let utcHour = date.getUTCHours();
+    let utcMinute = date.getUTCMinutes();
+    let utcSecond = date.getUTCSeconds();
+    let utcDateObject = new Date(utcYear,utcMonth,utcDAte,utcHour,utcMinute,utcSecond );
+    utcDateObject.setHours(utcDateObject.getHours() + obj.localTimeOffset);
 
-                                                                                            let date = new Date(obj.airConditions.sunset * 1000).toLocaleTimeString('en-US', { hour: "2-digit", minute: "2-digit" });
-                                                                                            sunset.innerHTML = date;
+    let hourFormat;
+    if(utcDateObject.getHours() < 10){
+        hourFormat = '0' + `${utcDateObject.getHours()}`;
+    }else{
+        hourFormat = `${utcDateObject.getHours()}`;
+    }
+
+    let minuteFormat;
+    if(utcDateObject.getMinutes() < 10){
+        minuteFormat = '0' + `${utcDateObject.getMinutes()}`;
+    }else{
+        minuteFormat = `${utcDateObject.getMinutes()}`;
+    }
+
+    switch(twelveHourToggleCheckBox.checked){
+        case true:
+           sunset.innerHTML = utcDateObject.toLocaleTimeString('en-US', { hour: "2-digit", minute: "2-digit" });
+           break;
+        case false:
+           sunset.innerHTML = `${hourFormat}` + ':' + `${minuteFormat}`;
+            break;
+        default:
+            break;
+
+    }
+    
                                                                                             
 
     //Hourly temp data
@@ -664,7 +700,7 @@ async function updateConditions(location){
     //Week days long implementation
     for(let i=0;i<daysOfWeek.length;i++){
         let nextDay = i + 1;
-        dayIncrement.setDate(today.getDate() + nextDay); // consider using getDay instead of Date because you want to iterate throught days of week and not days of month----------------------------------------------------------------------------------------------------
+        dayIncrement.setDate(today.getDate() + nextDay); 
         daysOfWeek[i].innerHTML = weekDaysRefs[dayIncrement.getDay()];
     }
     dayIncrement = new Date();
@@ -713,17 +749,44 @@ async function updateConditions(location){
     //incrementring LOCAL hour value +3
         let hourCurrent = obj.localTime;
         let hourIncrement = 0;
+        let hourlyFormat = '';
 
-    for(let i=0;i<arrayOfHourIncrement.length;i++){
+        switch(twelveHourToggleCheckBox.checked){
+            case true:
+                for(let i=0;i<arrayOfHourIncrement.length;i++){
 
-        hourCurrent.setHours(hourCurrent.getHours() + hourIncrement, 0);
+                    hourCurrent.setHours(hourCurrent.getHours() + hourIncrement, 0);
+            
+                        for(j=0;j<arrayOfHourIncrement[i].length;j++){
+                        arrayOfHourIncrement[i][j].innerHTML = hourCurrent.toLocaleTimeString(undefined, {hour:'2-digit',minute: '2-digit'});
+                        }
+            
+                    hourIncrement = 3;
+                }
+               break;
+            case false:
+                for(let i=0;i<arrayOfHourIncrement.length;i++){
 
-            for(j=0;j<arrayOfHourIncrement[i].length;j++){
-            arrayOfHourIncrement[i][j].innerHTML = hourCurrent.toLocaleTimeString(undefined, {hour:'2-digit',minute: '2-digit'});
-            }
+                    hourCurrent.setHours(hourCurrent.getHours() + hourIncrement, 0);
+                    if(hourCurrent.getHours() < 10){
+                        hourlyFormat = '0' + `${hourCurrent.getHours()}`;
+                    }else{
+                        hourlyFormat = `${hourCurrent.getHours()}`;
+                    }
+            
+                        for(j=0;j<arrayOfHourIncrement[i].length;j++){
+                        arrayOfHourIncrement[i][j].innerHTML = `${hourlyFormat}` + ':00';
+                        }
+            
+                    hourIncrement = 3;
+                    hourlyFormat = '';
+                }
+                break;
+            default:
+                break;
+    
+        }
 
-        hourIncrement = 3;
-    }
 }
 
 

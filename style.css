@@ -236,6 +236,7 @@ div {
 .hourly-forecast-ul li{
     margin:4px;
     position:relative;
+    flex-basis: 100%;
 }
 .hourly-forecast-li{
     display:flex;
@@ -474,6 +475,7 @@ div {
 .sub-hourly-forecast > ul > li{
     margin:4px;
     position:relative;
+    flex-basis: 100%;
 }
 .sub-hourly-forecast > ul > li > div p{
     width:100%;

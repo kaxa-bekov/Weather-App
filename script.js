@@ -23,21 +23,31 @@ const mapTab = document.getElementById('map-tab');
 const subCitiesTab = document.getElementById('sub-cities-tab');
 
 const settingsTab = document.getElementById('settings-tab');
+//settings tab toggle switch variables
 const notificationToggleCheckBox = document.getElementById('notification-toggle');
 const twelveHourToggleCheckBox = document.getElementById('12-hour-toggle');
 const locationToggleCheckBox = document.getElementById('location-toggle');
 
-const tempUnits = document.querySelectorAll('[data-temp-unit]');
-const windUnits = document.querySelectorAll('[date-wind-unit]');
-const pressureUnits = document.querySelectorAll('[data-pressure-unit]');
-const precipitationUnits = document.querySelectorAll('[data-precipitation-unit]');
-const distanceUnits = document.querySelectorAll('[data-distance-units]');
-
+//Measurment unit selection sliders
+const tempSlider = document.getElementById('temp-slider');
+const windSlider = document.getElementById('wind-slider');
+const pressureSlider = document.getElementById('pressure-slider');
+const precipitationSlider = document.getElementById('precipitation-slider');
+const distanceSlider = document.getElementById('distance-slider');
 
 const mainTabs = document.querySelectorAll('[data-mains]');
 const subTabs = document.querySelectorAll('[data-subs]');
 
 
+//Settings variables
+let tempUnit = 'c';
+let windSpeedUnit = 'km/h';
+let pressureUnit = 'hPa';
+let precipitationUnit = 'mm';
+let distanceUnit = 'km';
+
+
+//Map instance variable
 let mapInstance;
 
 // Main info elements
@@ -234,6 +244,15 @@ function addToSubCityList(subListItem,location){
     })
 }
 
+function updateConditionsOnCityListItems(temp){
+    arrayOfCities.forEach(city => {
+        city.children[2].innerHTML = `${getTemperatureInCorrectUnit(temp)}` + '&deg;';
+        });
+        arrayOfSubCities.forEach(city => {
+            city.children[2].innerHTML = `${getTemperatureInCorrectUnit(temp)}` + '&deg;';
+        });
+}
+
 
 async function addCityListItem(location){
 
@@ -250,7 +269,7 @@ async function addCityListItem(location){
     let localTime = document.createElement('p');
     localTime.innerHTML = rawData.localTime.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit'});
     let listItemTemp = document.createElement('p');
-    listItemTemp.innerHTML = `${rawData.temp}&deg;`;
+    listItemTemp.innerHTML = `${getTemperatureInCorrectUnit(rawData.temp)}&deg;`;
     cityNameAndLocalTimeDiv.appendChild(cityName);
     cityNameAndLocalTimeDiv.appendChild(localTime);
     cityListItem.appendChild(weatherImage);
@@ -338,6 +357,8 @@ async function getLatLongForInput(location){
 
 //This function will be adding a marker to the map every time user adds a city to the list
 async function addMarkerToTheMap(lat, lon,locationName,temp,daySummary){
+
+    if(locationName === currentLocation) return
     
     //Creating a reference to LatLng class from google maps API
     const {LatLng} = await google.maps.importLibrary('core')
@@ -362,7 +383,7 @@ async function addMarkerToTheMap(lat, lon,locationName,temp,daySummary){
         const infoImage = document.createElement('img');
         infoImage.src = imageURLs.hasOwnProperty(daySummary) ? imageURLs[daySummary] : './icons/loading-icon.png';
         const infoTemp = document.createElement('p');
-        infoTemp.innerHTML = temp + '&deg;';
+        infoTemp.innerHTML = getTemperatureInCorrectUnit(temp) + '&deg;';
 
         infoDiv.append(infoLocation,infoImage,infoTemp);
         return infoDiv;
@@ -422,10 +443,14 @@ function getNeededWeather(weatherData) {
     
     //1. The location name is being initialized globally and set from the variable on line 151.
     
-    //2. Now we will set a variable for the current temperature
+    //2. Now we will set a variable for the current temperature 
     let temp = Math.trunc(weatherData.current.temp);
+  
     
     //3. Now we will creat an array and save all of the needed air conditions in it.
+
+    
+
     let airConditions = {       
         uvi: weatherData.current.uvi,
         windSpeed: weatherData.current.wind_speed,
@@ -520,33 +545,96 @@ async function updateConditions(location){
 
     currentLocation = obj.locationName;
 
+
+    updateConditionsOnCityListItems(obj.temp);
+
     realFeel.forEach(realFeel => {
-        realFeel.innerHTML = `${Math.trunc(obj.airConditions.feelsLike)}` + `&deg;`;
+        realFeel.innerHTML = `${Math.trunc(getTemperatureInCorrectUnit(obj.airConditions.feelsLike))}` + `&deg;`;
     })        
     wind.forEach(wind => {
-        wind.innerHTML = `${Math.trunc(obj.airConditions.windSpeed*3.6)}` + ' km/h';
+        switch(windSpeedUnit){
+            case 'km/h':
+                wind.innerHTML = `${Math.trunc(obj.airConditions.windSpeed*3.6)}` + ' km/h';
+                break;
+            case 'mi/h':
+                wind.innerHTML = `${Math.trunc((obj.airConditions.windSpeed*3.6)/1.609)}` + ' mi/h';
+                break;
+            case 'knots':
+                wind.innerHTML = `${Math.trunc((obj.airConditions.windSpeed*3.6)/1.852)}` + ' Knots';
+                break;
+            default:
+                break;
+
+        }
+        
     })
     precipitation.forEach(rain => {
         if(!isNaN(Math.trunc(obj.airConditions.rain))){
-            rain.innerHTML = (`${Math.trunc(obj.airConditions.rain)}` + ' mm/h') ?? ' 0 mm/h';
+            switch (precipitationUnit) {
+                case 'mm':
+                    rain.innerHTML = (`${Math.trunc(obj.airConditions.rain)}` + ' mm/h') ?? ' 0 mm/h';
+                    break;
+                case 'inches':
+                    rain.innerHTML = (`${Math.trunc(obj.airConditions.rain/25.4)}` + ' In/h') ?? ' 0 In/h';
+                default:
+                    break;
+            } 
         }else{
-            rain.innerHTML = ' 0 mm/h';
+            switch(precipitationUnit){
+                case 'mm':
+                    rain.innerHTML = ' 0 mm/h';
+                    break;
+                case 'inches':
+                    rain.innerHTML = ' 0 Inches';
+                    break;
+                default:
+                    break;
+            }
+            
         }
     })
     UVIndex.forEach(uv => {
         uv.innerHTML = obj.airConditions.uvi;
     })
     humidity.innerHTML = `${obj.airConditions.humidity}` + ' %';
-    visibility.innerHTML = `${obj.airConditions.visibility/1000}` + ' km';
-    pressure.innerHTML = `${obj.airConditions.pressure}` + ' hPa';
-    let date = new Date(obj.airConditions.sunset * 1000).toLocaleTimeString('en-US', { hour: "2-digit", minute: "2-digit" });
-    sunset.innerHTML = date;
+
+    switch (distanceUnit) {
+        case 'km':
+            visibility.innerHTML = `${obj.airConditions.visibility/1000}` + ' km';
+            break;
+        case 'mi':
+            visibility.innerHTML = `${Math.trunc((obj.airConditions.visibility/1000)/1.609)}` + ' mi';
+        default:
+            break;
+    }
     
+    switch(pressureUnit){
+        case 'hPa':
+            pressure.innerHTML = `${obj.airConditions.pressure}` + ' hPa';
+            break;
+        case 'inches':
+            pressure.innerHTML = `${Math.trunc(obj.airConditions.pressure/33.7685)}` + ' Inches';
+            break;
+        case 'kPa':
+            pressure.innerHTML = `${obj.airConditions.pressure/10}` + ' kPa';
+            break;
+        case 'mm':
+            pressure.innerHTML = `${Math.trunc(obj.airConditions.pressure/1.33322)}` + ' mm';
+            break;    
+        default:
+            break;
+    }
+    
+
+
+                                                                                            let date = new Date(obj.airConditions.sunset * 1000).toLocaleTimeString('en-US', { hour: "2-digit", minute: "2-digit" });
+                                                                                            sunset.innerHTML = date;
+                                                                                            
 
     //Hourly temp data
     for(let i = 0;i < arrayOf6HoursTempDataElements.length;i++){
         for(let j= 0;j < arrayOf6HoursTempDataElements[i].length; j++){
-            arrayOf6HoursTempDataElements[i][j].innerHTML = `${obj.hourly[i]}` + `&deg;`;
+            arrayOf6HoursTempDataElements[i][j].innerHTML = `${getTemperatureInCorrectUnit(obj.hourly[i])}` + `&deg;`;
         }
 }
     //Hourly image
@@ -596,9 +684,9 @@ async function updateConditions(location){
             // Entering the actual elements array and setting their data (both at the same time) using the two dimensional array that we get from our forecast object.
             for(let n = 0;n < arrayOfArraysOfElementsContaining2ArraysMinAndMax[i][j].length;n++){
                 //setting max 
-                    arrayOfArraysOfElementsContaining2ArraysMinAndMax[i][j][n].innerHTML = `${Math.trunc(obj.dailyMinMax[i][0])}` + ' ';
+                    arrayOfArraysOfElementsContaining2ArraysMinAndMax[i][j][n].innerHTML = `${Math.trunc(getTemperatureInCorrectUnit(obj.dailyMinMax[i][0]))}` + ' ';
                 // //setting min
-                    arrayOfArraysOfElementsContaining2ArraysMinAndMax[i][j+1][n].innerHTML = Math.trunc(obj.dailyMinMax[i][1]);
+                    arrayOfArraysOfElementsContaining2ArraysMinAndMax[i][j+1][n].innerHTML = Math.trunc(getTemperatureInCorrectUnit(obj.dailyMinMax[i][1]));
             }
         }
     }
@@ -610,10 +698,12 @@ async function updateConditions(location){
         city.innerText = currentLocation;
     })
     
-    
+   
     tempMain.forEach(t =>{
-        t.innerHTML = `${obj.temp}` + `&deg;`;
+        t.innerHTML = `${getTemperatureInCorrectUnit(obj.temp)}` + `&deg;`;
     })
+
+
 
     imageMain.forEach(image => {
         image.alt = daySummaries.hasOwnProperty([obj.daySummaryKeyWord[0]]) ? daySummaries[obj.daySummaryKeyWord[0]] : undefined ;
@@ -795,88 +885,68 @@ settingsButton.addEventListener('click', () => {
     
 })
 
-function setTempUnits(unit){
-    for(let i=0;i<tempUnits.length;i++){
-        tempUnits[i].classList.remove('selected-unit');
-        tempUnits[i].style.opacity = .8;
-    }
+async function setTempUnits(unit){
+    tempUnit = unit;
     switch(unit){
         case 'c':
-            tempUnits[0].classList.add('selected-unit');
-            tempUnits[0].style.opacity = 1;
+            tempSlider.style.left = '0'
             break;
         case 'f':
-            tempUnits[1].classList.add('selected-unit');
-            tempUnits[1].style.opacity = 1;
+            tempSlider.style.left = '50%'
             break;
         default:
             console.log('invalid argument for temperature unit');
     }
+    await updateConditions(currentLocation);
 }
 
-function setWindUnits(unit){
-    for(let i=0;i<windUnits.length;i++){
-        windUnits[i].classList.remove('selected-unit');
-        windUnits[i].style.opacity = .8;
-    }
+async function setWindUnits(unit){
+    windSpeedUnit = unit;
     switch(unit){
         case 'km/h':
-            windUnits[0].classList.add('selected-unit');
-            windUnits[0].style.opacity = 1;
+            windSlider.style.left = '0';
             break;
         case 'mi/h':
-            windUnits[1].classList.add('selected-unit');
-            windUnits[1].style.opacity = 1;
+            windSlider.style.left = '33%';
             break;
         case 'knots':
-            windUnits[2].classList.add('selected-unit');
-            windUnits[2].style.opacity = 1;
+            windSlider.style.left = '66%';
             break;
         default:
             console.log('invalid argument for wind speed unit');
     }
+    await updateConditions(currentLocation);
 }
 
-function setPressureUnits(unit){
-    for(let i=0;i<pressureUnits.length;i++){
-        pressureUnits[i].classList.remove('selected-unit');
-        pressureUnits[i].style.opacity = .8;
-    }
+ async function setPressureUnits(unit){
+    pressureUnit = unit;
     switch(unit){
         case 'hPa':
-            pressureUnits[0].classList.add('selected-unit');
-            pressureUnits[0].style.opacity = 1;
+            pressureSlider.style.left = '0';
             break;
         case 'inches':
-            pressureUnits[1].classList.add('selected-unit');
-            pressureUnits[1].style.opacity = 1;
+            pressureSlider.style.left = '25%';
             break;
         case 'kPa':
-            pressureUnits[2].classList.add('selected-unit');
-            pressureUnits[2].style.opacity = 1;
+            pressureSlider.style.left = '50%';
             break;
         case 'mm':
-            pressureUnits[3].classList.add('selected-unit');
-            pressureUnits[3].style.opacity = 1;
+            pressureSlider.style.left = '75%';
             break;    
         default:
             console.log('invalid argument for pressure unit');
     }
+    await updateConditions(currentLocation);
 }
 
 function setPrecipitationUnits(unit){
-    for(let i=0;i<precipitationUnits.length;i++){
-        precipitationUnits[i].classList.remove('selected-unit');
-        precipitationUnits[i].style.opacity = .8;
-    }
+    precipitationUnit = unit;
     switch(unit){
         case 'mm':
-            precipitationUnits[0].classList.add('selected-unit');
-            precipitationUnits[0].style.opacity = 1;
+            precipitationSlider.style.left = '0';
             break;
         case 'inches':
-            precipitationUnits[1].classList.add('selected-unit');
-            precipitationUnits[1].style.opacity = 1;
+            precipitationSlider.style.left = '50%';
             break;
         default:
             console.log('invalid argument for precipitation unit');
@@ -884,22 +954,34 @@ function setPrecipitationUnits(unit){
 }
 
 function setDistanceUnits(unit){
-    for(let i=0;i<distanceUnits.length;i++){
-        distanceUnits[i].classList.remove('selected-unit');
-        distanceUnits[i].style.opacity = .8;
-    }
+    distanceUnit = unit;
     switch(unit){
         case 'km':
-            distanceUnits[0].classList.add('selected-unit');
-            distanceUnits[0].style.opacity = 1;
+            distanceSlider.style.left = '0';
             break;
         case 'mi':
-            distanceUnits[1].classList.add('selected-unit');
-            distanceUnits[1].style.opacity = 1;
+            distanceSlider.style.left = '50%';
             break;
         default:
             console.log('invalid argument for distance unit');
     }
+}
+
+
+function getTemperatureInCorrectUnit(temp){
+    //Setting the correct measurment unit for the temperature
+    let temperature;
+    switch (tempUnit) {
+        case 'c':
+            temperature = temp;
+            break;
+        case 'f':
+            temperature = Math.trunc((temp * (9/5)) + 32);
+            break;
+        default:
+            break;
+    }
+    return temperature;
 }
 
 

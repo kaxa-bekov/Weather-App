@@ -207,39 +207,44 @@
                                         <div class="unit">
                                             <p>Temperature</p>
                                             <div class="unit-selector">
-                                                <div onclick="setTempUnits('c')" data-temp-unit>Celcius</div>
-                                                <div onclick="setTempUnits('f')" data-temp-unit>Farenheit</div>
+                                                <div id="temp-slider" class="temp-slider"></div>
+                                                <div onclick="setTempUnits('c')" >Celcius</div>
+                                                <div onclick="setTempUnits('f')" >Farenheit</div>
                                             </div>
                                         </div>
                                         <div class="unit">
                                             <p>Wind Speed</p>
                                             <div class="unit-selector">
-                                                <div onclick="setWindUnits('km/h')" date-wind-unit>km/h</div>
-                                                <div onclick="setWindUnits('mi/h')" date-wind-unit>mi/h</div>
-                                                <div onclick="setWindUnits('knots')" date-wind-unit>Knots</div>
+                                                <div id="wind-slider" class="wind-slider"></div>
+                                                <div onclick="setWindUnits('km/h')" >km/h</div>
+                                                <div onclick="setWindUnits('mi/h')" >mi/h</div>
+                                                <div onclick="setWindUnits('knots')" >Knots</div>
                                             </div>
                                         </div>
                                         <div class="unit">
                                             <p>Pressure</p>
                                             <div class="unit-selector">
-                                                <div onclick="setPressureUnits('hPa')" data-pressure-unit>hPa</div>
-                                                <div onclick="setPressureUnits('inches')" data-pressure-unit>Inches</div>
-                                                <div onclick="setPressureUnits('kPa')" data-pressure-unit>kPa</div>
-                                                <div onclick="setPressureUnits('mm')" data-pressure-unit>mm</div>
+                                                <div id="pressure-slider" class="pressure-slider"></div>
+                                                <div onclick="setPressureUnits('hPa')" >hPa</div>
+                                                <div onclick="setPressureUnits('inches')" >Inches</div>
+                                                <div onclick="setPressureUnits('kPa')" >kPa</div>
+                                                <div onclick="setPressureUnits('mm')" >mm</div>
                                             </div>
                                         </div>
                                         <div class="unit">
                                             <p>Precipitation</p>
                                             <div class="unit-selector">
-                                                <div onclick="setPrecipitationUnits('mm')" data-precipitation-unit>Millimeters</div>
-                                                <div onclick="setPrecipitationUnits('inches')" data-precipitation-unit>Inches</div>
+                                                <div id="precipitation-slider" class="precipitation-slider"></div>
+                                                <div onclick="setPrecipitationUnits('mm')" >Millimeters</div>
+                                                <div onclick="setPrecipitationUnits('inches')" >Inches</div>
                                             </div>
                                         </div>
                                         <div class="unit">
                                             <p>Distance</p>
                                             <div class="unit-selector">
-                                                <div onclick="setDistanceUnits('km')" data-distance-units>Kilometers</div>
-                                                <div onclick="setDistanceUnits('mi')" data-distance-units>Miles</div>
+                                                <div id="distance-slider" class="distance-slider"></div>
+                                                <div onclick="setDistanceUnits('km')" >Kilometers</div>
+                                                <div onclick="setDistanceUnits('mi')" >Miles</div>
                                             </div>
                                         </div>
                                     </div>

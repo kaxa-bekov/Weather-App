@@ -148,8 +148,36 @@ let today = new Date();
 const weekDaysRefs = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 
+
 //Default city name
 let currentLocation= '';
+// Getting browsers current position.
+const nav = window.navigator;
+
+
+
+function getLocation(){
+    return new Promise((resolve,reject) => {
+        nav.geolocation.getCurrentPosition(resolve, reject);
+    })
+}
+
+
+
+window.addEventListener('DOMContentLoaded', async () => {
+
+    let position = await getLocation();
+
+    let reverseLocation = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyAi97T2eKAyD-H_jYuAoFCON0OEy_XiQOE`).then(response => response.json());
+    currentLocation = reverseLocation.results[5].formatted_address.toString();
+    updateConditions(currentLocation);
+    console.log(currentLocation);
+    console.log(reverseLocation.results);
+});
+
+
+
+
 
 
 // button handler that shows expanded conditions and adds hourly to sub-weather tab
@@ -340,6 +368,7 @@ async function getLatLongForInput(location){
     const codedGeo = await geocoder.geocode({address : location});
     //Setting the location name to the formatted location string
     let locationName = codedGeo.results[0].formatted_address;
+    
     if(locationName.includes(',')){
         //Making sure to remove the last word if there are 2 commas in the formatted response
         let localName = locationName.split(',');
@@ -423,7 +452,7 @@ async function prepareResponse(location){
     let localTime = localTimeArray[0];
     let localTimeOffset = localTimeArray[1];
 
-
+    
     //Making the Weather Api call based on lat and long returned fro Geocoder
     let wData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${geoCodedObject.lat}&lon=${geoCodedObject.lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
     //Calling the function that will format the weather data and return only what we need

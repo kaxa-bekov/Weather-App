@@ -5,11 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;800&family=Rubik&display=swap" rel="stylesheet">
 
 </head>
 <body>
     <!-- Main Container Div-->
     <div class="container">
+            <!--Popup window fro introduction-->
+            <div class="overlay" id="overlay"></div>
+            <div class="popup" id="popup">
+                <h1>Hold On, Hold On</h1>
+                <p>Please read the following introduction to have an idea on how to use the app and what its functionallity is.</p>
+                <p>This app takes one input, that is any location in the world and shows weather data as well as some of the air conditions for the given location.</p>
+                <p>In the left top corner you can see a dialog asking to allow your location, this is only to populate the app with weather information of your current location.</p>
+                <p>Please allow the locatation access.</p>
+                <p>This App features 3 different tabs to dislay the data and one "Settings" tab to customize the app for your own preferences.</p>
+                <ol>
+                    <li>
+                        <h3>Weather Tab</h3>
+                        <p>This tab shows temperature summary, hourly and daily forecasts, as well as air conditions for the given location.</p>
+                        <p>Please click the "See more" button to expand the air conditions.</p>
+                    </li>
+                    <li>
+                        <h3>Cities Tab</h3>
+                        <p>In the "Cities" tab you can add as many different locations as you would like and see their weather information.</p>
+                        <p>By clicking on any of the list items you will select that location as your main location and the "Weather" tab will reflect the data for that particular location.</p>
+                        <p><strong>You can remove the locations from the list by Double Clicking them.</strong></p>
+                    </li>
+                    <li>
+                        <h3>Map Tab</h3>
+                        <p>Here you can see a Google Map that will have markers for all of the locations that you have added as well as their weather data in a window above the location marker.</p>
+                        <p>The informational window with weather info is still under development and may behave unexpectedly sometimes. In order to reopen a widnow after you have closed it simply click on the marker on the map.</p>
+                        <p>You will also notice that you can add and remove locations from your list in the "Map" tab as well as the "Cities" tab. <strong>They are fully synchronized.</strong></p>
+                    </li>
+                    <li>
+                        <h3>Settings Tab</h3>
+                        <p>And finally in the "Settings" tab you are able to select different measurment units and set time format that is more comfortable for you.</p>
+                        <p><strong>Please note that the "Notifications", "Subscription" and "Sign Up" feature are not implemented in the beta version.</strong></p>
+                        <p>After you have selected desired measurment units and hour format you can go back to "Wetaher" tab and see that it had changed accordingly.</p>
+                    </li>
+                </ol>
+                <p><strong>Please let me know what do you think and what are the possible improvements taht can be made. Any feedback is greatly appreciated!!!</strong></p>
+                <button onClick="closePopup()">Close</button>
+            </div>
+
+
         <!-- Side Bar Div---------------------------------------------------------------------------------->
         <div class="side-bar">
             <div class="logo-wrapper">
@@ -75,42 +117,42 @@
                                                 <div class="hourly-forecast-li">
                                                     <p data-hourI-first>6:00 AM</p>
                                                     <img data-hourlyImage-first src="./icons/loading-icon.png" />
-                                                    <p data-hourly-first class="hourly-degrees">25&deg;</p>
+                                                    <p data-hourly-first class="hourly-degrees">...</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
                                                     <p data-hourI-second>9:00 AM</p>
                                                     <img data-hourlyImage-second src="./icons/loading-icon.png" />
-                                                    <p data-hourly-second class="hourly-degrees">28&deg;</p>
+                                                    <p data-hourly-second class="hourly-degrees">...</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
                                                     <p data-hourI-third>12:00 PM</p>
                                                     <img data-hourlyImage-third src="./icons/loading-icon.png" />
-                                                    <p data-hourly-third class="hourly-degrees">33&deg;</p>
+                                                    <p data-hourly-third class="hourly-degrees">...</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
                                                     <p data-hourI-fourth>3:00 PM</p>
                                                     <img data-hourlyImage-fourth src="./icons/loading-icon.png" />
-                                                    <p data-hourly-fourth class="hourly-degrees">34&deg;</p>
+                                                    <p data-hourly-fourth class="hourly-degrees">...</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
                                                     <p data-hourI-fifth>6:00 PM</p>
                                                     <img data-hourlyImage-fifth src="./icons/loading-icon.png" />
-                                                    <p data-hourly-fifth class="hourly-degrees">32&deg;</p>
+                                                    <p data-hourly-fifth class="hourly-degrees">...</p>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="hourly-forecast-li">
                                                     <p data-hourI-sixth>9:00 PM</p>
                                                     <img data-hourlyImage-sixth src="./icons/loading-icon.png" />
-                                                    <p data-hourly-sixth class="hourly-degrees">30&deg;</p>
+                                                    <p data-hourly-sixth class="hourly-degrees">...</p>
                                                 </div>
                                             </li>
                                         </ul>
@@ -461,6 +503,30 @@
                                     <ul id="sub-cities-list" class="cities-list">
                                         <!--This list will be populated using JS whne user wants to add a city to a list-->
                                     </ul>
+
+                            </div>
+
+                            <!-- This div will simply have a paid subscriptionmock up and sing up option mockup-->
+                            <div  class="hidden sub-signup" id="sub-signup-tab" data-subs>
+                                <div class="subscription-div">
+                                    <h1>Advanced</h1>
+                                    <div class="hr"></div>
+                                    <p>Get new experience</p>
+                                    <ul>
+                                        <li>Ad free</li>
+                                        <li>Health activities overview</li>
+                                        <li>Severe weather notification</li>
+                                    </ul>
+                                    <div class="subscribe-button">
+                                        <p>$5.99<span>/month</span></p>
+                                    </div>
+                                </div>
+                                <div class="signup-div">
+                                    <p>Never forget your umbrella!</p>
+                                    <div class="hr"></div>
+                                    <p>Sign up for our daily weather newsletter personalized just for you</p>
+                                    <button class="signup-button" type="button">Sign Up</button>
+                                </div>
 
                             </div>
                     </div>

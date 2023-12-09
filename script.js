@@ -1,3 +1,35 @@
+//Popup and Overlay
+const overlay = document.getElementById('overlay');
+const popup = document.getElementById('popup');
+
+
+
+
+// const hasVisited = localStorage.getItem('hasVisited');
+
+
+// localStorage.setItem('hasVisited','false');
+
+// if(!hasVisited){
+
+//     showPopup();
+
+//     localStorage.setItem('hasVisited','true')
+// }
+
+showPopup();
+
+function showPopup(){
+    overlay.style.display = 'block';
+    popup.style.display = 'block';
+}
+
+function closePopup(){
+    overlay.style.display = 'none';
+    popup.style.display = 'none';
+}
+
+
 //Side bar elements
 const weatherButton = document.getElementById("weather-option");
 const citiesButton = document.getElementById("cities-option");
@@ -23,6 +55,8 @@ const mapTab = document.getElementById('map-tab');
 const subCitiesTab = document.getElementById('sub-cities-tab');
 
 const settingsTab = document.getElementById('settings-tab');
+const subSignUpTab = document.getElementById('sub-signup-tab');
+
 //settings tab toggle switch variables
 const notificationToggleCheckBox = document.getElementById('notification-toggle');
 const twelveHourToggleCheckBox = document.getElementById('12-hour-toggle');
@@ -40,14 +74,12 @@ const distanceSlider = document.getElementById('distance-slider');
 const mainTabs = document.querySelectorAll('[data-mains]');
 const subTabs = document.querySelectorAll('[data-subs]');
 
-
 //Settings variables
 let tempUnit = 'c';
 let windSpeedUnit = 'km/h';
 let pressureUnit = 'hPa';
 let precipitationUnit = 'mm';
 let distanceUnit = 'km';
-
 
 //Map instance variable
 let mapInstance;
@@ -138,7 +170,6 @@ const dailyForecastUL = document.querySelector(".daily-forecast-div > ul");
 const dailyForecastFirstParagraph = document.querySelector(".daily-forecast-div > p");
 const dailyForecastLi = document.querySelectorAll("[data-daily]");
 
-
 //Week days array and some of the handling
 const daysOfWeek = document.querySelectorAll('[data-day]')
 const daysOfWeekShort = document.querySelectorAll('[data-day-short]')
@@ -147,14 +178,10 @@ let today = new Date();
 
 const weekDaysRefs = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
-
-
 //Default city name
 let currentLocation= '';
 // Getting browsers current position.
 const nav = window.navigator;
-
-
 
 function getLocation(){
     return new Promise((resolve,reject) => {
@@ -162,23 +189,17 @@ function getLocation(){
     })
 }
 
-
-
 window.addEventListener('DOMContentLoaded', async () => {
-
-    let position = await getLocation();
-
-    let reverseLocation = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyAi97T2eKAyD-H_jYuAoFCON0OEy_XiQOE`).then(response => response.json());
-    currentLocation = reverseLocation.results[5].formatted_address.toString();
-    updateConditions(currentLocation);
-    console.log(currentLocation);
-    console.log(reverseLocation.results);
+    let position;
+    try{
+        position = await getLocation();
+        let reverseLocation = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyAi97T2eKAyD-H_jYuAoFCON0OEy_XiQOE`).then(response => response.json());
+        currentLocation = reverseLocation.results[5].formatted_address.toString();
+        updateConditions(currentLocation);
+    }catch(error){
+        alert('Then Enter a location to see weather information')
+    }
 });
-
-
-
-
-
 
 // button handler that shows expanded conditions and adds hourly to sub-weather tab
 conditionsExpandButton.addEventListener('click',() =>{
@@ -243,6 +264,26 @@ function addToCityList(listItem,location){
         city.classList.add('selected');
         }});
     })
+
+
+    listItem.addEventListener('dblclick', () => {
+
+        let nodeValue = listItem.children[1].children[0].innerHTML;
+
+        for(let i = arrayOfSubCities.length-1; i>=0;i--){
+            if(arrayOfSubCities[i].children[1].children[0].innerHTML === nodeValue){
+                arrayOfSubCities[i].remove();
+                        arrayOfSubCities.splice(i,1);
+                        }
+                    }
+
+        for(let i = arrayOfCities.length-1; i>=0;i--){
+                if(arrayOfCities[i].children[1].children[0].innerHTML === nodeValue){
+                    arrayOfCities[i].remove();
+                            arrayOfCities.splice(i,1);
+                            }
+                    }
+    })
     
 }
 
@@ -272,15 +313,35 @@ function addToSubCityList(subListItem,location){
             }
         });
     })
+
+    subListItem.addEventListener('dblclick', () => {
+
+        let nodeValue = subListItem.children[1].children[0].innerHTML;
+
+        for(let i = arrayOfSubCities.length-1; i>=0;i--){
+            if(arrayOfSubCities[i].children[1].children[0].innerHTML === nodeValue){
+                        arrayOfSubCities[i].remove();
+                        arrayOfSubCities.splice(i,1);
+                        }
+                    }
+
+        for(let i = arrayOfCities.length-1; i>=0;i--){
+                if(arrayOfCities[i].children[1].children[0].innerHTML === nodeValue){
+                    arrayOfCities[i].remove();
+                            arrayOfCities.splice(i,1);
+                            }
+                    }
+    })
+
 }
 
-function updateConditionsOnCityListItems(temp){
-    arrayOfCities.forEach(city => {
-        city.children[2].innerHTML = `${getTemperatureInCorrectUnit(temp)}` + '&deg;';
-        });
-        arrayOfSubCities.forEach(city => {
-            city.children[2].innerHTML = `${getTemperatureInCorrectUnit(temp)}` + '&deg;';
-        });
+async function updateConditionsOnCityListItems(){
+
+    for(let i=0;i<arrayOfCities.length;i++){
+        let cityTemp = await prepareResponse(arrayOfCities[i].children[1].children[0].innerHTML);
+        arrayOfCities[i].children[2].innerHTML = `${getTemperatureInCorrectUnit(cityTemp.temp)}` + '&deg;';
+        arrayOfSubCities[i].children[2].innerHTML = `${getTemperatureInCorrectUnit(cityTemp.temp)}` + '&deg;';
+    }
 }
 
 
@@ -321,6 +382,7 @@ async function ifLocationExists(location){
     let locationToCheck = await getLatLongForInput(location);
     let ifExists = false;
     for(localName of arrayOfCities){
+        console.log(arrayOfCities);
         if(localName.children[1].children[0].innerHTML === locationToCheck.locationName){
             alert("This city has already been added! Please select it from the list.");
             ifExists = true;
@@ -408,6 +470,7 @@ async function addMarkerToTheMap(lat, lon,locationName,temp,daySummary){
 
     const infoWindowContent = (location,temp,daySummary) => {
         const infoDiv = document.createElement('div');
+        infoDiv.setAttribute('style', "font-family: 'Rubik',sans-serif;");
         infoDiv.classList.add('info-window')
         const infoLocation = document.createElement('h1');
         infoLocation.innerHTML = location;
@@ -570,6 +633,95 @@ function getNeededWeather(weatherData) {
     return neededInfoObject;
 } 
 
+function updateHourlies(localTime){
+    //incrementring LOCAL hour value +3
+    let hourCurrent;
+    let hourIncrement = 0;
+    let hourlyFormat = '';
+
+    if((currentLocation === '') && ((localTime === undefined) || (localTime === null))){
+        hourCurrent = new Date;
+        switch(twelveHourToggleCheckBox.checked){
+            case true:
+                for(let i=0;i<arrayOfHourIncrement.length;i++){
+    
+                    hourCurrent.setHours(hourCurrent.getHours() + hourIncrement, 0);
+            
+                        for(j=0;j<arrayOfHourIncrement[i].length;j++){
+                        arrayOfHourIncrement[i][j].innerHTML = hourCurrent.toLocaleTimeString(undefined, {hour:'2-digit',minute: '2-digit'});
+                        }
+            
+                    hourIncrement = 3;
+                }
+               break;
+            case false:
+                for(let i=0;i<arrayOfHourIncrement.length;i++){
+    
+                    hourCurrent.setHours(hourCurrent.getHours() + hourIncrement, 0);
+                    if(hourCurrent.getHours() < 10){
+                        hourlyFormat = '0' + `${hourCurrent.getHours()}`;
+                    }else{
+                        hourlyFormat = `${hourCurrent.getHours()}`;
+                    }
+            
+                        for(j=0;j<arrayOfHourIncrement[i].length;j++){
+                        arrayOfHourIncrement[i][j].innerHTML = `${hourlyFormat}` + ':00';
+                        }
+            
+                    hourIncrement = 3;
+                    hourlyFormat = '';
+                }
+                break;
+            default:
+                break;
+    
+        }
+    }else{
+        
+    hourCurrent = localTime;
+   
+
+    switch(twelveHourToggleCheckBox.checked){
+        case true:
+            for(let i=0;i<arrayOfHourIncrement.length;i++){
+
+                hourCurrent.setHours(hourCurrent.getHours() + hourIncrement, 0);
+        
+                    for(j=0;j<arrayOfHourIncrement[i].length;j++){
+                    arrayOfHourIncrement[i][j].innerHTML = hourCurrent.toLocaleTimeString(undefined, {hour:'2-digit',minute: '2-digit'});
+                    }
+        
+                hourIncrement = 3;
+            }
+           break;
+        case false:
+            for(let i=0;i<arrayOfHourIncrement.length;i++){
+
+                hourCurrent.setHours(hourCurrent.getHours() + hourIncrement, 0);
+                if(hourCurrent.getHours() < 10){
+                    hourlyFormat = '0' + `${hourCurrent.getHours()}`;
+                }else{
+                    hourlyFormat = `${hourCurrent.getHours()}`;
+                }
+        
+                    for(j=0;j<arrayOfHourIncrement[i].length;j++){
+                    arrayOfHourIncrement[i][j].innerHTML = `${hourlyFormat}` + ':00';
+                    }
+        
+                hourIncrement = 3;
+                hourlyFormat = '';
+            }
+            break;
+        default:
+            break;
+
+    }
+    }
+
+    
+}
+
+updateHourlies(undefined);
 
 async function updateConditions(location){
 
@@ -578,8 +730,6 @@ async function updateConditions(location){
     currentLocation = obj.locationName;
 
     console.log(obj.localTime);
-
-    updateConditionsOnCityListItems(obj.temp);
 
     realFeel.forEach(realFeel => {
         realFeel.innerHTML = `${Math.trunc(getTemperatureInCorrectUnit(obj.airConditions.feelsLike))}` + `&deg;`;
@@ -694,8 +844,6 @@ async function updateConditions(location){
 
     }
     
-                                                                                            
-
     //Hourly temp data
     for(let i = 0;i < arrayOf6HoursTempDataElements.length;i++){
         for(let j= 0;j < arrayOf6HoursTempDataElements[i].length; j++){
@@ -722,7 +870,6 @@ async function updateConditions(location){
         daySummaryWord[i][j].innerHTML = daySummaries.hasOwnProperty([obj.daySummaryKeyWord[i]]) ? daySummaries[obj.daySummaryKeyWord[i]] : undefined ;
     }
     }
-
 
     let dayIncrement = new Date();
     let today = new Date();
@@ -775,50 +922,52 @@ async function updateConditions(location){
         image.src = imageURLs.hasOwnProperty(obj.daySummaryKeyWord[0]) ? imageURLs[obj.daySummaryKeyWord[0]] : undefined;
     })
 
-    //incrementring LOCAL hour value +3
-        let hourCurrent = obj.localTime;
-        let hourIncrement = 0;
-        let hourlyFormat = '';
 
-        switch(twelveHourToggleCheckBox.checked){
-            case true:
-                for(let i=0;i<arrayOfHourIncrement.length;i++){
 
-                    hourCurrent.setHours(hourCurrent.getHours() + hourIncrement, 0);
-            
-                        for(j=0;j<arrayOfHourIncrement[i].length;j++){
-                        arrayOfHourIncrement[i][j].innerHTML = hourCurrent.toLocaleTimeString(undefined, {hour:'2-digit',minute: '2-digit'});
-                        }
-            
-                    hourIncrement = 3;
-                }
-               break;
-            case false:
-                for(let i=0;i<arrayOfHourIncrement.length;i++){
+    updateHourlies(obj.localTime);
 
-                    hourCurrent.setHours(hourCurrent.getHours() + hourIncrement, 0);
-                    if(hourCurrent.getHours() < 10){
-                        hourlyFormat = '0' + `${hourCurrent.getHours()}`;
-                    }else{
-                        hourlyFormat = `${hourCurrent.getHours()}`;
-                    }
+    // //incrementring LOCAL hour value +3
+    //     let hourCurrent = obj.localTime;
+    //     let hourIncrement = 0;
+    //     let hourlyFormat = '';
+
+    //     switch(twelveHourToggleCheckBox.checked){
+    //         case true:
+    //             for(let i=0;i<arrayOfHourIncrement.length;i++){
+
+    //                 hourCurrent.setHours(hourCurrent.getHours() + hourIncrement, 0);
             
-                        for(j=0;j<arrayOfHourIncrement[i].length;j++){
-                        arrayOfHourIncrement[i][j].innerHTML = `${hourlyFormat}` + ':00';
-                        }
+    //                     for(j=0;j<arrayOfHourIncrement[i].length;j++){
+    //                     arrayOfHourIncrement[i][j].innerHTML = hourCurrent.toLocaleTimeString(undefined, {hour:'2-digit',minute: '2-digit'});
+    //                     }
             
-                    hourIncrement = 3;
-                    hourlyFormat = '';
-                }
-                break;
-            default:
-                break;
+    //                 hourIncrement = 3;
+    //             }
+    //            break;
+    //         case false:
+    //             for(let i=0;i<arrayOfHourIncrement.length;i++){
+
+    //                 hourCurrent.setHours(hourCurrent.getHours() + hourIncrement, 0);
+    //                 if(hourCurrent.getHours() < 10){
+    //                     hourlyFormat = '0' + `${hourCurrent.getHours()}`;
+    //                 }else{
+    //                     hourlyFormat = `${hourCurrent.getHours()}`;
+    //                 }
+            
+    //                     for(j=0;j<arrayOfHourIncrement[i].length;j++){
+    //                     arrayOfHourIncrement[i][j].innerHTML = `${hourlyFormat}` + ':00';
+    //                     }
+            
+    //                 hourIncrement = 3;
+    //                 hourlyFormat = '';
+    //             }
+    //             break;
+    //         default:
+    //             break;
     
-        }
+    //     }
 
 }
-
-
 
 //Cities button handles to switch tabs (classList.add/remove('active/hidden)).
 
@@ -844,23 +993,6 @@ citiesButton.addEventListener('click', () => {
 })
 
 //Searh box listener and handler 
-
-// searchBox.addEventListener('select',  () => {
-//     mainTabs.forEach(tab => {
-//         tab.classList.add('hidden');
-//         tab.classList.remove('active');
-//     })
-
-//     subTabs.forEach(tab =>{
-//         tab.classList.add('hidden');
-//         tab.classList.remove('active');
-//     })
-    
-//     subWeatherSummaryTab.classList.add('active');
-//     subWeatherSummaryTab.classList.remove('hidden');
-//     citiesTab.classList.add('active');
-//     citiesTab.classList.remove('hidden');
-// })
 
 searchBox.addEventListener('submit', async (event) =>{
 
@@ -895,8 +1027,6 @@ searchBox.addEventListener('submit', async (event) =>{
             city.classList.remove('selected');
         })
     }
-        
-    
     }catch(error){
         alert('Please enter a city name or a zip code: ' + `${error}`);
     }
@@ -974,6 +1104,8 @@ settingsButton.addEventListener('click', () => {
 
     settingsTab.classList.add('active');
     settingsTab.classList.remove('hidden')
+    subSignUpTab.classList.add('active');
+    subSignUpTab.classList.remove('hidden')
     
 })
 
@@ -989,6 +1121,7 @@ async function setTempUnits(unit){
         default:
             console.log('invalid argument for temperature unit');
     }
+    await updateConditionsOnCityListItems();
     await updateConditions(currentLocation);
 }
 

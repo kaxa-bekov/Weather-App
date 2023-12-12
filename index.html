@@ -36,7 +36,7 @@
                     </li>
                     <li>
                         <h3>Map Tab</h3>
-                        <p>Here you can see a Google Map that will have markers for all of the locations that you have added as well as their weather data in a window above the location marker.</p>
+                        <p>Here you can see a Google Map that will add markers for all of the locations that you have added on this particular tab as well as their weather data in a window above the location marker.</p>
                         <p>The informational window with weather info is still under development and may behave unexpectedly sometimes. In order to reopen a widnow after you have closed it simply click on the marker on the map.</p>
                         <p>You will also notice that you can add and remove locations from your list in the "Map" tab as well as the "Cities" tab. <strong>They are fully synchronized.</strong></p>
                     </li>
@@ -44,7 +44,7 @@
                         <h3>Settings Tab</h3>
                         <p>And finally in the "Settings" tab you are able to select different measurment units and set time format that is more comfortable for you.</p>
                         <p><strong>Please note that the "Notifications", "Subscription" and "Sign Up" feature are not implemented in the beta version.</strong></p>
-                        <p>After you have selected desired measurment units and hour format you can go back to "Wetaher" tab and see that it had changed accordingly.</p>
+                        <p>After you have selected desired measurment units and hour format you can go back to "Weather" tab and see that it had changed accordingly.</p>
                     </li>
                 </ol>
                 <p><strong>Please let me know what do you think and what are the possible improvements taht can be made. Any feedback is greatly appreciated!!!</strong></p>
@@ -537,7 +537,16 @@
     </div>
     
     <script>
-        (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+        (g=>{
+            var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;
+            b=b[c]||(b[c]={});
+            var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));
+            e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);
+            e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;
+            d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));
+            a.nonce=m.querySelector("script[nonce]")?.nonce||"";
+            m.head.append(a)}));
+            d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
           key: "AIzaSyAi97T2eKAyD-H_jYuAoFCON0OEy_XiQOE",
           v: "weekly",
           // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).

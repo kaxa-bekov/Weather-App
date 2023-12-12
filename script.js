@@ -5,19 +5,12 @@ const popup = document.getElementById('popup');
 
 
 
-// const hasVisited = localStorage.getItem('hasVisited');
+const hasVisited = localStorage.getItem('hasVisited');
 
 
-// localStorage.setItem('hasVisited','false');
-
-// if(!hasVisited){
-
-//     showPopup();
-
-//     localStorage.setItem('hasVisited','true')
-// }
-
-showPopup();
+if(hasVisited !== 'true'){
+    showPopup();
+}
 
 function showPopup(){
     overlay.style.display = 'block';
@@ -27,6 +20,7 @@ function showPopup(){
 function closePopup(){
     overlay.style.display = 'none';
     popup.style.display = 'none';
+    localStorage.setItem('hasVisited','true');
 }
 
 
@@ -235,6 +229,9 @@ function subWeatherDisplayRevert(){
 // List of all the added cities
 let arrayOfCities = [...citiesList.children];
 let arrayOfSubCities = [...subCitiesList.children];
+//Array of infowindows based on the location name,this is an empty array to begin with that gets modified by concat() method
+let arrayOfInfoWindows = [];
+
 
 //Function to receive a DOM Node and append it to the MAIN cities tab with applied styling accordingly
 function addToCityList(listItem,location){
@@ -256,15 +253,12 @@ function addToCityList(listItem,location){
         });
         listItem.classList.add('selected');
         updateConditions(location);
-        console.log(listItem.children[1].children[0].innerHTML);
-        console.log(currentLocation);
         let nodeValue = listItem.children[1].children[0].innerHTML;
         arrayOfSubCities.forEach(city => {
         if(city.children[1].children[0].innerHTML === nodeValue){
         city.classList.add('selected');
         }});
     })
-
 
     listItem.addEventListener('dblclick', () => {
 
@@ -287,7 +281,7 @@ function addToCityList(listItem,location){
     
 }
 
-//Function to receive a DOM Node and appent it to the SUB cities tab with applied styles according to that tab
+//Function to receive a DOM Node and append it to the SUB cities tab with applied styles according to that tab
 function addToSubCityList(subListItem,location){
     subListItem.classList.add('sub-city-list-item');
     subListItem.children[0].classList.add('sub-city-list-img');
@@ -327,9 +321,9 @@ function addToSubCityList(subListItem,location){
 
         for(let i = arrayOfCities.length-1; i>=0;i--){
                 if(arrayOfCities[i].children[1].children[0].innerHTML === nodeValue){
-                    arrayOfCities[i].remove();
-                            arrayOfCities.splice(i,1);
-                            }
+                        arrayOfCities[i].remove();
+                        arrayOfCities.splice(i,1);
+                        }
                     }
     })
 
@@ -339,11 +333,21 @@ async function updateConditionsOnCityListItems(){
 
     for(let i=0;i<arrayOfCities.length;i++){
         let cityTemp = await prepareResponse(arrayOfCities[i].children[1].children[0].innerHTML);
-        arrayOfCities[i].children[2].innerHTML = `${getTemperatureInCorrectUnit(cityTemp.temp)}` + '&deg;';
-        arrayOfSubCities[i].children[2].innerHTML = `${getTemperatureInCorrectUnit(cityTemp.temp)}` + '&deg;';
+        arrayOfCities[i].children[2].innerHTML = `${getTemperatureInCorrectUnit(cityTemp.temp)}` + '&deg;' + `${tempUnit === 'c' ? 'C' : 'F'}`;
+        arrayOfSubCities[i].children[2].innerHTML = `${getTemperatureInCorrectUnit(cityTemp.temp)}` + '&deg;' + `${tempUnit === 'c' ? 'C' : 'F'}`;
     }
 }
 
+// async function updateConditionsOnInfoWindows(){
+
+//     for(let i=0;i<arrayOfInfoWindows.length;i++){
+//         let cityTemp = await prepareResponse(arrayOfInfoWindows[i].getContent().children[0].innerHTML);
+//         arrayOfInfoWindows[i].close();
+//         arrayOfInfoWindows[i].getContent().children[2].innerHTML = `${getTemperatureInCorrectUnit(cityTemp.temp)}` + '&deg;';
+//         arrayOfInfoWindows = [];
+//         await addMarkerToTheMap(cityTemp.lat,cityTemp.lon,cityTemp.locationName,cityTemp.temp,cityTemp.daySummaryKeyWord[0]);
+//     }
+// }
 
 async function addCityListItem(location){
 
@@ -360,7 +364,7 @@ async function addCityListItem(location){
     let localTime = document.createElement('p');
     localTime.innerHTML = rawData.localTime.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit'});
     let listItemTemp = document.createElement('p');
-    listItemTemp.innerHTML = `${getTemperatureInCorrectUnit(rawData.temp)}&deg;`;
+    listItemTemp.innerHTML = `${getTemperatureInCorrectUnit(rawData.temp)}&deg;` + `${tempUnit === 'c' ? 'C' : 'F'}`;
     cityNameAndLocalTimeDiv.appendChild(cityName);
     cityNameAndLocalTimeDiv.appendChild(localTime);
     cityListItem.appendChild(weatherImage);
@@ -382,7 +386,6 @@ async function ifLocationExists(location){
     let locationToCheck = await getLatLongForInput(location);
     let ifExists = false;
     for(localName of arrayOfCities){
-        console.log(arrayOfCities);
         if(localName.children[1].children[0].innerHTML === locationToCheck.locationName){
             alert("This city has already been added! Please select it from the list.");
             ifExists = true;
@@ -449,45 +452,14 @@ async function getLatLongForInput(location){
 }
 
 //This function will be adding a marker to the map every time user adds a city to the list
-async function addMarkerToTheMap(lat, lon,locationName,temp,daySummary){
+async function getInfoWindow(marker,infoWindow){
 
-    if(locationName === currentLocation) return
-    
-    //Creating a reference to LatLng class from google maps API
-    const {LatLng} = await google.maps.importLibrary('core')
-    //Creating an object of that class called markerPosition because the will be our marker position for each new marker
-    markerPosition = new LatLng(lat, lon);
-    //Creating a reference to Marker class from google maps API
-    const {Marker} = await google.maps.importLibrary('marker');
-    //Creating a new Marker object and initializing it with the given LatLng object created a few lines above
-    let marker = new Marker({
-        position: markerPosition,
-        map: mapInstance
-    })
-    //Every time this function is called map will be panned to the new marker position(previous markers remain on the map)
-    mapInstance.panTo(markerPosition);
+    console.log(arrayOfInfoWindows);
 
-
-    const infoWindowContent = (location,temp,daySummary) => {
-        const infoDiv = document.createElement('div');
-        infoDiv.setAttribute('style', "font-family: 'Rubik',sans-serif;");
-        infoDiv.classList.add('info-window')
-        const infoLocation = document.createElement('h1');
-        infoLocation.innerHTML = location;
-        const infoImage = document.createElement('img');
-        infoImage.src = imageURLs.hasOwnProperty(daySummary) ? imageURLs[daySummary] : './icons/loading-icon.png';
-        const infoTemp = document.createElement('p');
-        infoTemp.innerHTML = getTemperatureInCorrectUnit(temp) + '&deg;';
-
-        infoDiv.append(infoLocation,infoImage,infoTemp);
-        return infoDiv;
+    for(let i = 0;i < arrayOfInfoWindows.length;i++){
+       arrayOfInfoWindows[i].close();
     }
 
-    
-    const {InfoWindow} = await google.maps.importLibrary('maps');
-    const infoWindow = new InfoWindow({content: infoWindowContent(locationName,temp,daySummary),maxWidth:300});
-
-   
     infoWindow.open({
         anchor: marker,
         mapInstance,
@@ -502,12 +474,60 @@ async function addMarkerToTheMap(lat, lon,locationName,temp,daySummary){
             shouldFocus: false
         });
     })
+
+  
+}
+
+async function getLatLngObject(lat,lon){
+    //Creating a reference to LatLng class from google maps API
+    const {LatLng} = await google.maps.importLibrary('core')
+    //Creating an object of that class called markerPosition because that will be our marker position for each new marker
+    const markerPosition = new LatLng(lat, lon);
+    return markerPosition;
+}
+
+async function getmapMarker(latLngObject){
+    //Creating a reference to Marker class from google maps API
+    const {Marker} = await google.maps.importLibrary('marker');
+    //Creating a new Marker object and initializing it with the given LatLng object created a few lines above
+    const marker = new Marker({
+        position: latLngObject,
+        map: mapInstance
+    })
+    //Every time this function is called map will be panned to the new marker position(previous markers remain on the map)
+    mapInstance.panTo(latLngObject);
+    return marker;
+}
+
+async function initInfoWindow(locationName,temp,daySummary){
+    const infoWindowContent = (location,temp,daySummary) => {
+        const infoDiv = document.createElement('div');
+        infoDiv.setAttribute('style', "font-family: 'Rubik',sans-serif;");
+        infoDiv.classList.add('info-window')
+        const infoLocation = document.createElement('h1');
+        infoLocation.innerHTML = location;
+        const infoImage = document.createElement('img');
+        infoImage.src = imageURLs.hasOwnProperty(daySummary) ? imageURLs[daySummary] : './icons/loading-icon.png';
+        const infoTemp = document.createElement('p');
+        infoTemp.innerHTML = getTemperatureInCorrectUnit(temp) + '&deg;' + `${tempUnit === 'c' ? 'C' : 'F'}`;
+        
+        infoDiv.append(infoLocation,infoImage,infoTemp);
+        return infoDiv;
+    }
+    const {InfoWindow} = await google.maps.importLibrary('maps');
+    const infoWindow = new InfoWindow({content: infoWindowContent(locationName,temp,daySummary),maxWidth:300});
+    arrayOfInfoWindows.push(infoWindow);
+
+    return infoWindow;
 }
 
 async function prepareResponse(location){
     
     //Calling the function that will return an object containing the formatted location string and lat adn long for the giveen location
     let geoCodedObject = await getLatLongForInput(location);
+    let lat = geoCodedObject.lat;
+    let lon = geoCodedObject.lon;
+
     let locationName = geoCodedObject.locationName;
 
     //Calling the function that will return the local time to the location that was entered
@@ -517,16 +537,25 @@ async function prepareResponse(location){
 
     
     //Making the Weather Api call based on lat and long returned fro Geocoder
-    let wData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${geoCodedObject.lat}&lon=${geoCodedObject.lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
+    let wData = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=2e45d6c495086102f84e4abce600e8a6&units=metric`).then(response => response.json());
     //Calling the function that will format the weather data and return only what we need
     let neededData = getNeededWeather(wData);
     //Adding the necesary data to the object that will be returned to update all the conditions and UI
-    let wholeObject = {locationName, ...neededData,localTime,localTimeOffset}; 
+    let wholeObject = {locationName, ...neededData,localTime,localTimeOffset,lat,lon}; 
 
-    //this code will execute only if user is currently in the Map Tab
-    if(mapTab.classList.contains('active')){
-    //Calling the function that will add a narker to the map based on given location
-    await addMarkerToTheMap(geoCodedObject.lat, geoCodedObject.lon,locationName,neededData.temp,neededData.daySummaryKeyWord[0]);
+    //this code will execute only if user is currently in the Map Tab or in the Settings Tab
+    if(mapTab.classList.contains('active') || settingsTab.classList.contains('active')){
+        //Calling the functions that will add a marker to the map based on given location
+
+        //Calling the function that will return a LatLng object
+        const latlngObject = await getLatLngObject(lat,lon);
+        //Callin the function that will return a reference to a Map Marker
+        const mapMarker = await getmapMarker(latlngObject);
+        //Calling the function that will create an InfoWindow and add it to the map Marker
+        const infoWindowRef = await initInfoWindow(locationName,neededData.temp,neededData.daySummaryKeyWord[0]);
+        //Calling the function that will be making changes to the info windows aka closing and opening new ones
+        await getInfoWindow(mapMarker,infoWindowRef);
+
     }
 
     //Returning the necessary data object
@@ -729,10 +758,8 @@ async function updateConditions(location){
 
     currentLocation = obj.locationName;
 
-    console.log(obj.localTime);
-
     realFeel.forEach(realFeel => {
-        realFeel.innerHTML = `${Math.trunc(getTemperatureInCorrectUnit(obj.airConditions.feelsLike))}` + `&deg;`;
+        realFeel.innerHTML = `${Math.trunc(getTemperatureInCorrectUnit(obj.airConditions.feelsLike))}` + `&deg;` + `${tempUnit === 'c' ? 'C' : 'F'}`;
     })        
     wind.forEach(wind => {
         switch(windSpeedUnit){
@@ -847,7 +874,7 @@ async function updateConditions(location){
     //Hourly temp data
     for(let i = 0;i < arrayOf6HoursTempDataElements.length;i++){
         for(let j= 0;j < arrayOf6HoursTempDataElements[i].length; j++){
-            arrayOf6HoursTempDataElements[i][j].innerHTML = `${getTemperatureInCorrectUnit(obj.hourly[i])}` + `&deg;`;
+            arrayOf6HoursTempDataElements[i][j].innerHTML = `${getTemperatureInCorrectUnit(obj.hourly[i])}` + `&deg;` + `${tempUnit === 'c' ? 'C' : 'F'}`;
         }
 }
     //Hourly image
@@ -898,7 +925,7 @@ async function updateConditions(location){
                 //setting max 
                     arrayOfArraysOfElementsContaining2ArraysMinAndMax[i][j][n].innerHTML = `${Math.trunc(getTemperatureInCorrectUnit(obj.dailyMinMax[i][0]))}` + ' ';
                 // //setting min
-                    arrayOfArraysOfElementsContaining2ArraysMinAndMax[i][j+1][n].innerHTML = Math.trunc(getTemperatureInCorrectUnit(obj.dailyMinMax[i][1]));
+                    arrayOfArraysOfElementsContaining2ArraysMinAndMax[i][j+1][n].innerHTML = `${Math.trunc(getTemperatureInCorrectUnit(obj.dailyMinMax[i][1]))}`  + `${tempUnit === 'c' ? 'C' : 'F'}`;
             }
         }
     }
@@ -912,7 +939,7 @@ async function updateConditions(location){
     
    
     tempMain.forEach(t =>{
-        t.innerHTML = `${getTemperatureInCorrectUnit(obj.temp)}` + `&deg;`;
+        t.innerHTML = `${getTemperatureInCorrectUnit(obj.temp)}` + `&deg;` + `${tempUnit === 'c' ? 'C' : 'F'}`;
     })
 
 
@@ -926,46 +953,6 @@ async function updateConditions(location){
 
     updateHourlies(obj.localTime);
 
-    // //incrementring LOCAL hour value +3
-    //     let hourCurrent = obj.localTime;
-    //     let hourIncrement = 0;
-    //     let hourlyFormat = '';
-
-    //     switch(twelveHourToggleCheckBox.checked){
-    //         case true:
-    //             for(let i=0;i<arrayOfHourIncrement.length;i++){
-
-    //                 hourCurrent.setHours(hourCurrent.getHours() + hourIncrement, 0);
-            
-    //                     for(j=0;j<arrayOfHourIncrement[i].length;j++){
-    //                     arrayOfHourIncrement[i][j].innerHTML = hourCurrent.toLocaleTimeString(undefined, {hour:'2-digit',minute: '2-digit'});
-    //                     }
-            
-    //                 hourIncrement = 3;
-    //             }
-    //            break;
-    //         case false:
-    //             for(let i=0;i<arrayOfHourIncrement.length;i++){
-
-    //                 hourCurrent.setHours(hourCurrent.getHours() + hourIncrement, 0);
-    //                 if(hourCurrent.getHours() < 10){
-    //                     hourlyFormat = '0' + `${hourCurrent.getHours()}`;
-    //                 }else{
-    //                     hourlyFormat = `${hourCurrent.getHours()}`;
-    //                 }
-            
-    //                     for(j=0;j<arrayOfHourIncrement[i].length;j++){
-    //                     arrayOfHourIncrement[i][j].innerHTML = `${hourlyFormat}` + ':00';
-    //                     }
-            
-    //                 hourIncrement = 3;
-    //                 hourlyFormat = '';
-    //             }
-    //             break;
-    //         default:
-    //             break;
-    
-    //     }
 
 }
 
@@ -1122,6 +1109,7 @@ async function setTempUnits(unit){
             console.log('invalid argument for temperature unit');
     }
     await updateConditionsOnCityListItems();
+    // await updateConditionsOnInfoWindows();
     await updateConditions(currentLocation);
 }
 
@@ -1143,7 +1131,7 @@ async function setWindUnits(unit){
     await updateConditions(currentLocation);
 }
 
- async function setPressureUnits(unit){
+async function setPressureUnits(unit){
     pressureUnit = unit;
     switch(unit){
         case 'hPa':

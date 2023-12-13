@@ -1016,7 +1016,7 @@ div {
     left:0;
     margin:2px;
     background-color: var(--color-div-background);
-    transition:left 1s, background-color 1s;
+    transition:left .3s, background-color 1s;
 }
 
 .unit-selector  > .wind-slider{
@@ -1028,7 +1028,7 @@ div {
     left:0;
     margin:2px;
     background-color: var(--color-div-background);
-    transition:left 1s, background-color 1s;
+    transition:left .3s, background-color 1s;
 }
 
 .unit-selector > .pressure-slider{
@@ -1040,7 +1040,7 @@ div {
     left:0;
     margin:2px;
     background-color: var(--color-div-background);
-    transition:left 1s, background-color 1s;
+    transition:left .3s, background-color 1s;
 }
 
 .unit-selector  > .precipitation-slider{
@@ -1052,7 +1052,7 @@ div {
     left:0;
     margin:2px;
     background-color: var(--color-div-background);
-    transition:left 1s, background-color 1s;
+    transition:left .3s, background-color 1s;
 }
 
 .unit-selector > .distance-slider{
@@ -1064,7 +1064,7 @@ div {
     left:0;
     margin:2px;
     background-color: var(--color-div-background);
-    transition:left 1s, background-color 1s;
+    transition:left .3s, background-color 1s;
 }
 
 

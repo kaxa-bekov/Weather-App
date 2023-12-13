@@ -2,11 +2,7 @@
 const overlay = document.getElementById('overlay');
 const popup = document.getElementById('popup');
 
-
-
-
 const hasVisited = localStorage.getItem('hasVisited');
-
 
 if(hasVisited !== 'true'){
     showPopup();
@@ -32,6 +28,18 @@ const settingsButton = document.getElementById("settings-option");
 
 const searchBox = document.getElementById('searh-box');
 const searchData = document.querySelector('[data-location]');
+let autocomplete;
+
+// async function initPlaces(){
+//     // const { Autocomplete } = await google.maps.importLibrary('places');
+//     autocomplete = new google.maps.places.Autocomplete(searchData, {
+//         fields: ['formatted_address'],
+//         types: ['(regions)']
+//     })
+
+
+// }
+
 //All tabs are contained in two arrays, one array holds the main tabs to set their active/hidden class and anothe array contains the sub tabs for the same functionality
 // Also all the tabs have their unique ids to use them as a reference to each tab depending on which one is selected and set it to active.
 const weatherTab = document.getElementById('weather-tab')
@@ -235,6 +243,7 @@ let arrayOfInfoWindows = [];
 
 //Function to receive a DOM Node and append it to the MAIN cities tab with applied styling accordingly
 function addToCityList(listItem,location){
+    
 
     listItem.classList.add('city-list-item');
     listItem.children[0].classList.add('city-list-img');
@@ -277,6 +286,12 @@ function addToCityList(listItem,location){
                             arrayOfCities.splice(i,1);
                             }
                     }
+
+        if(citiesList.children.length === 0){
+            citiesTab.insertBefore(placeholderCity,citiesList);
+            subCitiesTab.insertBefore(subPlaceholderCity,subCitiesList);
+        }
+       
     })
     
 }
@@ -325,6 +340,12 @@ function addToSubCityList(subListItem,location){
                         arrayOfCities.splice(i,1);
                         }
                     }
+
+        if(subCitiesList.children.length === 0){
+            subCitiesTab.insertBefore(subPlaceholderCity,subCitiesList);
+            citiesTab.insertBefore(placeholderCity,citiesList);
+        }
+        
     })
 
 }
@@ -337,17 +358,6 @@ async function updateConditionsOnCityListItems(){
         arrayOfSubCities[i].children[2].innerHTML = `${getTemperatureInCorrectUnit(cityTemp.temp)}` + '&deg;' + `${tempUnit === 'c' ? 'C' : 'F'}`;
     }
 }
-
-// async function updateConditionsOnInfoWindows(){
-
-//     for(let i=0;i<arrayOfInfoWindows.length;i++){
-//         let cityTemp = await prepareResponse(arrayOfInfoWindows[i].getContent().children[0].innerHTML);
-//         arrayOfInfoWindows[i].close();
-//         arrayOfInfoWindows[i].getContent().children[2].innerHTML = `${getTemperatureInCorrectUnit(cityTemp.temp)}` + '&deg;';
-//         arrayOfInfoWindows = [];
-//         await addMarkerToTheMap(cityTemp.lat,cityTemp.lon,cityTemp.locationName,cityTemp.temp,cityTemp.daySummaryKeyWord[0]);
-//     }
-// }
 
 async function addCityListItem(location){
 
@@ -984,43 +994,43 @@ citiesButton.addEventListener('click', () => {
 searchBox.addEventListener('submit', async (event) =>{
 
     
-    try{
+    // try{
         
     event.preventDefault();
-    const userInput = searchData.value.trim();
-    if(!userInput){
-        throw new Error('Empty Location');
-    }
+    // const userInput = searchData.value.trim();
+    // if(!userInput){
+    //     throw new Error('Empty Location');
+    // }
 
-    if(citiesTab.classList.contains('active') || mapTab.classList.contains('active')){
+    // if(citiesTab.classList.contains('active') || mapTab.classList.contains('active')){
 
          
-        //Taking the selection off of all of thye list items
-        arrayOfCities.forEach(city => {
-            city.classList.remove('selected');
-        });
-        arrayOfSubCities.forEach(city => {
-            city.classList.remove('selected');
-        })
-        await updateConditions(userInput);
-        await addCityListItem(userInput);
-    }else if(weatherTab.classList.contains('active')){
-        await updateConditions(userInput);
+    //     //Taking the selection off of all of thye list items
+    //     arrayOfCities.forEach(city => {
+    //         city.classList.remove('selected');
+    //     });
+    //     arrayOfSubCities.forEach(city => {
+    //         city.classList.remove('selected');
+    //     })
+    //     await updateConditions(userInput);
+    //     await addCityListItem(userInput);
+    // }else if(weatherTab.classList.contains('active')){
+    //     await updateConditions(userInput);
 
-        arrayOfCities.forEach(city => {
-            city.classList.remove('selected');
-        });
-        arrayOfSubCities.forEach(city => {
-            city.classList.remove('selected');
-        })
-    }
-    }catch(error){
-        alert('Please enter a city name or a zip code: ' + `${error}`);
-    }
-    finally{
+    //     arrayOfCities.forEach(city => {
+    //         city.classList.remove('selected');
+    //     });
+    //     arrayOfSubCities.forEach(city => {
+    //         city.classList.remove('selected');
+    //     })
+    // }
+    // }catch(error){
+    //     alert('Please enter a city name or a zip code: ' + `${error}`);
+    // }
+    // finally{
       
-        searchData.value = '';
-    }
+    //     searchData.value = '';
+    // }
 })
 
 //Weather button handler to return to the original main screen and revert the changes of 'see more; button.
@@ -1109,7 +1119,6 @@ async function setTempUnits(unit){
             console.log('invalid argument for temperature unit');
     }
     await updateConditionsOnCityListItems();
-    // await updateConditionsOnInfoWindows();
     await updateConditions(currentLocation);
 }
 
@@ -1217,6 +1226,55 @@ async function initMap(){
         center: {lat:40.730610,lng:-73.935242},
         zoom: 12,
     });
+
+    const { Autocomplete } = await google.maps.importLibrary('places');
+    autocomplete = new Autocomplete(searchData, {
+        fields: ['formatted_address'],
+        types: ['(regions)']
+    })
+
+    
+    autocomplete.addListener('place_changed', async () => {
+        
+        try{
+
+            const userInput = autocomplete.getPlace().formatted_address;
+            if(!userInput){
+                throw new Error('Empty Location');
+            }
+        
+            if(citiesTab.classList.contains('active') || mapTab.classList.contains('active')){
+        
+                 
+                //Taking the selection off of all of thye list items
+                arrayOfCities.forEach(city => {
+                    city.classList.remove('selected');
+                });
+                arrayOfSubCities.forEach(city => {
+                    city.classList.remove('selected');
+                })
+                await updateConditions(userInput);
+                await addCityListItem(userInput);
+            }else if(weatherTab.classList.contains('active')){
+                await updateConditions(userInput);
+        
+                arrayOfCities.forEach(city => {
+                    city.classList.remove('selected');
+                });
+                arrayOfSubCities.forEach(city => {
+                    city.classList.remove('selected');
+                })
+            }
+            }catch(error){
+                alert('Please enter a city name or a zip code: ' + `${error}`);
+            }
+            finally{
+              
+                searchData.value = '';
+                searchData.focus();
+            }
+
+    })
 }
 
 window.initMap();

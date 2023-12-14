@@ -25,30 +25,30 @@ body{
 
 div {
     border-radius:26px;
-    /* overflow: hidden; */
 }
 .container{
     display: flex;
     flex-direction:row;
     justify-content: center;
     align-items: center;
-    width: 1460px;
+    width: 60%;
     height: 70vh;
-    margin:24px auto;
-    padding: 12px 24px;
+    margin:5% auto;
+    padding: .75em 1.5em;
     user-select: none;
+
 }
 .side-bar{
     background-color:var(--color-div-background);
     width:8%;
     height:100%;
-    margin: 24px 8px;
-    padding: 12px;
+    margin: 1.5em .5em;
+    padding: 1em;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    gap: 86px;
+    gap: 2em;
 }
 .side-bar div {
     border-radius:0;
@@ -68,12 +68,12 @@ div {
 .search-bar-itself{
     background-color: var(--color-div-background);
     width:65%;
-    height: 42px;
+    height: 2.1875em;
     outline:none;
-    border-radius:16px;
+    border-radius:.833em;
     border-width:0;
     font-size: 1.2rem;
-    padding: 0 6px;
+    padding: 0 .3125em;
     color:var(--color-text-dark);
 }
 .search-bar-itself:focus, 
@@ -84,22 +84,26 @@ div {
     outline:none;
 }
 .icon{
-    width:50px;
-    height:50px;
-    margin:6px;
+    width:3em;
+    display: block;
+    margin:.375em auto;
 }
 .logo-wrapper{
-    margin: 16px auto;
+    margin:1em 0;
 }
 .menu{
-    margin: 12px auto;
+    margin:.75em 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 24px;
+    gap: inherit;
     color: var(--color-text-dark);
     text-align: center;
+    height:60%;
+}
+.menu p{
+    font-size:80%;
 }
 .menu div {
     opacity:.8
@@ -119,9 +123,9 @@ div {
     flex-direction:column;
     justify-content:center;
     align-items:flex-start;
-    margin: 24px 8px;
-    padding:0 12px;
-    
+    margin:1.5em 0.5em;
+    padding:0 0.75em;
+    overflow: hidden;
 }
 
 /* This is the main screen of the app. It contains the main area (main-info) and the side area (sub-info)*/
@@ -132,7 +136,8 @@ div {
     justify-content: space-between;
     align-items: center;
     flex-basis: 100%;
-    margin-top:12px;
+    margin-top:.75em;
+
 }
 
 /* This is the main-info area, it is the container for the TABS*/
@@ -165,56 +170,58 @@ div {
     display: flex;
     flex-direction:row;
     justify-content: space-between;
-    padding: 12px 24px;
+    padding: .75em 1.5em;
     align-items: center;
     flex-basis: 50%;
 }
 .temperature-info{
     height:100%;
-    padding: 8px;
+    padding: .5em;
     display:flex;
     flex-direction: column;
     justify-content:space-between;
     align-items:flex-start;
-    flex-basis:50%;
+    flex-basis:60%;
 }
 .temperature-info div {
     border-radius: 0;
 }
 .weather-image{
     height: 100%;
-    padding: 8px;
-    flex-basis:33%;
+    padding: .375em;
+    flex-basis:40%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 }
 .weather-image img {
-    width: 250px;
-    height: 250px;
-    padding: 6px;
+    width: 14em; 
 }
-.temperature-location {
-    margin: 8px;
-    font-size: 1.2rem;
+
+.temperature-location h1{
+    color:var(--color-text-light);
+    font-size: 2.5em;
 }
-.temperature-location h1,
+
 .temperature-degrees h1 {
     color:var(--color-text-light);
+    margin: .25em;
+    font-size: 3.5rem;
+}
+.temperature-location {
+    margin:.4em;
+    font-size: 1.2rem;
 }
 .temperature-location p {
     color:var(--color-text-light);
 }
-.temperature-degrees {
-    margin: 16px;
-    font-size: 2rem;
-}
+
 
 /* Hourly forecast div styling*/
 .hourly-forecast{
     width: 100%;
-    padding: 12px 24px;
-    margin: 18px;
+    padding: .75em 1.5em;
+    margin: 1.125em;
     flex-basis: 90%;
     background-color: var(--color-div-background);
 }
@@ -222,7 +229,7 @@ div {
     border-radius:0;
 }
 .hourly-forecast > p{
-    margin: 12px 8px 6px 8px;
+    margin: .75em .5em .375em .5em;
     color:var(--color-text-dark);
     text-transform: uppercase;
 }
@@ -230,25 +237,27 @@ div {
     display:flex;
     justify-content: center;
     align-items:center;
-    gap:55px;
+    gap:1em;
     list-style-type: none;
-    margin-top: 24px;
+    margin-top:1.5em;
     height: 70%;
 }
 .hourly-forecast-ul li{
-    margin:4px;
+    margin:.25em;
     position:relative;
     flex-basis: 100%;
+    height: 100%;
 }
 .hourly-forecast-li{
     display:flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 16px;
+    gap: 1em;
     color:var(--color-text-dark);
     text-align: center;
-    /* overflow:visible; */
+    
+
 }
 .hourly-forecast-li p{
     width:100%;
@@ -256,31 +265,30 @@ div {
 }
 .hourly-forecast-ul li:nth-of-type(-n+5)::after{
     content: '';
-    height: 156px;
+    height: 100%;
     width: 1px;
     top:0;
     position: absolute;
     background-color: rgba(255,255,255,.2);
-    left: 94px;
+    left: 112%;
     z-index: 5;
 }
 .hourly-degrees{
     color:var(--color-text-light);
     font-size:2rem;
-    margin:4px;
+    margin:.125em;
 }
 .hourly-forecast-li img{
-    width:50px;
-    height:50px;
-    margin: 6px 0;
+    width:3em;
+    margin: .375em 0;
 }
 
 /* Atmosphere conditions div styling*/
 .conditions{
     width: 100%;
     flex-basis: 100%;
-    padding: 12px 24px;
-    margin: 0 18px;
+    padding: .75em 1.5em;
+    margin: 0 1.125em;
     display: flex;
     flex-direction:column;
     justify-content:space-between;
@@ -293,7 +301,7 @@ div {
 .header-and-button{
     display: flex;
     justify-content: space-between;
-    padding: 12px;
+    padding: .75em;
     width:100%;
     height:auto;
 }
@@ -305,9 +313,9 @@ div {
 }
 .conditions-button{
     border: 0 solid transparent;
-    border-radius: 24px;
-    width: 105px;
-    height: 36px;
+    border-radius: 1.5em;
+    width: 6.625em;
+    height: 2.25em;
     background-color: var(--color-button-background);
     color:var(--color-text-light);
 }
@@ -333,21 +341,18 @@ div {
     font-size:2rem;
 }
 .grid-con{
-    padding: 6px;
-    margin-left: 43px;
+    padding: .375em;
+    margin-left: 2.6875em;
     position:relative;
     overflow: visible;
 }
-.further{ 
-    left: -33px !important; 
-} 
+
 .grid-con > img{
     position: absolute;
-    width: 30px;
-    height: 30px;
-    margin: 2px;
-    top: 5px;
-    left: -29px;
+    width: 2em;
+    margin: .125em;
+    top: 5%;
+    left: -13%;
 }
 
 /*sub-info's sub-weather div styling. Mainly has a 7 day forecast as a unordered list with display flex */
@@ -364,20 +369,19 @@ div {
 .daily-forecast-div{
     flex-basis: 100%;
     background-color: var(--color-div-background);
-    padding:34px;
+    padding:2em;
 }
 .daily-forecast-div div{
     border-radius:0;
 }
 .daily-forecast-div > ul{
-    margin: 20px 8px 0 8px;
-    padding: 1px;
+    margin: 1em .5em 0 .5em;
     height: 95%;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    gap: 51px;
+    gap: 3.1875em;
     overflow: hidden;
 }
 /* selects the first and second paragraph elements inside of the list item element*/
@@ -402,11 +406,11 @@ div {
 
 
 .daily-forecast-div > p{
-    margin:8px;
+    margin:.5em;
     color:var(--color-text-dark);
     text-transform: uppercase;
     font-size:1rem;
-    margin-bottom: 39px;
+    margin-bottom: 2.4375em;
 }
 .daily-forecast,
 .daily-forecast > div{
@@ -426,7 +430,7 @@ div {
     background-color: rgba(255,255,255,.2);
     position:absolute;
     left:0;
-    top:170%;
+    top:138%;
 }
 
 #dailyForecast.daily-forecast-div > ul > .daily-forecast-shrink:nth-child(-n+6)::after{
@@ -443,14 +447,12 @@ div {
 
     width:40%;
     color:var(--color-text-light);
-    font-size:1.1rem;
+    font-size:1rem;
     justify-content: center;
-    gap:13px;
+    gap:0.8125em;
 }
 .daily-forecast > div img{
-    
-    width:50px;
-    height:50px;
+    width:3.5em;
 }
 
 /*Styling for the appendable hourly forecast div that will be addded to sub weather when the button is clicked.*/
@@ -458,8 +460,8 @@ div {
     width: 100%;
     flex-basis:30%;
     background-color: var(--color-div-background);
-    padding: 12px 24px;
-    margin: 12px 0;
+    padding: .75em 1.5em;
+    margin: .75em 0;
     display:none; /* Default value */
 }
 
@@ -467,7 +469,7 @@ div {
     border-radius:0;
 }
 .sub-hourly-forecast > p{
-    margin: 12px 8px 6px 8px;
+    margin: .75em .5em .375em .5em;
     color:var(--color-text-dark);
     text-transform: uppercase;
 }
@@ -476,15 +478,16 @@ div {
     display:flex;
     justify-content: center;
     align-items:center;
-    gap:55px;
+    gap:3.4375em;
     list-style: none;
-    margin-top: 24px;
+    margin-top: 1.5em;
     height: 70%;
 }
 .sub-hourly-forecast > ul > li{
-    margin:4px;
+    margin:.25em;
     position:relative;
     flex-basis: 100%;
+    height: 100%;
 }
 .sub-hourly-forecast > ul > li > div p{
     width:100%;
@@ -495,31 +498,30 @@ div {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 16px;
+    gap: 1em;
     color:var(--color-text-dark);
     /* overflow:visible; */
 }
 .sub-hourly-forecast > ul > li:nth-of-type(-n+2)::after{
     content: '';
-    height: 156px;
+    height: 100%;
     width: 1px;
     top:0;
     position: absolute;
     background-color: rgba(255,255,255,.2);
-    left: 94px;
+    left: 158%;
     z-index: 5;
 }
 
 .sub-hourly-forecast > ul > li > div > p:nth-child(2){
     color:var(--color-text-light);
     font-size:2rem;
-    margin:4px;
+    margin:.25em;
 }
 
 .sub-hourly-forecast > ul > li > div > img{
-    width:50px;
-    height:50px;
-    margin: 6px 0;
+    width:3em;
+    margin: .375em 0;
 }
 /*End of Sub-weather styling*/
 
@@ -546,23 +548,22 @@ div {
 .extended-conditions-wrapper > div{
     background-color: var(--color-div-background);
     position:relative;
-    padding: 6px;
-    padding-left: 94px;
-    padding-top:12px;
+    padding: .375em;
+    padding-left: 5.875em;
+    padding-top:.75em;
 }
 .extended-conditions-wrapper > div img{
     position:absolute;
-    width:30px;
-    height:30px;
-    top: 23px;
-    left: 49px;
-    margin:2px;
+    width:2em;
+    top: 16%;
+    left:15%;
+    margin:.125em;
 }
 .extended-conditions-wrapper > div:nth-child(odd){
-    margin: 8px 10px 8px 0;
+    margin: .5em .625em .5em 0;
 }
 .extended-conditions-wrapper > div:nth-child(even){
-    margin: 8px 0 8px 10px;
+    margin: .5em 0 .5em .625em;
 }
 .extended-conditions-wrapper > div:nth-child(-n+2){
     margin-top:0;
@@ -599,7 +600,7 @@ div {
     display: flex;
     flex-direction:row;
     justify-content: space-between;
-    padding: 12px 24px;
+    padding: .75em 1.5em;
     align-items: center;
     flex-basis: 33%;
 }
@@ -616,9 +617,14 @@ div {
     width: 0;
 }
 
+.alt-location h1{
+    font-size:2em;
+}
+
 .sub-city-name{
+
     display: flex;
-    height: 123px;
+    height: 3.75em;
     flex-direction: column;
     justify-content: center;
     overflow: hidden;
@@ -630,13 +636,13 @@ div {
     text-align: center;
     color: var(--color-text-dark);
     font-size: 1.5rem;
-    margin:25px 0;
+    margin:1.5em 0;
 }
 
 
 .alt-weather-image{
     height: 100%;
-    padding: 8px;
+    padding: .375em;
     flex-basis:33%;
     display: flex;
     justify-content: center;
@@ -650,9 +656,8 @@ div {
 
 
 .alt-weather-image img {
-    width: 125px;
-    height: 125px;
-    padding: 6px;
+    width: 10em;
+    padding: .375em;
 }
 
 
@@ -663,7 +668,7 @@ div {
 }
 
 .alt-daily{
-    padding: 12px 24px;
+    padding: .75em 1.5em;
     flex-basis:33%;
     background-color:transparent;
     width:100%
@@ -694,12 +699,12 @@ div {
 
 .city-list-item{
     height: auto;
-    padding: 12px;
-    margin: 12px 1px;
+    padding: .75em;
+    margin: .75em 0.0625em;
     display: flex;
     justify-content: space-between;
     background-color: var(--color-div-background);
-    border-radius:26px;
+    border-radius:1.625em;
     transition: outline 1s;
 }
 
@@ -715,17 +720,16 @@ div {
 
 
 .city-list-img{
-    width: 125px;
-    height: 125px;
-    padding: 6px;
+    width:8em;
+    padding: .375em;
     flex-basis:15%;
 }
 
 .list-item-temperature{
     color: var(--color-text-light);
     font-size: 3rem;
-    padding: 8px;
-    padding-top:10px;
+    padding: .5em;
+    padding-top:.625em;
     flex-basis: 10%;
     text-align: end;
 }
@@ -738,9 +742,9 @@ div {
 
 .city-name-and-local-time{
     border-radius:0;
-    padding: 8px;
-    padding-top: 23px;
-    margin-left:12px;
+    padding: .5em;
+    padding-top: 1.5em;
+    margin-left:.75em;
     flex-basis:100%;
 }
 
@@ -750,14 +754,14 @@ div {
 }
 
 .sub-city-list-item{
-    padding: 4px;
-    margin:8px 1px;
+    padding: .25em;
+    margin:.5em 0.0625em;
     height: auto;
     display: flex;
     justify-content: space-between;
     background-color: var(--color-div-background);
-    border-radius:26px;
-    transition: outline 1s;
+    border-radius:1.625em;
+    transition: outline .5s;
 }
 
 .sub-city-list-item:focus,
@@ -769,16 +773,16 @@ div {
 }
 
 .sub-city-list-img{
-    width:75px;
-    height:75px;
-    padding: 2px;
+    width:4.5em;
+    height:4.5em;
+    padding: .125em;
     flex-basis:15%;
 }
 
 .sub-list-item-temperature{
     font-size:1.9rem;
-    padding: 4px;
-    padding-top: 6px;
+    padding: .25em;
+    padding-top: .375em;
     color: var(--color-text-light);
     flex-basis: 10%;
     text-align: end;
@@ -794,9 +798,9 @@ div {
     color:var(--color-text-light);
 }
 .sub-city-name-and-local-time{
-    padding: 4px;
-    padding-top: 12px;
-    margin-left: 6px;
+    padding: .25em;
+    padding-top: .75em;
+    margin-left: .375em;
     border-radius:0;
     flex-basis:100%;
 }
@@ -820,16 +824,16 @@ div {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap:18px;
+    gap:1.125em;
     background-color: var(--color-div-background);
-    padding: 12px;
-    margin:6px;
+    padding: .75em;
+    margin:.375em;
 }
 
 .info-window img{
-    width:75px;
-    height:75px;
-    margin: 2px;
+    width:4.5em;
+    height:4.5em;
+    margin: .125em;
 }
 .info-window h1{
     color: var(--color-text-dark);
@@ -850,7 +854,7 @@ div {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    gap:24px;
+    gap:1.5em;
     overflow-x: hidden;
     overflow-y:scroll;
     border-radius: 0;
@@ -870,7 +874,7 @@ div {
 .wrapper > p{
     color:var(--color-text-light);
     font-size:2rem;
-    margin:6px;
+    margin:.375em;
 }
 
 .wrapper > div{
@@ -888,13 +892,13 @@ div {
     align-items: center;
     height: 2.5em;
     background-color: var(--color-background);
-    margin: 12px 0;
+    margin: .75em 0;
 }
 .unit-selector > div {
     position: relative;
     flex-basis: 100%;
     height: 85%;
-    margin: 2px;
+    margin: .125em;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -911,7 +915,7 @@ div {
 .unit > p{
     color:var(--color-text-dark);
     font-size: 1.7rem;
-    margin:6px;
+    margin:.375em;
 }
 
 .unit{
@@ -927,7 +931,7 @@ div {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 12px;
+    padding: .75em;
     height: 50%;
 }
 
@@ -939,13 +943,13 @@ div {
 .toggable p:nth-child(1){
     color:var(--color-text-light);
     font-size:1.5rem;
-    margin:6px;
+    margin:.375em;
 }
 
 .toggable p:nth-child(2){
     color:var(--color-text-dark);
     font-size:1rem;
-    margin:6px;
+    margin:.375em;
 }
 
 .hr{
@@ -961,14 +965,14 @@ div {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 12px;
+    padding: .75em;
     color: var(--color-text-dark);
     height:100%
 }
 
 .toggle-button{
-    width: 100px;
-    height: 50px;
+    width: 6.25em;
+    height: 3.125em;
     position: relative;
     cursor: pointer;
 }
@@ -980,21 +984,21 @@ div {
 .toggle-slider{
     position: relative;
     background-color: var(--color-background);
-    width: 50px;
-    height:26px;
-    border-radius:13px;
-    top: 6px;
-    left: 37px;
+    width: 3.125em;
+    height:1.625em;
+    border-radius:0.8125em;
+    top: 15%;
+    left: 48%;
 }
 
 .toggle-slider::before {
     content:'';
-    width: 20px;
-    height:20px;
+    width: 1.25em;
+    height:1.25em;
     position: absolute;
     display: inline-block;
-    top: 3px;
-    left: 3px;
+    top: 12%;
+    left: 7%;
     background-color: var(--color-div-background);
     border-radius:50%;
     transition: transform .3s, background-color .3s;
@@ -1002,71 +1006,44 @@ div {
 }
 
 .toggle-input:checked + .toggle-slider::before{
-    transform: translateX(24px);
+    transform: translateX(1.4em);
     background-color: var(--color-button-background);
 }
 
-
-.unit-selector  > .temp-slider{
+.unit-selector  > .temp-slider,
+.unit-selector  > .wind-slider,
+.unit-selector > .pressure-slider,
+.unit-selector  > .precipitation-slider,
+.unit-selector > .distance-slider{
     content:'';
-    width: calc(50% - 4px);
     height:85%;
     position:absolute;
     display: block;
     left:0;
-    margin:2px;
+    margin:.125em;
     background-color: var(--color-div-background);
     transition:left .3s, background-color 1s;
+}
+
+.unit-selector  > .temp-slider{
+    width: calc(50% - .25em);
 }
 
 .unit-selector  > .wind-slider{
-    content:'';
-    width: calc(34% - 4px);
-    height:85%;
-    position:absolute;
-    display: block;
-    left:0;
-    margin:2px;
-    background-color: var(--color-div-background);
-    transition:left .3s, background-color 1s;
+    width: calc(34% - .25em);
 }
 
 .unit-selector > .pressure-slider{
-    content:'';
-    width: calc(25% - 4px);
-    height:85%;
-    position:absolute;
-    display: block;
-    left:0;
-    margin:2px;
-    background-color: var(--color-div-background);
-    transition:left .3s, background-color 1s;
+    width: calc(25% - .25em);
 }
 
 .unit-selector  > .precipitation-slider{
-    content:'';
-    width: calc(50% - 4px);
-    height:85%;
-    position:absolute;
-    display: block;
-    left:0;
-    margin:2px;
-    background-color: var(--color-div-background);
-    transition:left .3s, background-color 1s;
+    width: calc(50% - .25em);
 }
 
 .unit-selector > .distance-slider{
-    content:'';
-    width: calc(50% - 4px);
-    height:85%;
-    position:absolute;
-    display: block;
-    left:0;
-    margin:2px;
-    background-color: var(--color-div-background);
-    transition:left .3s, background-color 1s;
+    width: calc(50% - .25em);
 }
-
 
 .sub-signup{
     width: 100%;
@@ -1076,7 +1053,7 @@ div {
 .subscription-div{
     width: 100%;
     background-color: var(--color-div-background);
-    padding: 12px;
+    padding: .75em;
     height: 50%;
     margin-top: 12%;
 }
@@ -1084,29 +1061,29 @@ div {
 .subscription-div > h1{
     color:var(--color-text-light);
     font-size: 2.6rem;
-    margin: 23px 8px;
+    margin: 1.5em .5em;
 }
 
 .subscription-div > p{
     color: var(--color-text-light);
     font-size:1.5rem;
-    margin: 28px 8px;
+    margin: 1.75em .5em;
 }
 
 .subscription-div > ul{
     color: var(--color-text-dark);
     font-size: 1rem;
-    margin: 27px
+    margin: 1.75em;
 }
 
 .subscribe-button{
     background-color: var(--color-button-background);
-    width: 95%;
-    height: 25%;
-    margin: 52px 12px;
-    padding: 8%;
+    width: 19em;
+    height: 7em;
+    margin: 3.25em .75em;
+    padding: 2em;
     text-align: center;
-    transition: background-color .8s, outline .8s;
+    transition: background-color .3s, outline .3s;
     cursor: pointer;
 }
 
@@ -1128,7 +1105,7 @@ div {
 .signup-div{
     width: 100%;
     background-color: var(--color-div-background);
-    padding: 12px;
+    padding: .75em;
     height: 30%;
     margin-top: 5%;
 }
@@ -1136,22 +1113,22 @@ div {
 .signup-div > p:nth-of-type(1){
     color: var(--color-text-light);
     font-size: 1.7rem;
-    margin: 19px 8px;
+    margin: .7 .3em;
 }
 
 .signup-div > p:nth-of-type(2){
     color: var(--color-text-dark);
     font-size: 1rem;
-    margin: 23px 8px;
+    margin: 1.5em .5em;
 }
 
 .signup-button{
     width: 95%;
-    margin: 16px 8px;
-    border-radius: 24px;
+    margin: 1em .5em;
+    border-radius: 1.5em;
     background-color: var(--color-button-background);
     text-align: center;
-    padding: 12px;
+    padding: .75em;
     border:none;
     cursor: pointer;
     color: var(--color-text-light);
@@ -1169,11 +1146,11 @@ div {
     z-index:999;
 }
 
-.popup{
+.popup-location{
     display:none;
     position:fixed;
     top:25%;
-    left:50%;
+    left:0%;
     transform:translate(-50%, -25%);
     background-color:rgba(0,0,0,0.8);
     z-index:1000;
@@ -1183,36 +1160,27 @@ div {
     color:var(--color-text-light);
 }
 
-.popup h1{
-    margin: 12px 8px;
-}
-
-.popup p,
-.popup ol,
-.popup li{
-    margin: 6px 2px;
+.popup-location p
+{
+    margin: .375em .125em;
     line-height: 1.2;
     letter-spacing: 0.5px;
 }
 
-.popup ol li{
-    margin-left: 5%;
-}
 
-.popup > p:last-of-type{
+
+.popup-location > p:last-of-type{
     margin-top:5%;
+    margin-bottom:5%;
 }
 
 
-.popup h3{
-    margin: 20px 4px 4px 4px;
-}
 
-.popup button{
+.popup-location button{
     margin-left: 85%;
     margin-top: 5%;
-    width: 100px;
-    height: 25px;
+    width: 6.25em;
+    height: 1.5em;
     border: none;
     background-color: var(--color-button-background);
     cursor: pointer;
@@ -1225,3 +1193,84 @@ div {
 .active{
     display:flex;
 }
+
+@media (width > 3000px) {
+    html{
+        font-size:22px;
+    }
+}
+
+@media (width < 2200px) {
+    html{
+        font-size:15px;
+    }
+}
+
+@media (width < 2000px) {
+    html{
+        font-size:14px;
+    }
+
+    .hourly-degrees{
+        font-size:1.7rem;
+    }
+}
+
+@media (width < 1760px) {
+    html{
+        font-size:14px;
+    }
+  
+    .hourly-degrees{
+        font-size:1.2rem;
+    }
+}
+
+@media (width < 1560px) {
+    html{
+        font-size:13px;
+    }
+    .container{
+        width: 95%;
+    }
+    .hourly-degrees{
+        font-size:1.2rem;
+    }
+}
+@media (width < 1100px) {
+    html{
+        font-size:12px;
+    }
+    .container{
+        width: 95%;
+    }
+    .hourly-degrees{
+        font-size:1.2rem;
+    }
+}
+
+@media (max-width: 768px){
+    html{
+        font-size:10px;
+    }
+    .container{
+        width: 100%;
+    }
+    .hourly-degrees{
+        font-size:1.2rem;
+    }
+}
+
+
+@media (max-width: 475px){
+    html{
+        font-size:8px;
+    }
+    .container{
+        width: 100%;
+    }
+    .hourly-degrees{
+        font-size:1.2rem;
+    }
+}
+

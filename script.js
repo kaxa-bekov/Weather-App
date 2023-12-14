@@ -1,12 +1,12 @@
 //Popup and Overlay
 const overlay = document.getElementById('overlay');
-const popup = document.getElementById('popup');
+const popup = document.getElementById('popup-location');
 
 const hasVisited = localStorage.getItem('hasVisited');
 
-if(hasVisited !== 'true'){
+// if(hasVisited !== 'true'){
     showPopup();
-}
+// }
 
 function showPopup(){
     overlay.style.display = 'block';
@@ -30,15 +30,7 @@ const searchBox = document.getElementById('searh-box');
 const searchData = document.querySelector('[data-location]');
 let autocomplete;
 
-// async function initPlaces(){
-//     // const { Autocomplete } = await google.maps.importLibrary('places');
-//     autocomplete = new google.maps.places.Autocomplete(searchData, {
-//         fields: ['formatted_address'],
-//         types: ['(regions)']
-//     })
 
-
-// }
 
 //All tabs are contained in two arrays, one array holds the main tabs to set their active/hidden class and anothe array contains the sub tabs for the same functionality
 // Also all the tabs have their unique ids to use them as a reference to each tab depending on which one is selected and set it to active.
@@ -212,9 +204,9 @@ conditionsExpandButton.addEventListener('click',() =>{
 
 // Function to change the sub-weather display
 function subWeatherDisplayChange(){
-    dailyForecast.style.padding = "28px";
+    dailyForecast.style.padding = "1.75em";
     dailyForecast.style.flexBasis = "66%";
-    dailyForecastUL.style.gap = "15px";
+    dailyForecastUL.style.gap = "1em";
     dailyForecastFirstParagraph.style.marginBottom = "0"
     subHourlyForecast.style.display = "block";
     dailyForecastLi.forEach(day => {
@@ -224,10 +216,10 @@ function subWeatherDisplayChange(){
 
 // Function that returns the original state of the sub-weather tab
 function subWeatherDisplayRevert(){
-    dailyForecast.style.padding = "34px";
+    dailyForecast.style.padding = "2em";
     dailyForecast.style.flexBasis = "100%";
-    dailyForecastUL.style.gap = "51px";
-    dailyForecastFirstParagraph.style.marginBottom = "39px"
+    dailyForecastUL.style.gap = "3.1875em";
+    dailyForecastFirstParagraph.style.marginBottom = "2.4375em"
     subHourlyForecast.style.display = "none";
     dailyForecastLi.forEach(day => {
         day.classList.remove("daily-forecast-shrink");
@@ -992,45 +984,7 @@ citiesButton.addEventListener('click', () => {
 //Searh box listener and handler 
 
 searchBox.addEventListener('submit', async (event) =>{
-
-    
-    // try{
-        
     event.preventDefault();
-    // const userInput = searchData.value.trim();
-    // if(!userInput){
-    //     throw new Error('Empty Location');
-    // }
-
-    // if(citiesTab.classList.contains('active') || mapTab.classList.contains('active')){
-
-         
-    //     //Taking the selection off of all of thye list items
-    //     arrayOfCities.forEach(city => {
-    //         city.classList.remove('selected');
-    //     });
-    //     arrayOfSubCities.forEach(city => {
-    //         city.classList.remove('selected');
-    //     })
-    //     await updateConditions(userInput);
-    //     await addCityListItem(userInput);
-    // }else if(weatherTab.classList.contains('active')){
-    //     await updateConditions(userInput);
-
-    //     arrayOfCities.forEach(city => {
-    //         city.classList.remove('selected');
-    //     });
-    //     arrayOfSubCities.forEach(city => {
-    //         city.classList.remove('selected');
-    //     })
-    // }
-    // }catch(error){
-    //     alert('Please enter a city name or a zip code: ' + `${error}`);
-    // }
-    // finally{
-      
-    //     searchData.value = '';
-    // }
 })
 
 //Weather button handler to return to the original main screen and revert the changes of 'see more; button.

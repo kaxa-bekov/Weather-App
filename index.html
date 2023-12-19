@@ -15,18 +15,15 @@
     <div class="container">
             <!--Popup window fro introduction-->
             <div class="overlay" id="overlay"></div>
-            <div class="popup-location" id="popup-location">
-                <p>Please allow the location sharing to get weather information of your location.</p>
-                <button onClick="closePopup()">Close</button>
-            </div>
-
-
-
-
+           
         <!-- Side Bar Div---------------------------------------------------------------------------------->
         <div class="side-bar">
+            <div class="popup popup-home" id="popup-home">
+                <p>Click here any time to return to main screen</p>
+                <button type="button" onclick="closeHomePopup()">Close</button>
+            </div>
             <div class="logo-wrapper">
-                <img class="icon" src="./icons/app-logo.png" alt="App Logo" />
+                <img id="home-icon" class="icon" src="./icons/app-logo.png" alt="App Logo" />
             </div>
             <nav class="menu">
                 <div id="weather-option" class="weather-option">
@@ -52,6 +49,10 @@
         <div class="app-screen">
             <!--Search Bar----------------------------------------------------------->
             <div class="search-bar">
+                <div class="popup popup-location" id="popup-location">
+                    <p>Please allow the location sharing or enter your desired location to get weather information</p>
+                    <button onClick="closePopupLocation()">Close</button>
+                </div>
                 <form id="searh-box" class="search-form">
                     <input data-location  type="text" name="city" id="city-search" class="search-bar-itself"  frameborder="0" placeholder="Enter City">
                 </form>
@@ -131,6 +132,10 @@
                                     </div>
                                     <div class="conditions">
                                         <div class="header-and-button">
+                                            <div class="popup popup-expand-conditions" id="popup-expand-conditions">
+                                                <p>Please click here to see more air conditions.</p>
+                                                <button onClick="closeConditionsPopup()">Close</button>
+                                            </div>
                                             <p>Air Conditions</p>
                                             <button id="expand-conditions" class="conditions-button">See more</button>
                                         </div>
@@ -204,6 +209,10 @@
                             </div>
                             <!--This is the second tab of this partition. it contains the list of cities when user has clicked on the seach bar to look up cities or simply selected the cities in the side bar.-->
                             <div data-mains  id="cities-tab" class="cities-tab hidden">
+                                <div class="popup popup-city-list" id="popup-city-list">
+                                    <p>You can add multiple location here to view the weather.</p>
+                                    <button onClick="closeCityListPopup()">Close</button>
+                                </div>
                                     <p data-city-placeholder>Look up a city to add it to your list</p>
                                     <ul id="cities-list" class="cities-list">
                                         <!--This list will be populated using JS whne user wants to add a city to a list-->
@@ -215,6 +224,10 @@
                             </div>
                             <!--This tab will have the settings of the displayed weather information-->
                             <div data-mains  id="settings-tab" class="settings-tab hidden">
+                                <div class="popup popup-setting" id="popup-settings">
+                                    <p>Customize the weather information output to your preferences.</p>
+                                    <button onClick="closeSettingsPopup()">Close</button>
+                                </div>
                                 <div class="units-wrapper wrapper">
                                     <p>Units</p>
                                     <div class="units-div">

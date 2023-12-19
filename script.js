@@ -1,21 +1,57 @@
 //Popup and Overlay
 const overlay = document.getElementById('overlay');
-const popup = document.getElementById('popup-location');
+const popupLocation = document.getElementById('popup-location');
+const popupSeeMore = document.getElementById('popup-expand-conditions');
+const popupListCities = document.getElementById('popup-city-list');
+const popupHomeIcon = document.getElementById('popup-home');
+const popupSettings = document.getElementById('popup-settings')
 
 const hasVisited = localStorage.getItem('hasVisited');
 
 // if(hasVisited !== 'true'){
-    showPopup();
+    showPopupLocation();
 // }
 
-function showPopup(){
+function showPopupLocation(){
     overlay.style.display = 'block';
-    popup.style.display = 'block';
+    popupLocation.style.display = 'block';
 }
 
-function closePopup(){
+function closePopupLocation(){
+    popupLocation.style.display = 'none';
+    popupSeeMore.style.display = 'block';
+}
+
+function closeConditionsPopup(){
+    popupSeeMore.style.display = 'none';
+    popupHomeIcon.style.display = 'block';
+}
+
+function closeHomePopup() {
     overlay.style.display = 'none';
-    popup.style.display = 'none';
+    popupHomeIcon.style.display = 'none';
+}
+
+
+function showCityListPopup(){
+    overlay.style.display = 'block';
+    popupListCities.style.display = 'block';
+}
+ 
+function closeCityListPopup(){
+    overlay.style.display = 'none';
+    popupListCities.style.display = 'none';
+
+}
+
+function showSettingsPopup(){
+    overlay.style.display = 'block';
+    popupSettings.style.display = 'block';
+}
+
+function closeSettingsPopup(){
+    overlay.style.display = 'none';
+    popupSettings.style.display = 'none';
     localStorage.setItem('hasVisited','true');
 }
 
@@ -25,6 +61,29 @@ const weatherButton = document.getElementById("weather-option");
 const citiesButton = document.getElementById("cities-option");
 const mapButton = document.getElementById("map-option");
 const settingsButton = document.getElementById("settings-option");
+
+const homeIcon = document.getElementById('home-icon');
+homeIcon.addEventListener('click', () => {
+
+    subTabs.forEach(tab => {
+        tab.classList.add('hidden');
+        tab.classList.remove('active');
+    })
+
+
+    mainTabs.forEach(tab => {
+        tab.classList.add('hidden');
+        tab.classList.remove('active');
+    })
+
+    weatherTab.classList.add('active');
+    weatherTab.classList.remove('hidden');
+    subWeatherTab.classList.add('active');
+    subWeatherTab.classList.remove('hidden');
+    hourlyAndConditionsWrapper.style.display = 'flex';
+    extendedConditionsWrapper.style.display = 'none';
+    subWeatherDisplayRevert();
+});
 
 const searchBox = document.getElementById('searh-box');
 const searchData = document.querySelector('[data-location]');
@@ -455,8 +514,6 @@ async function getLatLongForInput(location){
 
 //This function will be adding a marker to the map every time user adds a city to the list
 async function getInfoWindow(marker,infoWindow){
-
-    console.log(arrayOfInfoWindows);
 
     for(let i = 0;i < arrayOfInfoWindows.length;i++){
        arrayOfInfoWindows[i].close();
@@ -962,6 +1019,8 @@ async function updateConditions(location){
 
 citiesButton.addEventListener('click', () => {
     
+
+
     mainTabs.forEach(tab => {
         tab.classList.add('hidden');
         tab.classList.remove('active');
@@ -976,8 +1035,11 @@ citiesButton.addEventListener('click', () => {
     subWeatherSummaryTab.classList.remove('hidden');
     citiesTab.classList.add('active');
     citiesTab.classList.remove('hidden');
-    
-    
+
+
+    // if(hasVisited !== 'true'){
+        showCityListPopup();
+    // }
     
 })
 
@@ -1057,7 +1119,10 @@ settingsButton.addEventListener('click', () => {
     settingsTab.classList.remove('hidden')
     subSignUpTab.classList.add('active');
     subSignUpTab.classList.remove('hidden')
-    
+
+    // if(hasVisited !== 'true'){
+        showSettingsPopup()
+    // }
 })
 
 async function setTempUnits(unit){
@@ -1183,7 +1248,7 @@ async function initMap(){
 
     const { Autocomplete } = await google.maps.importLibrary('places');
     autocomplete = new Autocomplete(searchData, {
-        fields: ['formatted_address'],
+        fields: ['formatted_address','name'],
         types: ['(regions)']
     })
 
@@ -1192,6 +1257,7 @@ async function initMap(){
         
         try{
 
+            console.log(autocomplete.getPlace().name);
             const userInput = autocomplete.getPlace().formatted_address;
             if(!userInput){
                 throw new Error('Empty Location');

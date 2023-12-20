@@ -243,17 +243,26 @@ function getLocation(){
     })
 }
 
+let initLat;
+let initLon;
+
 window.addEventListener('DOMContentLoaded', async () => {
-    let position;
+    
     try{
+        let position;
         position = await getLocation();
         let reverseLocation = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=AIzaSyAi97T2eKAyD-H_jYuAoFCON0OEy_XiQOE`).then(response => response.json());
         currentLocation = reverseLocation.results[5].formatted_address.toString();
+        console.log(currentLocation);
         updateConditions(currentLocation);
+        initLat = position.coords.latitude;
+        initLon = position.coords.longitude;
+
     }catch(error){
         alert('Then Enter a location to see weather information')
     }
 });
+
 
 // button handler that shows expanded conditions and adds hourly to sub-weather tab
 conditionsExpandButton.addEventListener('click',() =>{
@@ -1101,7 +1110,7 @@ mapButton.addEventListener('click', async () => {
     subCitiesTab.classList.add('active');
     subCitiesTab.classList.remove('hidden');
 
-    // await initMap();
+    await initMap();
 
 })
 
@@ -1123,7 +1132,7 @@ settingsButton.addEventListener('click', () => {
 
     if(hasVisited !== 'true'){
         showSettingsPopup()
-    }else return
+    }
 })
 
 async function setTempUnits(unit){
@@ -1243,8 +1252,14 @@ async function initMap(){
     if(mapInstance) return
     const { Map } = await google.maps.importLibrary('maps');
     mapInstance = new Map(mapTab, {
-        center: {lat:40.730610,lng:-73.935242},
+        center: {lat: initLat,lng: initLon},
         zoom: 12,
+    });
+
+    const { Marker } = await google.maps.importLibrary('marker');
+    const marker = new Marker({
+        position: {lat: initLat, lng: initLon},
+        map: mapInstance
     });
 
     const { Autocomplete } = await google.maps.importLibrary('places');
@@ -1298,4 +1313,4 @@ async function initMap(){
     })
 }
 
-window.initMap();
+// window.initMap();

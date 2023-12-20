@@ -8,9 +8,9 @@ const popupSettings = document.getElementById('popup-settings')
 
 const hasVisited = localStorage.getItem('hasVisited');
 
-// if(hasVisited !== 'true'){
+if(hasVisited !== 'true'){
     showPopupLocation();
-// }
+}
 
 function showPopupLocation(){
     overlay.style.display = 'block';
@@ -233,6 +233,7 @@ const weekDaysRefs = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 //Default city name
 let currentLocation= '';
+let shortName = '';
 // Getting browsers current position.
 const nav = window.navigator;
 
@@ -1037,9 +1038,9 @@ citiesButton.addEventListener('click', () => {
     citiesTab.classList.remove('hidden');
 
 
-    // if(hasVisited !== 'true'){
+    if(hasVisited !== 'true'){
         showCityListPopup();
-    // }
+    }
     
 })
 
@@ -1120,9 +1121,9 @@ settingsButton.addEventListener('click', () => {
     subSignUpTab.classList.add('active');
     subSignUpTab.classList.remove('hidden')
 
-    // if(hasVisited !== 'true'){
+    if(hasVisited !== 'true'){
         showSettingsPopup()
-    // }
+    }else return
 })
 
 async function setTempUnits(unit){
